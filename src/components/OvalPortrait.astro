@@ -1,0 +1,29 @@
+---
+// retrato da seção "Quem eu sou": foto em pílula dentro de um anel rosa, sombra listrada,
+// texto curvo por cima e estrelinhas no contorno
+import Photo from './Photo.astro';
+
+interface Props {
+  src?: string;
+  alt: string;
+  arcText: string;
+}
+const { src, alt, arcText } = Astro.props;
+const star = "M14 0 C15 10 18 13 28 14 C18 15 15 18 14 28 C13 18 10 15 0 14 C10 13 13 10 14 0Z";
+---
+<div class="relative aspect-[360/540] w-full max-w-[360px]">
+  <div aria-hidden="true" class="stripes absolute inset-0 translate-x-4 translate-y-4 rounded-full border-[1.5px] border-wine" style="--stripe-a: var(--color-sky); --stripe-w: 14px;"></div>
+  <div aria-hidden="true" class="absolute inset-0 rounded-full border-[1.5px] border-wine bg-rose"></div>
+  <div class="absolute inset-5 overflow-hidden rounded-full border-[1.5px] border-wine bg-offwhite">
+    <Photo src={src} alt={alt} label="Foto da Loren" class="h-full w-full" />
+  </div>
+  <svg aria-hidden="true" viewBox="0 0 360 540" class="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+    <defs><path id="oval-arc" d="M -26 180 A 206 206 0 0 1 386 180" /></defs>
+    <text class="font-display italic" style="font-size: 25px" fill="#6B1F2E">
+      <textPath href="#oval-arc" startOffset="50%" text-anchor="middle">{arcText}</textPath>
+    </text>
+    <g transform="translate(346 236)"><path class="sparkle-animate" style="--sparkle-dur: 2.2s; --sparkle-delay: 0s;" d={star} fill="#6B1F2E" /></g>
+    <g transform="translate(-16 360)"><path class="sparkle-animate" style="--sparkle-dur: 2.8s; --sparkle-delay: 0.6s;" d={star} fill="#6B1F2E" /></g>
+    <g transform="translate(300 470) scale(0.6)"><path class="sparkle-animate" style="--sparkle-dur: 2s; --sparkle-delay: 1.2s;" d={star} fill="#BFD9EE" stroke="#6B1F2E" stroke-width="1.5" /></g>
+  </svg>
+</div>

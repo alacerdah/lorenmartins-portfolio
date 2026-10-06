@@ -1,0 +1,64 @@
+---
+// moldura 9:16 de vídeo. Com `permalink` (post/reel do Instagram) mostra o embed oficial;
+// sem, mostra um espaço reservado com a legenda.
+interface Props {
+  label: string;
+  permalink?: string;
+  class?: string;
+}
+const { label, permalink, class: className = "" } = Astro.props;
+---
+<div
+  class={`relative aspect-[9/16] w-full overflow-hidden border-[1.5px] border-wine bg-offwhite ${className}`}
+  data-video-embed={permalink ? "true" : undefined}
+>
+  {permalink ? (
+    /* o embed do Instagram nunca fica mais estreito que 326px: ele nasce no tamanho normal
+       dentro do .video-embed-inner e o script abaixo encolhe esse wrapper pra caber na moldura */
+    <div class="video-embed-inner" style="width:342px;">
+      <blockquote
+        class="instagram-media"
+        data-instgrm-permalink={`${permalink}?utm_source=ig_embed&utm_campaign=loading`}
+        data-instgrm-version="14"
+        style="background:#FFF; border:0; margin:1px; max-width:540px; min-width:326px; padding:0; width:calc(100% - 2px);"
+      >
+        <a href={permalink} target="_blank" rel="noopener noreferrer">Ver no Instagram</a>
+      </blockquote>
+    </div>
+  ) : (
+    <div class="flex h-full flex-col items-center justify-center gap-2 px-3 text-center text-wine">
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-10 w-10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M10 8l6 4-6 4z" />
+      </svg>
+      <span class="text-xs font-semibold tracking-[0.1em] uppercase">{label}</span>
+    </div>
+  )}
+</div>
+
+<script>
+  // encolhe o wrapper interno (não o iframe) pra não quebrar o resize automático do Instagram
+  function fitEmbed(wrap: HTMLElement) {
+    const inner = wrap.querySelector<HTMLElement>(".video-embed-inner");
+    const iframe = inner?.querySelector<HTMLIFrameElement>("iframe.instagram-media");
+    if (!inner || !iframe) return false;
+    inner.style.transformOrigin = "top left";
+    const apply = () => {
+      // antes do post carregar o Instagram entrega uma altura de esqueleto; ignora
+      if (inner.offsetHeight < 100) return;
+      inner.style.transform = `scale(${wrap.clientWidth / (inner.offsetWidth || 342)})`;
+    };
+    apply();
+    new ResizeObserver(apply).observe(iframe);
+    window.addEventListener("resize", apply);
+    return true;
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-video-embed]").forEach((wrap) => {
+    if (fitEmbed(wrap)) return;
+    const mo = new MutationObserver(() => {
+      if (fitEmbed(wrap)) mo.disconnect();
+    });
+    mo.observe(wrap, { childList: true, subtree: true });
+  });
+</script>

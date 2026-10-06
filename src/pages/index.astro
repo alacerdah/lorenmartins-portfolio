@@ -1,0 +1,596 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sparkle from '../components/Sparkle.astro';
+import Photo from '../components/Photo.astro';
+import VideoFrame from '../components/VideoFrame.astro';
+import OvalPortrait from '../components/OvalPortrait.astro';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTEÚDO — tudo que muda no site fica aqui em cima.
+// Fotos: coloque os arquivos em public/images/ e preencha o caminho ("/images/x.jpg").
+// Caminho vazio ("") = espaço reservado com legenda.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const navLinks = [
+  { href: "#sobre", label: "Sobre" },
+  { href: "#nichos", label: "Nichos" },
+  { href: "#carrosseis", label: "Carrosséis & fotos" },
+  { href: "#cases", label: "Cases" },
+];
+
+const photos = {
+  hero: "/images/loren.webp",
+  sobre: "/images/loren-sobre.png",
+};
+
+const contact = {
+  email: "contatolorenmartins@gmail.com",
+  instagram: "https://www.instagram.com/bylorenmartins",
+  tiktok: "https://www.tiktok.com/@bylorenmartins",
+  mediaKit: "", // PDF em public/ (ex.: "/midia-kit.pdf") ou link
+};
+
+// marcas do carrossel animado
+const brands = ["Marca 01", "Marca 02", "Marca 03", "Marca 04", "Marca 05", "Marca 06", "Marca 07", "Marca 08"];
+
+// `top: true` = entra no "Top 3 nichos" (na ordem da lista). Os demais viram os botões.
+// TODO: lifestyle, tech, autocuidado e experiências são os nichos reais; os outros são exemplos.
+const niches = [
+  { id: "lifestyle", label: "Lifestyle", top: true },
+  { id: "tech", label: "Tech", top: true },
+  { id: "autocuidado", label: "Autocuidado", top: true },
+  { id: "experiencias", label: "Experiências" },
+  { id: "casa", label: "Casa & decor" },
+  { id: "gastronomia", label: "Gastronomia" },
+  { id: "fitness", label: "Fitness" },
+  { id: "pets", label: "Pets" },
+];
+
+// vídeos: `permalink` do post/reel do Instagram mostra o embed oficial; sem ele, espaço reservado
+type Video = { niche: string; brand: string; format: string; permalink?: string };
+const videos: Video[] = niches.flatMap((n) =>
+  [1, 2, 3].map((i) => ({ niche: n.id, brand: `[Marca ${i}]`, format: "[formato]" }))
+);
+
+// carrosséis do feed: `slides` = imagens em ordem; vazio usa `slideCount` espaços reservados
+const carousels = [
+  { id: "k1", brand: "[Marca — carrossel 1]", niche: "Tech", text: "[Ideia do carrossel: tema, objetivo e resultado.]", slides: [] as string[], slideCount: 5 },
+  { id: "k2", brand: "[Marca — carrossel 2]", niche: "Autocuidado", text: "[Ideia do carrossel: tema, objetivo e resultado.]", slides: [] as string[], slideCount: 6 },
+  { id: "k3", brand: "[Marca — carrossel 3]", niche: "Lifestyle", text: "[Ideia do carrossel: tema, objetivo e resultado.]", slides: [] as string[], slideCount: 4 },
+  { id: "k4", brand: "[Marca — carrossel 4]", niche: "Experiências", text: "[Ideia do carrossel: tema, objetivo e resultado.]", slides: [] as string[], slideCount: 7 },
+];
+
+// galeria de fotos UGC: `tall` ocupa duas linhas da grade; `shape` arredonda em arco
+const gallery = [
+  { src: "", label: "Produto · tech", tall: true, shape: "arch-top" },
+  { src: "", label: "Lifestyle" },
+  { src: "", label: "Flat lay" },
+  { src: "", label: "Autocuidado", tall: true },
+  { src: "", label: "Mão + produto" },
+  { src: "", label: "Ambiente", tall: true, shape: "arch-bottom" },
+  { src: "", label: "Experiência" },
+  { src: "", label: "Detalhe" },
+];
+
+// cases de sucesso. TODO: os números abaixo são EXEMPLO — trocar pelos reais dos prints.
+// views = visualizações por vídeo (em mil); compare = [métrica, Loren %, média do nicho %]
+const cases = [
+  {
+    id: "c1", brand: "[Marca do case 1]", niche: "Tech", format: "Anúncio UGC",
+    goal: "[Objetivo da campanha — ex.: lançar produto e gerar vendas no TikTok Shop.]",
+    kpis: [["1,2M", "visualizações"], ["48%", "retenção até o fim"], ["3,4%", "CTR do anúncio"], ["[nº]", "vendas atribuídas"]],
+    views: [["V1", 180], ["V2", 420], ["V3", 260], ["V4", 610], ["V5", 330]],
+    compare: [["Retenção", 48, 30], ["CTR", 3.4, 1.8], ["Engajamento", 9.1, 5.2]],
+    quote: "[Depoimento curto da marca sobre o resultado]",
+  },
+  {
+    id: "c2", brand: "[Marca do case 2]", niche: "Autocuidado", format: "Vídeo orgânico",
+    goal: "[Objetivo — ex.: aumentar reconhecimento da marca com público 18–30.]",
+    kpis: [["860K", "visualizações"], ["41%", "retenção até o fim"], ["12K", "salvamentos"], ["[nº]", "novos seguidores"]],
+    views: [["V1", 120], ["V2", 300], ["V3", 540], ["V4", 210]],
+    compare: [["Retenção", 41, 28], ["Salvamentos", 6.5, 2.4], ["Engajamento", 11.3, 6.0]],
+    quote: "[Depoimento curto da marca sobre o resultado]",
+  },
+  {
+    id: "c3", brand: "[Marca do case 3]", niche: "Lifestyle", format: "Pacote de 6 vídeos",
+    goal: "[Objetivo — ex.: criar biblioteca de criativos para anúncios.]",
+    kpis: [["2,1M", "visualizações"], ["52%", "retenção até o fim"], ["2,9x", "ROAS"], ["6", "criativos entregues"]],
+    views: [["V1", 380], ["V2", 290], ["V3", 720], ["V4", 450], ["V5", 260], ["V6", 510]],
+    compare: [["Retenção", 52, 30], ["CTR", 2.9, 1.8], ["Engajamento", 8.4, 5.2]],
+    quote: "[Depoimento curto da marca sobre o resultado]",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+const topNiches = niches.filter((n) => n.top).slice(0, 3);
+const otherNiches = niches.filter((n) => !n.top);
+const videosOf = (id: string) => videos.filter((v) => v.niche === id);
+const brandsOf = (id: string) => [...new Set(videosOf(id).map((v) => v.brand))].join(", ");
+const cardBgs = ["bg-rose", "bg-sky", "bg-rose"];
+
+const pct = (n: number) => String(n).replace(".", ",") + "%";
+const caseCharts = cases.map((c) => {
+  const maxView = Math.max(...c.views.map((v) => v[1]));
+  return {
+    ...c,
+    bars: c.views.map(([label, value]) => ({
+      label,
+      value: `${value}K`,
+      height: Math.round((value / maxView) * 85),
+      best: value === maxView,
+    })),
+    rows: c.compare.map(([label, mine, avg]) => {
+      const top = Math.max(mine, avg) * 1.15;
+      return { label, mine: Math.round((mine / top) * 100), avg: Math.round((avg / top) * 100), mineLabel: pct(mine), avgLabel: pct(avg) };
+    }),
+  };
+});
+const kpiBgs = ["bg-rose", "bg-offwhite", "bg-sky", "bg-offwhite"];
+
+const hasEmbeds = videos.some((v) => v.permalink);
+const linkOr = (url: string) => url || "#contato";
+---
+
+<Layout>
+  <main class="overflow-x-clip">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-30 border-b border-wine/15 bg-offwhite/90 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
+        <a href="#" class="font-display text-2xl text-wine italic">Loren Martins</a>
+        <nav class="hidden items-center gap-7 text-[15px] font-medium lg:flex">
+          {navLinks.map((l) => <a href={l.href} class="text-wine hover:text-wine-deep">{l.label}</a>)}
+        </nav>
+        <a href="#contato" class="rounded-full bg-wine px-5 py-2.5 text-sm font-semibold text-offwhite transition-transform hover:-translate-y-0.5">
+          Vamos conversar
+        </a>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="mx-auto grid max-w-6xl items-center gap-14 px-6 pt-12 pb-20 md:grid-cols-2 md:pt-16">
+      <div class="flex flex-col gap-6">
+        <div data-reveal class="flex flex-wrap gap-2">
+          <span class="rounded-full bg-rose px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">Criadora UGC</span>
+          <span class="rounded-full bg-sky px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">São José dos Campos · SP</span>
+        </div>
+        <h1 data-reveal style="--reveal-delay: 80ms;" class="font-display text-[clamp(3rem,7.5vw,6.25rem)] leading-[0.95] text-wine">
+          Conteúdo que <span class="italic">vende</span> sem parecer anúncio.
+        </h1>
+        <p data-reveal style="--reveal-delay: 160ms;" class="max-w-lg text-lg leading-relaxed text-wine-soft">
+          Vídeos autênticos de lifestyle, tech, autocuidado e experiências, feitos pra prender a atenção e converter.
+        </p>
+        <div data-reveal style="--reveal-delay: 240ms;" class="flex flex-wrap gap-3">
+          <a href="#nichos" class="rounded-full bg-wine px-7 py-4 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">Ver nichos</a>
+          <a href="#contato" class="rounded-full border-[1.5px] border-wine px-7 py-4 font-semibold text-wine transition-transform hover:-translate-y-0.5">Pedir orçamento</a>
+        </div>
+      </div>
+      <div data-reveal style="--reveal-delay: 120ms;" class="flex justify-center">
+        <div class="relative aspect-[4/5] w-full max-w-[420px]">
+          <div aria-hidden="true" class="stripes absolute inset-0 translate-x-[18px] translate-y-[18px] rounded-t-[210px] rounded-b-3xl border-[1.5px] border-wine" style="--stripe-w: 22px;"></div>
+          <div class="absolute inset-0 overflow-hidden rounded-t-[210px] rounded-b-3xl border-[1.5px] border-wine bg-sky">
+            <Photo src={photos.hero} alt="Loren Martins" label="Foto da Loren" class="h-full w-full" eager />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARCAS (carrossel animado) -->
+    <section aria-label="Marcas que já confiaram no meu trabalho" class="border-y-[1.5px] border-wine">
+      <div class="marquee overflow-hidden bg-wine py-5 text-rose">
+        <div class="marquee-track flex w-max">
+          {[0, 1].map((copy) => (
+            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-center gap-14 pr-14 font-display text-[clamp(1.6rem,3vw,2.2rem)] whitespace-nowrap italic">
+              {brands.map((b) => (
+                <li class="flex items-center gap-14">{b}<span aria-hidden="true" class="text-sky not-italic">✦</span></li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+      <div aria-hidden="true" class="marquee overflow-hidden border-t-[1.5px] border-wine bg-sky py-4 text-wine">
+        <div class="marquee-track flex w-max" data-reverse>
+          {[0, 1].map(() => (
+            <ul class="flex shrink-0 items-center gap-10 pr-10 text-sm font-semibold tracking-[0.14em] whitespace-nowrap uppercase">
+              {brands.map((b) => <li class="flex items-center gap-10">{b}<span>•</span></li>)}
+            </ul>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- QUEM EU SOU (seção com listras) -->
+    <section id="sobre" class="stripes scroll-mt-20 border-b-[1.5px] border-wine px-6 py-24 sm:py-32">
+      <div data-reveal class="hard-shadow mx-auto grid max-w-5xl items-center gap-16 rounded-[40px] border-[1.5px] border-wine bg-offwhite px-7 py-12 sm:px-14 sm:py-16 md:grid-cols-2">
+        <div class="flex flex-col gap-5">
+          <div class="flex items-center gap-4">
+            <span aria-hidden="true" class="relative h-16 w-[72px] shrink-0">
+              <Sparkle class="sparkle-animate absolute top-1 left-0 h-12 w-12 text-wine" style="--sparkle-dur: 2.4s; --sparkle-delay: 0s;" />
+              <Sparkle class="sparkle-animate absolute top-0 right-0 h-4 w-4 text-sky" outline style="--sparkle-dur: 1.8s; --sparkle-delay: 0.4s;" />
+              <Sparkle class="sparkle-animate absolute right-0.5 bottom-0 h-5 w-5 text-rose" outline style="--sparkle-dur: 2.6s; --sparkle-delay: 0.9s;" />
+            </span>
+            <h2 class="font-display text-[clamp(2.75rem,5vw,4rem)] leading-none text-wine">Oi, <span class="italic">marca</span> :)</h2>
+          </div>
+          <p class="text-lg leading-relaxed">
+            Me chamo <strong class="text-wine">Loren</strong>, tenho 26 anos e moro em <strong class="text-wine">São José dos Campos (SP)</strong>.
+          </p>
+          <p class="text-lg leading-relaxed">Sou criadora de conteúdo com foco em:</p>
+          <ul class="flex flex-wrap gap-2.5">
+            {["lifestyle", "tech", "autocuidado", "experiências"].map((n, i) => (
+              <li class={`rounded-full border-[1.5px] border-wine px-4 py-2 text-sm font-semibold text-wine ${i % 2 ? "bg-sky" : "bg-rose"}`}>{n}</li>
+            ))}
+          </ul>
+          <p class="text-lg leading-relaxed">
+            Produzo vídeos autênticos voltados para <strong class="text-wine">retenção e conversão</strong>, com
+            <strong class="text-wine">estética moderna e jovem</strong> e uma linguagem que aproxima a marca do público.
+          </p>
+        </div>
+        <div class="flex justify-center px-8 pt-14 pb-6">
+          <OvalPortrait src={photos.sobre} alt="Loren Martins sorrindo, gravando com o celular" arcText="sobre sua nova creator favorita!" />
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP 3 NICHOS -->
+    <section id="nichos" class="mx-auto flex max-w-6xl scroll-mt-20 flex-col gap-12 px-6 pt-28 pb-16">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <h2 data-reveal class="font-display text-[clamp(2.75rem,6vw,4.5rem)] leading-none text-wine">Top 3 <span class="italic">nichos</span></h2>
+        <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed text-wine-soft">Onde a Loren mais cria — e onde os resultados aparecem.</p>
+      </div>
+      <div class="grid gap-7 md:grid-cols-3">
+        {topNiches.map((n, i) => {
+          const first = videosOf(n.id)[0];
+          return (
+            <article data-reveal style={`--reveal-delay: ${i * 120}ms;`} class={`flex flex-col gap-5 rounded-t-[200px] rounded-b-[28px] border-[1.5px] border-wine p-5 pb-7 ${cardBgs[i]}`}>
+              <VideoFrame label="Vídeo UGC 9:16" permalink={first?.permalink} class="rounded-t-[180px] rounded-b-2xl" />
+              <div class="flex items-baseline gap-3.5 px-2">
+                <span class="font-display text-4xl text-wine italic">{String(i + 1).padStart(2, "0")}</span>
+                <h3 class="font-display text-[28px] font-semibold">{n.label}</h3>
+              </div>
+              <p class="px-2 text-[15px] leading-normal">Marcas: {brandsOf(n.id)}</p>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- DEMAIS NICHOS -->
+    <section class="mx-auto flex max-w-6xl flex-col gap-8 px-6 pt-8 pb-28">
+      <div data-reveal class="flex flex-col gap-2">
+        <h2 class="font-display text-[44px] leading-tight text-wine">Demais <span class="italic">nichos</span></h2>
+        <p class="text-wine-soft">Toque num nicho para ver os trabalhos.</p>
+      </div>
+      <div data-reveal role="group" aria-label="Escolher nicho" class="flex flex-wrap gap-3">
+        {otherNiches.map((n, i) => (
+          <button
+            type="button"
+            data-tab={`niche:${n.id}`}
+            aria-pressed={i === 0 ? "true" : "false"}
+            class="min-h-12 rounded-full border-[1.5px] border-wine bg-offwhite px-6 text-[15px] font-semibold text-wine transition-colors hover:bg-rose aria-pressed:bg-wine aria-pressed:text-offwhite"
+          >
+            {n.label}
+          </button>
+        ))}
+      </div>
+      {otherNiches.map((n, i) => (
+        <div data-panel={`niche:${n.id}`} hidden={i !== 0} class="grid overflow-hidden rounded-[28px] border-[1.5px] border-wine md:grid-cols-[minmax(280px,2fr)_3fr]">
+          <div class="stripes flex flex-col border-b-[1.5px] border-wine p-6 sm:p-10 md:border-r-[1.5px] md:border-b-0" style="--stripe-angle: 0deg; --stripe-a: var(--color-sky); --stripe-w: 18px;">
+            <div class="flex flex-col gap-3 rounded-[20px] border-[1.5px] border-wine bg-offwhite p-7">
+              <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">Nicho selecionado</span>
+              <h3 class="font-display text-[40px] text-wine italic">{n.label}</h3>
+              <p class="text-[15px] leading-relaxed">Marcas: {brandsOf(n.id)}</p>
+              <a href="#contato" class="self-start rounded-full bg-wine px-5 py-3 text-sm font-semibold text-offwhite">Quero esse tipo de conteúdo</a>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3 bg-offwhite p-5 sm:gap-4 sm:p-8">
+            {videosOf(n.id).slice(0, 3).map((v, j) => (
+              <VideoFrame label={`Vídeo ${j + 1}`} permalink={v.permalink} class="rounded-2xl bg-rose" />
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- CARROSSÉIS & FOTOS -->
+    <section id="carrosseis" class="scroll-mt-20 border-t-[1.5px] border-wine">
+      <div aria-hidden="true" class="stripes h-5 border-b-[1.5px] border-wine" style="--stripe-a: var(--color-wine); --stripe-w: 20px;"></div>
+      <div class="mx-auto flex max-w-6xl flex-col gap-20 px-6 pt-24 pb-28">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+          <h2 data-reveal class="font-display text-[clamp(2.75rem,6vw,4.5rem)] leading-none text-wine">Carrosséis <span class="italic">&amp; fotos</span></h2>
+          <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed text-wine-soft">Além dos vídeos: carrosséis pro feed e fotos de produto e lifestyle prontas pra anúncio.</p>
+        </div>
+
+        <div class="grid items-center gap-14 md:grid-cols-2">
+          <!-- visualizador: um carrossel por vez, os outros escondidos -->
+          <div data-reveal class="flex justify-center">
+            {carousels.map((c, ci) => {
+              const total = c.slides.length || c.slideCount;
+              return (
+                <div data-panel={`car:${c.id}`} hidden={ci !== 0} data-carousel class="flex w-full max-w-[420px] flex-col items-center gap-5">
+                  <div class="relative w-full">
+                    <div aria-hidden="true" class="absolute inset-0 translate-x-7 scale-[0.94] rounded-3xl border-[1.5px] border-wine bg-sky"></div>
+                    <div aria-hidden="true" class="absolute inset-0 translate-x-3.5 scale-[0.97] rounded-3xl border-[1.5px] border-wine bg-rose"></div>
+                    <div class="relative overflow-hidden rounded-3xl border-[1.5px] border-wine bg-offwhite">
+                      <ul data-track aria-label={`${c.brand}: slides`} class="flex aspect-[4/5] snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {Array.from({ length: total }, (_, s) => (
+                          <li class={`relative w-full shrink-0 snap-center ${s % 2 ? "bg-sky" : "bg-rose"}`}>
+                            <Photo src={c.slides[s]} alt={`${c.brand} — slide ${s + 1} de ${total}`} label={s === 0 ? "Capa · 4:5" : `Slide ${s + 1} · 4:5`} class="h-full w-full" />
+                          </li>
+                        ))}
+                      </ul>
+                      <span data-counter class="pointer-events-none absolute top-4 right-4 rounded-full bg-wine-deep px-2.5 py-1 text-xs font-semibold text-offwhite">1/{total}</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <button type="button" data-dir="-1" aria-label="Slide anterior" class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-wine transition-opacity disabled:opacity-35">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                    </button>
+                    <div class="flex gap-2" aria-hidden="true">
+                      {Array.from({ length: total }, (_, s) => (
+                        <span data-dot class={`h-2 rounded-full border border-wine transition-all ${s === 0 ? "w-6 bg-wine" : "w-2 bg-rose"}`}></span>
+                      ))}
+                    </div>
+                    <button type="button" data-dir="1" aria-label="Próximo slide" class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-wine text-offwhite transition-opacity disabled:opacity-35">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div data-reveal style="--reveal-delay: 120ms;" class="flex flex-col gap-5">
+            {carousels.map((c, ci) => (
+              <div data-panel={`car:${c.id}`} hidden={ci !== 0} class="flex flex-col gap-4">
+                <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">{c.niche} · {c.slides.length || c.slideCount} slides</span>
+                <h3 class="font-display text-[40px] leading-tight text-wine">{c.brand}</h3>
+                <p class="leading-relaxed">{c.text}</p>
+              </div>
+            ))}
+            <span class="pt-2 text-sm font-semibold text-wine-soft">Outros carrosséis</span>
+            <div role="group" aria-label="Escolher carrossel" class="grid grid-cols-4 gap-3">
+              {carousels.map((c, ci) => (
+                <button
+                  type="button"
+                  data-tab={`car:${c.id}`}
+                  aria-pressed={ci === 0 ? "true" : "false"}
+                  aria-label={c.brand}
+                  class={`aspect-[4/5] overflow-hidden rounded-2xl border-[1.5px] border-dashed border-wine p-0 text-[11px] font-semibold text-wine aria-pressed:border-[3px] aria-pressed:border-solid ${ci % 2 ? "bg-rose" : "bg-sky"}`}
+                >
+                  {c.slides[0] ? <img src={c.slides[0]} alt="" class="h-full w-full object-cover" loading="lazy" /> : `Carrossel ${ci + 1}`}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- galeria de fotos -->
+        <div class="flex flex-col gap-7">
+          <div data-reveal class="flex items-center gap-4">
+            <Sparkle class="sparkle-animate h-7 w-7 text-wine" style="--sparkle-dur: 2.4s;" />
+            <h3 class="font-display text-4xl text-wine">Fotos <span class="italic">UGC</span></h3>
+          </div>
+          <ul class="grid grid-flow-dense auto-rows-[200px] grid-cols-[repeat(auto-fill,minmax(min(100%,220px),1fr))] gap-4">
+            {gallery.map((g, i) => (
+              <li
+                data-reveal
+                style={`--reveal-delay: ${(i % 4) * 90}ms;`}
+                class={`relative overflow-hidden border-[1.5px] border-wine ${g.tall ? "row-span-2" : ""} ${g.shape === "arch-top" ? "rounded-t-[200px] rounded-b-[20px]" : g.shape === "arch-bottom" ? "rounded-t-[20px] rounded-b-[200px]" : "rounded-[20px]"} ${["bg-sky", "bg-rose", "bg-offwhite"][i % 3]}`}
+              >
+                <Photo src={g.src} alt={g.label} class="h-full w-full" />
+                <span class="absolute bottom-4 left-4 rounded-full border border-wine bg-offwhite px-3 py-1.5 text-xs font-semibold text-wine">{g.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASES DE SUCESSO -->
+    <section id="cases" class="scroll-mt-20 border-t-[1.5px] border-wine bg-sky px-6 py-28">
+      <div class="mx-auto flex max-w-6xl flex-col gap-10">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+          <h2 data-reveal class="font-display text-[clamp(2.75rem,6vw,4.5rem)] leading-none text-wine">Cases de <span class="italic">sucesso</span></h2>
+          <div data-reveal role="group" aria-label="Escolher case" class="flex flex-wrap gap-2.5">
+            {cases.map((c, i) => (
+              <button
+                type="button"
+                data-tab={`case:${c.id}`}
+                aria-pressed={i === 0 ? "true" : "false"}
+                class="min-h-12 rounded-full border-[1.5px] border-wine bg-offwhite px-5 text-[15px] font-semibold text-wine transition-colors hover:bg-rose aria-pressed:bg-wine aria-pressed:text-offwhite"
+              >
+                {c.brand}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {caseCharts.map((c, i) => (
+          <article data-panel={`case:${c.id}`} hidden={i !== 0} data-reveal class="hard-shadow overflow-hidden rounded-[32px] border-[1.5px] border-wine bg-offwhite">
+            <header class="stripes border-b-[1.5px] border-wine px-6 py-8 sm:px-12" style="--stripe-w: 40px;">
+              <div class="flex max-w-xl flex-col gap-1.5 rounded-[20px] border-[1.5px] border-wine bg-offwhite px-6 py-5">
+                <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">{c.niche} · {c.format}</span>
+                <h3 class="font-display text-4xl text-wine">{c.brand}</h3>
+                <p class="text-[15px] leading-relaxed">{c.goal}</p>
+              </div>
+            </header>
+
+            <dl class="grid grid-cols-2 gap-4 border-b-[1.5px] border-wine px-6 py-8 sm:px-12 lg:grid-cols-4">
+              {c.kpis.map(([value, label], k) => (
+                <div class={`flex flex-col-reverse gap-1.5 rounded-[20px] border-[1.5px] border-wine p-5 ${kpiBgs[k % 4]}`}>
+                  <dt class="text-sm font-medium">{label}</dt>
+                  <dd class="font-display text-[clamp(2rem,4vw,2.75rem)] leading-none text-wine">{value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <div class="grid md:grid-cols-2">
+              <figure class="flex flex-col gap-5 border-b-[1.5px] border-wine px-6 py-8 sm:px-12 md:border-r-[1.5px] md:border-b-0">
+                <figcaption class="flex flex-col gap-1">
+                  <span class="font-display text-2xl text-wine">Visualizações por vídeo</span>
+                  <span class="text-sm text-wine-soft">em mil, primeiros 30 dias</span>
+                </figcaption>
+                <div class="flex h-60 items-end gap-3.5 border-b-[1.5px] border-wine pt-6">
+                  {c.bars.map((b) => (
+                    <div class="flex h-full flex-1 flex-col items-center justify-end gap-1.5">
+                      <span class="text-[13px] font-semibold text-wine">{b.value}</span>
+                      <div
+                        data-bar
+                        data-size={`${b.height}%`}
+                        style="height: 0%;"
+                        class={`w-full max-w-14 rounded-t-xl border-[1.5px] border-b-0 border-wine ${b.best ? "bg-wine" : "bg-rose"}`}
+                        aria-label={`${b.label}: ${b.value} visualizações`}
+                        role="img"
+                      ></div>
+                    </div>
+                  ))}
+                </div>
+                <div class="-mt-2.5 flex gap-3.5" aria-hidden="true">
+                  {c.bars.map((b) => <span class="flex-1 text-center text-xs text-wine-soft">{b.label}</span>)}
+                </div>
+              </figure>
+
+              <figure class="flex flex-col gap-5 px-6 py-8 sm:px-12">
+                <figcaption class="flex flex-col gap-1">
+                  <span class="font-display text-2xl text-wine">Loren vs. média do nicho</span>
+                  <span class="text-sm text-wine-soft">quanto maior, melhor</span>
+                </figcaption>
+                <div class="flex gap-5 text-[13px]" aria-hidden="true">
+                  <span class="flex items-center gap-2"><span class="h-3.5 w-3.5 rounded bg-wine"></span>Loren</span>
+                  <span class="flex items-center gap-2"><span class="h-3.5 w-3.5 rounded border-[1.5px] border-wine bg-sky"></span>Média do nicho</span>
+                </div>
+                <dl class="flex flex-col gap-5">
+                  {c.rows.map((r) => (
+                    <div class="flex flex-col gap-2">
+                      <dt class="text-sm font-semibold">{r.label}</dt>
+                      <dd class="flex items-center gap-2.5">
+                        <span class="sr-only">Loren:</span>
+                        <span class="flex flex-1 items-center gap-2.5">
+                          <span data-bar data-size={`${r.mine}%`} data-axis="x" style="width: 0%;" class="h-[18px] max-w-[80%] rounded-r-full bg-wine"></span>
+                          <span class="text-[13px] font-semibold text-wine">{r.mineLabel}</span>
+                        </span>
+                      </dd>
+                      <dd class="flex items-center gap-2.5">
+                        <span class="sr-only">Média do nicho:</span>
+                        <span class="flex flex-1 items-center gap-2.5">
+                          <span data-bar data-size={`${r.avg}%`} data-axis="x" style="width: 0%;" class="box-border h-[18px] max-w-[80%] rounded-r-full border-[1.5px] border-l-0 border-wine bg-sky"></span>
+                          <span class="text-[13px] text-wine-soft">{r.avgLabel}</span>
+                        </span>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </figure>
+            </div>
+
+            <blockquote class="flex flex-wrap items-center gap-4 border-t-[1.5px] border-wine bg-rose px-6 py-6 sm:px-12">
+              <p class="font-display text-[22px] text-wine italic">“{c.quote}”</p>
+              <footer class="text-sm font-semibold">— {c.brand}</footer>
+            </blockquote>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <footer id="contato" class="scroll-mt-20 bg-wine text-offwhite">
+      <div aria-hidden="true" class="h-7" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 40px, #BFD9EE 40px 80px, #FAF6EF 80px 120px);"></div>
+      <div class="mx-auto flex max-w-6xl flex-col gap-10 px-6 pt-24 pb-14">
+        <h2 data-reveal class="font-display text-[clamp(3.25rem,8vw,7rem)] leading-[0.95] text-rose">
+          Vamos criar <span class="text-sky italic">juntas?</span>
+        </h2>
+        <div data-reveal style="--reveal-delay: 100ms;" class="flex flex-wrap gap-3">
+          <a href={contact.email ? `mailto:${contact.email}` : "#contato"} class="rounded-full bg-rose px-7 py-4 font-semibold text-wine transition-transform hover:-translate-y-0.5">
+            {contact.email || "[email da Loren]"}
+          </a>
+          {[
+            { label: "Instagram", url: contact.instagram },
+            { label: "TikTok", url: contact.tiktok },
+            { label: "Mídia kit (PDF)", url: contact.mediaKit },
+          ].map((l) => (
+            <a href={linkOr(l.url)} target={l.url ? "_blank" : undefined} rel={l.url ? "noopener noreferrer" : undefined} class="rounded-full border-[1.5px] border-sky px-7 py-4 font-semibold text-sky transition-transform hover:-translate-y-0.5">
+              {l.label}
+            </a>
+          ))}
+        </div>
+        <div class="flex flex-wrap justify-between gap-4 border-t border-rose/30 pt-8 text-sm text-rose">
+          <span>© Loren Martins</span>
+          <span class="font-display italic">conteúdo UGC</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  {hasEmbeds && <script is:inline async src="https://www.instagram.com/embed.js"></script>}
+
+  <script>
+    // abas genéricas: botão data-tab="grupo:id" mostra os data-panel="grupo:id" e esconde o resto do grupo
+    const growBars = (root: ParentNode) => {
+      root.querySelectorAll<HTMLElement>("[data-bar]").forEach((bar) => {
+        const prop = bar.dataset.axis === "x" ? "width" : "height";
+        requestAnimationFrame(() => (bar.style[prop] = bar.dataset.size ?? "0%"));
+      });
+    };
+
+    document.querySelectorAll<HTMLButtonElement>("[data-tab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const [group] = (btn.dataset.tab ?? "").split(":");
+        document.querySelectorAll<HTMLButtonElement>(`[data-tab^="${group}:"]`).forEach((b) => {
+          b.setAttribute("aria-pressed", String(b === btn));
+        });
+        document.querySelectorAll<HTMLElement>(`[data-panel^="${group}:"]`).forEach((panel) => {
+          const show = panel.dataset.panel === btn.dataset.tab;
+          panel.hidden = !show;
+          if (show) {
+            panel.classList.add("is-visible");
+            growBars(panel);
+          }
+        });
+      });
+    });
+
+    // gráficos crescem quando o card de cases entra na tela
+    const casesSection = document.querySelector("#cases");
+    if (casesSection) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            casesSection.querySelectorAll<HTMLElement>("[data-panel]:not([hidden])").forEach(growBars);
+            io.disconnect();
+          }
+        },
+        { threshold: 0.25 }
+      );
+      io.observe(casesSection);
+    }
+
+    // carrosséis do feed: setas, contador e bolinhas acompanham o scroll do trilho
+    document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((car) => {
+      const track = car.querySelector<HTMLElement>("[data-track]");
+      const counter = car.querySelector<HTMLElement>("[data-counter]");
+      const dots = car.querySelectorAll<HTMLElement>("[data-dot]");
+      const [prev, next] = car.querySelectorAll<HTMLButtonElement>("[data-dir]");
+      if (!track) return;
+      const total = track.children.length;
+
+      const update = () => {
+        const idx = Math.round(track.scrollLeft / (track.clientWidth || 1));
+        if (counter) counter.textContent = `${idx + 1}/${total}`;
+        dots.forEach((d, i) => {
+          d.classList.toggle("w-6", i === idx);
+          d.classList.toggle("bg-wine", i === idx);
+          d.classList.toggle("w-2", i !== idx);
+          d.classList.toggle("bg-rose", i !== idx);
+        });
+        prev.disabled = idx === 0;
+        next.disabled = idx === total - 1;
+      };
+
+      [prev, next].forEach((btn) =>
+        btn.addEventListener("click", () => track.scrollBy({ left: Number(btn.dataset.dir) * track.clientWidth }))
+      );
+      track.addEventListener("scroll", update, { passive: true });
+      update();
+    });
+  </script>
+</Layout>

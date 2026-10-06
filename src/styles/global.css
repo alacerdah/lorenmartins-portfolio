@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Instrument Sans", system-ui, sans-serif;
+
+  --color-offwhite: #FAF6EF;
+  --color-wine: #6B1F2E;
+  --color-wine-deep: #3A0F18;
+  --color-wine-soft: #5A2A33;
+  --color-rose: #F4C9D2;
+  --color-sky: #BFD9EE;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-offwhite);
+    color: var(--color-wine-deep);
+    font-family: var(--font-body);
+  }
+  ::selection {
+    background-color: var(--color-wine);
+    color: var(--color-offwhite);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-wine);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* listras: a cor de cada faixa e a largura vêm por variável, pra reaproveitar em todo canto */
+  .stripes {
+    background-image: repeating-linear-gradient(
+      var(--stripe-angle, 90deg),
+      var(--stripe-a, var(--color-rose)) 0 var(--stripe-w, 64px),
+      var(--stripe-b, var(--color-offwhite)) var(--stripe-w, 64px) calc(var(--stripe-w, 64px) * 2)
+    );
+  }
+
+  /* sombra "dura" deslocada, o acabamento de todos os cards */
+  .hard-shadow {
+    box-shadow: 10px 10px 0 var(--color-wine);
+  }
+
+  /* carrossel de marcas: a faixa tem a lista duas vezes e desliza metade da largura,
+     então o fim emenda no começo sem pulo */
+  .marquee-track {
+    animation: marquee 30s linear infinite;
+  }
+  .marquee-track[data-reverse] {
+    animation-direction: reverse;
+    animation-duration: 36s;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none !important;
+    }
+  }
+
+  /* entrada ao rolar */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.16, 0.8, 0.24, 1), transform 0.7s cubic-bezier(0.16, 0.8, 0.24, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* barras dos gráficos crescem quando o case aparece */
+  [data-bar] {
+    transition: height 0.9s cubic-bezier(0.16, 0.8, 0.24, 1), width 0.9s cubic-bezier(0.16, 0.8, 0.24, 1);
+  }
+
+  /* brilhinhos animados */
+  .sparkle-animate {
+    animation: sparkle-pulse var(--sparkle-dur, 2.4s) ease-in-out infinite;
+    animation-delay: var(--sparkle-delay, 0s);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+@keyframes sparkle-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.6) rotate(18deg);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

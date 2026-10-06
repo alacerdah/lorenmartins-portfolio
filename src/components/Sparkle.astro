@@ -1,0 +1,16 @@
+---
+// estrela de 4 pontas, o ornamento da marca. fill/stroke via classes de cor (text-*)
+interface Props {
+  class?: string;
+  outline?: boolean;
+}
+const { class: className = "", outline = false } = Astro.props;
+---
+<svg aria-hidden="true" viewBox="0 0 24 24" class={className}>
+  <path
+    d="M12 0 C12.8 7.2 16.8 11.2 24 12 C16.8 12.8 12.8 16.8 12 24 C11.2 16.8 7.2 12.8 0 12 C7.2 11.2 11.2 7.2 12 0Z"
+    fill="currentColor"
+    stroke={outline ? "#6B1F2E" : "none"}
+    stroke-width={outline ? 1 : 0}
+  />
+</svg>
