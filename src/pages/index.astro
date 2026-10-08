@@ -16,6 +16,7 @@ const navLinks = [
   { href: "#nichos", label: "Nichos" },
   { href: "#carrosseis", label: "Carrosséis & fotos" },
   { href: "#cases", label: "Cases" },
+  { href: "#feedbacks", label: "Feedbacks" },
 ];
 
 const photos = {
@@ -31,7 +32,7 @@ const contact = {
 };
 
 // marcas do carrossel animado
-const brands = ["Marca 01", "Marca 02", "Marca 03", "Marca 04", "Marca 05", "Marca 06", "Marca 07", "Marca 08"];
+const brands = ["hey harper", "CMC Lab", "Chico Rei", "Stapellia Moda", "Don Cream", "Marca 06", "Marca 07", "Marca 08"];
 
 // `top: true` = entra no "Top 3 nichos" (na ordem da lista). Os demais viram os botões.
 // TODO: lifestyle, tech, autocuidado e experiências são os nichos reais; os outros são exemplos.
@@ -100,6 +101,47 @@ const cases = [
     quote: "[Depoimento curto da marca sobre o resultado]",
   },
 ] as const;
+
+// feedbacks no WhatsApp — cada entrada é uma conversa (troca de mensagens entre marca e Loren)
+// avatar: iniciais da marca; cor: bg do avatar (rose ou sky)
+const feedbacks = [
+  {
+    brand: "hey harper", logo: "/images/logos/hey-harper.webp", color: "bg-sky",
+    msgs: [
+      { from: "brand", text: "Heya Loren! Thank you so much - I love it!! Everything looks great, and the whole delivery is very well organised. I really appreciate all the effort. Gonna be interesting to see the performance, but for now I don't have any extra feedback notes - let's test it!", time: "14:32" },
+      { from: "loren", text: "Omg thank you so much!! I'm so happy you liked it, it was such a pleasure working with hey harper", time: "14:35" },
+    ],
+  },
+  {
+    brand: "CMC Lab", logo: "/images/logos/cmc-lab.png", color: "bg-rose",
+    msgs: [
+      { from: "brand", text: "Loren, queria agradecer pela parceria, nós adoramos a sua entrega! Dá pra ver seu compromisso com sua entrega, tanto na qualidade do vídeo quanto na construção do roteiro e cenas.", time: "10:15" },
+      { from: "brand", text: "Foi um vídeo bem pensado e que realmente desperta o interesse de quem assiste. Com certeza, em futuras oportunidades, entraremos em contato novamente!", time: "10:17" },
+      { from: "loren", text: "Que feedback incrível, muito obrigada!! Fico muito feliz que gostaram do resultado, foi um prazer trabalhar com vocês", time: "10:20" },
+    ],
+  },
+  {
+    brand: "Chico Rei", logo: "/images/logos/chico-rei.jpg", color: "bg-sky",
+    msgs: [
+      { from: "brand", text: "Oi, Loren! Tudo bem?\n\nFicamos muito satisfeitos com o resultado! Você seguiu perfeitamente o briefing e captou o vídeo no tom exato que precisávamos. Obrigado pela entrega e esperamos voltar a trabalhar com você nas próximas campanhas que criarmos! ♥", time: "10:07" },
+      { from: "loren", text: "Oi! Muito obrigada pelo retorno, fiquei muito feliz com esse feedback! Foi um prazer trabalhar com a Chico Rei, adorei o projeto. Contem comigo nas próximas!", time: "10:12" },
+    ],
+  },
+  {
+    brand: "Stapellia Moda", logo: "/images/logos/stapellia.jpg", color: "bg-rose",
+    msgs: [
+      { from: "brand", text: "A entrega foi perfeita, não precisamos ajustar nada. Ela foi muito profissional e atenta ao briefing! Adoramos a experiência!", time: "11:20" },
+      { from: "loren", text: "Muito obrigada pelo feedback! Fico feliz que gostaram, foi incrível trabalhar com a Stapellia. Contem comigo sempre!", time: "11:25" },
+    ],
+  },
+  {
+    brand: "Don Cream", logo: "/images/logos/don-cream.png", color: "bg-sky",
+    msgs: [
+      { from: "brand", text: "Trabalhar com você foi incrível! Além da entrega impecável e dentro dos briefings acordados, você sempre se mostrou solícita a qualquer necessidade de ajuste ou alinhamento. Ansiosa pelas próximas oportunidades de ter você trabalhando com a Don Cream! Conte com o Urso!", time: "17:06" },
+      { from: "loren", text: "Que mensagem mais linda!! Muito obrigada, trabalhar com a Don Cream foi demais. Contem comigo sempre! 🐻❤️", time: "17:10" },
+    ],
+  },
+];
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -492,6 +534,78 @@ const linkOr = (url: string) => url || "#contato";
       </div>
     </section>
 
+    <!-- FEEDBACKS (WhatsApp) -->
+    <section id="feedbacks" class="scroll-mt-20 border-t-[1.5px] border-wine px-6 py-28">
+      <div class="mx-auto flex max-w-6xl flex-col items-center gap-12">
+        <div class="flex flex-col items-center gap-3 text-center">
+          <h2 data-reveal class="font-display text-[clamp(2.75rem,6vw,4.5rem)] leading-none text-wine">O que as marcas <span class="italic">dizem</span></h2>
+        </div>
+
+        <div data-reveal style="--reveal-delay: 160ms;" class="w-full max-w-[460px]">
+          <!-- moldura de celular -->
+          <div class="hard-shadow overflow-hidden rounded-[32px] border-[1.5px] border-wine">
+            <!-- topbar -->
+            <div class="flex items-center gap-3 bg-wine px-5 py-3.5">
+              <div class="h-9 w-9 shrink-0 overflow-hidden rounded-full border-2 border-rose">
+                <img src={photos.hero} alt="Loren" class="h-full w-full object-cover" />
+              </div>
+              <div>
+                <p class="text-[15px] font-semibold text-offwhite">Loren Martins</p>
+                <p class="text-xs text-rose">online</p>
+              </div>
+            </div>
+
+            <!-- área do chat -->
+            <div data-fb-chat class="relative min-h-[320px] overflow-hidden bg-offwhite transition-[height] duration-500" style="background-image: repeating-linear-gradient(90deg, transparent 0 58px, rgba(107,31,46,0.03) 58px 60px);">
+              {feedbacks.map((fb, fi) => (
+                <div
+                  data-fb-slide={fi}
+                  style={`transform: translateX(${fi === 0 ? 0 : 60}px)`}
+                  class={`inset-x-0 top-0 flex flex-col gap-2.5 px-4 py-5 transition-all duration-500 absolute ${fi === 0 ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                >
+                  {fb.msgs.map((m) =>
+                    m.from === "brand" ? (
+                      <div class="mr-[12%] self-start rounded-2xl rounded-tl-[4px] border border-wine/10 bg-white px-3.5 py-2.5">
+                        <div class="mb-1.5 flex items-center gap-2">
+                          <img src={fb.logo} alt={fb.brand} class="h-7 w-7 shrink-0 rounded-full object-cover" />
+                          <span class="text-[13px] font-semibold text-wine">{fb.brand}</span>
+                        </div>
+                        <p class="text-[14px] leading-[1.55]">{m.text}</p>
+                        <p class="mt-1 text-right text-[11px] text-wine-soft/60">{m.time}</p>
+                      </div>
+                    ) : (
+                      <div class="ml-[12%] self-end rounded-2xl rounded-tr-[4px] bg-rose px-3.5 py-2.5">
+                        <p class="text-[14px] leading-[1.55]">{m.text}</p>
+                        <p class="mt-1 text-right text-[11px] text-wine-soft/60">{m.time}</p>
+                      </div>
+                    )
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <!-- faixa listrada -->
+            <div aria-hidden="true" class="h-1.5 border-t-[1.5px] border-wine" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 32px, #BFD9EE 32px 64px, #FAF6EF 64px 96px);"></div>
+          </div>
+
+          <!-- bolinhas + setas -->
+          <div class="flex items-center justify-center gap-5 pt-5">
+            <button type="button" data-fb-prev aria-label="Feedback anterior" class="flex h-10 w-10 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-wine transition-transform hover:-translate-y-0.5 active:scale-95">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+            </button>
+            <div class="flex gap-2" aria-hidden="true">
+              {feedbacks.map((_, i) => (
+                <span data-fb-dot={i} class={`h-2 rounded-full border border-wine transition-all cursor-pointer ${i === 0 ? "w-6 bg-wine" : "w-2 bg-rose"}`}></span>
+              ))}
+            </div>
+            <button type="button" data-fb-next aria-label="Próximo feedback" class="flex h-10 w-10 items-center justify-center rounded-full border-[1.5px] border-wine bg-wine text-offwhite transition-transform hover:-translate-y-0.5 active:scale-95">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CONTATO -->
     <footer id="contato" class="scroll-mt-20 bg-wine text-offwhite">
       <div aria-hidden="true" class="h-7" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 40px, #BFD9EE 40px 80px, #FAF6EF 80px 120px);"></div>
@@ -592,5 +706,57 @@ const linkOr = (url: string) => url || "#contato";
       track.addEventListener("scroll", update, { passive: true });
       update();
     });
+
+    // feedbacks WhatsApp: auto-play + setas + bolinhas
+    {
+      const slides = document.querySelectorAll<HTMLElement>("[data-fb-slide]");
+      const dots = document.querySelectorAll<HTMLElement>("[data-fb-dot]");
+      const prevBtn = document.querySelector<HTMLButtonElement>("[data-fb-prev]");
+      const nextBtn = document.querySelector<HTMLButtonElement>("[data-fb-next]");
+      if (slides.length > 0 && prevBtn && nextBtn) {
+        const total = slides.length;
+        let current = 0;
+        let autoTimer: ReturnType<typeof setInterval>;
+
+        const chat = document.querySelector<HTMLElement>("[data-fb-chat]");
+        const fitHeight = () => {
+          if (chat) chat.style.height = slides[current].offsetHeight + "px";
+        };
+        fitHeight();
+        window.addEventListener("resize", fitHeight);
+        document.fonts?.ready.then(fitHeight);
+        const goTo = (idx: number) => {
+          slides.forEach((s, i) => {
+            const active = i === idx;
+            s.classList.toggle("opacity-0", !active);
+            s.classList.toggle("opacity-100", active);
+            s.classList.toggle("pointer-events-none", !active);
+            s.style.transform = active ? "translateX(0)" : `translateX(${i > idx ? 60 : -60}px)`;
+          });
+          current = idx;
+          fitHeight();
+          dots.forEach((d, i) => {
+            d.classList.toggle("w-6", i === current);
+            d.classList.toggle("bg-wine", i === current);
+            d.classList.toggle("w-2", i !== current);
+            d.classList.toggle("bg-rose", i !== current);
+          });
+          resetAuto();
+        };
+
+        const next = () => goTo((current + 1) % total);
+        const prev = () => goTo((current - 1 + total) % total);
+
+        nextBtn.addEventListener("click", next);
+        prevBtn.addEventListener("click", prev);
+        dots.forEach((d) => d.addEventListener("click", () => goTo(Number(d.dataset.fbDot))));
+
+        const resetAuto = () => {
+          clearInterval(autoTimer);
+          autoTimer = setInterval(next, 4500);
+        };
+        resetAuto();
+      }
+    }
   </script>
 </Layout>

@@ -51,6 +51,7 @@ public/
 | `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem |
 | `gallery` | Fotos UGC da galeria; `tall` = 2 linhas, `shape` = arco |
 | `cases` | Cases de sucesso com KPIs, gráficos de barras e comparativos |
+| `feedbacks` | Conversas estilo WhatsApp (marca + Loren). `logo` = `/images/logos/...` |
 
 Para adicionar fotos: colocar em `public/images/` e usar o caminho `/images/nome.ext`.
 
