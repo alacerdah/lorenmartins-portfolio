@@ -47,7 +47,7 @@ public/
 | `contact` | Email, Instagram, TikTok, mídia kit |
 | `brandRows` | Logos do carrossel de marcas (2 faixas). Cada logo é `logo("Nome", "arquivo.png")` e o arquivo fica em `public/images/logos/` |
 | `niches` | Lista de nichos; `top: true` = entra no "Top 3" |
-| `videos` | Vídeos por nicho; com `permalink` do Instagram = embed real |
+| `videos` / `realVideos` | Vídeos por nicho (3 espaços cada). Em `realVideos` preencha por nicho: `src` = arquivo .mp4 que toca no site, ou `permalink` do Instagram = embed real |
 | `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem |
 | `gallery` | Fotos UGC da galeria; `tall` = 2 linhas, `shape` = arco |
 | `cases` | Cases de sucesso com KPIs, gráficos de barras e comparativos |

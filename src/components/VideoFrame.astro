@@ -1,18 +1,22 @@
 ---
-// moldura 9:16 de vídeo. Com `permalink` (post/reel do Instagram) mostra o embed oficial;
-// sem, mostra um espaço reservado com a legenda.
+// moldura 9:16 de vídeo. Com `src` (arquivo de vídeo direto, ex.: .mp4) toca no próprio site;
+// com `permalink` (post/reel do Instagram) mostra o embed oficial;
+// sem nenhum, mostra um espaço reservado com a legenda.
 interface Props {
   label: string;
+  src?: string;
   permalink?: string;
   class?: string;
 }
-const { label, permalink, class: className = "" } = Astro.props;
+const { label, src, permalink, class: className = "" } = Astro.props;
 ---
 <div
   class={`relative aspect-[9/16] w-full overflow-hidden border-[1.5px] border-wine bg-offwhite ${className}`}
-  data-video-embed={permalink ? "true" : undefined}
+  data-video-embed={permalink && !src ? "true" : undefined}
 >
-  {permalink ? (
+  {src ? (
+    <video src={src} controls playsinline preload="metadata" aria-label={label} class="h-full w-full object-cover"></video>
+  ) : permalink ? (
     /* o embed do Instagram nunca fica mais estreito que 326px: ele nasce no tamanho normal
        dentro do .video-embed-inner e o script abaixo encolhe esse wrapper pra caber na moldura */
     <div class="video-embed-inner" style="width:342px;">

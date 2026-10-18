@@ -61,10 +61,14 @@ const niches = [
   { id: "pets", label: "Pets" },
 ];
 
-// vídeos: `permalink` do post/reel do Instagram mostra o embed oficial; sem ele, espaço reservado
-type Video = { niche: string; brand: string; format: string; permalink?: string };
+// vídeos: `src` (arquivo .mp4) toca direto no site; `permalink` do post/reel do Instagram mostra o embed oficial;
+// sem nenhum dos dois, espaço reservado. Preencha `realVideos` por nicho (na ordem dos 3 espaços).
+type Video = { niche: string; brand: string; format: string; src?: string; permalink?: string };
+const realVideos: Record<string, Partial<Video>[]> = {
+  fitness: [{ src: "https://lorenmartins.my.canva.site/_assets/video/297213cddf4782496d1d5e4dca9d5255.mp4" }],
+};
 const videos: Video[] = niches.flatMap((n) =>
-  [1, 2, 3].map((i) => ({ niche: n.id, brand: `[Marca ${i}]`, format: "[formato]" }))
+  [1, 2, 3].map((i) => ({ niche: n.id, brand: `[Marca ${i}]`, format: "[formato]", ...realVideos[n.id]?.[i - 1] }))
 );
 
 // carrosséis do feed: `slides` = imagens em ordem; vazio usa `slideCount` espaços reservados
@@ -306,7 +310,7 @@ const linkOr = (url: string) => url || "#contato";
           const first = videosOf(n.id)[0];
           return (
             <article data-reveal style={`--reveal-delay: ${i * 120}ms;`} class={`flex flex-col gap-5 rounded-t-[200px] rounded-b-[28px] border-[1.5px] border-wine p-5 pb-7 ${cardBgs[i]}`}>
-              <VideoFrame label="Vídeo UGC 9:16" permalink={first?.permalink} class="rounded-t-[180px] rounded-b-2xl" />
+              <VideoFrame label="Vídeo UGC 9:16" src={first?.src} permalink={first?.permalink} class="rounded-t-[180px] rounded-b-2xl" />
               <div class="flex items-baseline gap-3.5 px-2">
                 <span class="font-display text-4xl text-wine italic">{String(i + 1).padStart(2, "0")}</span>
                 <h3 class="font-display text-[28px] font-semibold">{n.label}</h3>
@@ -348,7 +352,7 @@ const linkOr = (url: string) => url || "#contato";
           </div>
           <div class="grid grid-cols-3 gap-3 bg-offwhite p-5 sm:gap-4 sm:p-8">
             {videosOf(n.id).slice(0, 3).map((v, j) => (
-              <VideoFrame label={`Vídeo ${j + 1}`} permalink={v.permalink} class="rounded-2xl bg-rose" />
+              <VideoFrame label={`Vídeo ${j + 1}`} src={v.src} permalink={v.permalink} class="rounded-2xl bg-rose" />
             ))}
           </div>
         </div>
