@@ -31,8 +31,22 @@ const contact = {
   mediaKit: "", // PDF em public/ (ex.: "/midia-kit.pdf") ou link
 };
 
-// marcas do carrossel animado
-const brands = ["hey harper", "CMC Lab", "Chico Rei", "Stapellia Moda", "Don Cream", "Marca 06", "Marca 07", "Marca 08"];
+// marcas do carrossel animado — logos em public/images/logos/. Duas faixas: a de cima e a de baixo (reversa)
+const logo = (name: string, file: string) => ({ name, src: `/images/logos/${file}` });
+const brandRows = [
+  [
+    logo("Dove", "dove.png"), logo("Beyoung", "beyoung.png"), logo("Pernambucanas", "pernambucanas.png"),
+    logo("hey harper", "hey-harper.png"), logo("Loungerie", "loungerie.png"), logo("Avène", "avene.png"),
+    logo("Basic", "basic.png"), logo("Rosa Selvagem", "rosa-selvagem.png"), logo("Neutrogena", "neutrogena.png"),
+    logo("CMC Lab", "cmc-lab.png"),
+  ],
+  [
+    logo("Chico Rei", "chico-rei.png"), logo("Kiss New York", "kiss-new-york.png"), logo("Don Cream", "don-cream.png"),
+    logo("KitKat", "kitkat.png"), logo("Philips", "philips.png"), logo("Kaisan", "kaisan.png"),
+    logo("Panda Alianças", "panda-aliancas.png"), logo("Color Wow", "color-wow.png"), logo("Beleza Brasileira", "beleza-brasileira.png"),
+    logo("Stapellia Moda", "stapellia.jpg"),
+  ],
+];
 
 // `top: true` = entra no "Top 3 nichos" (na ordem da lista). Os demais viram os botões.
 // TODO: lifestyle, tech, autocuidado e experiências são os nichos reais; os outros são exemplos.
@@ -106,7 +120,7 @@ const cases = [
 // avatar: iniciais da marca; cor: bg do avatar (rose ou sky)
 const feedbacks = [
   {
-    brand: "hey harper", logo: "/images/logos/hey-harper.webp", color: "bg-sky",
+    brand: "hey harper", logo: "/images/logos/hey-harper.png", color: "bg-sky",
     msgs: [
       { from: "brand", text: "Heya Loren! Thank you so much - I love it!! Everything looks great, and the whole delivery is very well organised. I really appreciate all the effort. Gonna be interesting to see the performance, but for now I don't have any extra feedback notes - let's test it!", time: "14:32" },
       { from: "loren", text: "Omg thank you so much!! I'm so happy you liked it, it was such a pleasure working with hey harper", time: "14:35" },
@@ -121,7 +135,7 @@ const feedbacks = [
     ],
   },
   {
-    brand: "Chico Rei", logo: "/images/logos/chico-rei.jpg", color: "bg-sky",
+    brand: "Chico Rei", logo: "/images/logos/chico-rei.png", color: "bg-sky",
     msgs: [
       { from: "brand", text: "Oi, Loren! Tudo bem?\n\nFicamos muito satisfeitos com o resultado! Você seguiu perfeitamente o briefing e captou o vídeo no tom exato que precisávamos. Obrigado pela entrega e esperamos voltar a trabalhar com você nas próximas campanhas que criarmos! ♥", time: "10:07" },
       { from: "loren", text: "Oi! Muito obrigada pelo retorno, fiquei muito feliz com esse feedback! Foi um prazer trabalhar com a Chico Rei, adorei o projeto. Contem comigo nas próximas!", time: "10:12" },
@@ -219,22 +233,30 @@ const linkOr = (url: string) => url || "#contato";
 
     <!-- MARCAS (carrossel animado) -->
     <section aria-label="Marcas que já confiaram no meu trabalho" class="border-y-[1.5px] border-wine">
-      <div class="marquee overflow-hidden bg-wine py-5 text-rose">
+      <div class="marquee overflow-hidden bg-wine py-5">
         <div class="marquee-track flex w-max">
           {[0, 1].map((copy) => (
-            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-center gap-14 pr-14 font-display text-[clamp(1.6rem,3vw,2.2rem)] whitespace-nowrap italic">
-              {brands.map((b) => (
-                <li class="flex items-center gap-14">{b}<span aria-hidden="true" class="text-sky not-italic">✦</span></li>
+            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-center gap-8 pr-8">
+              {brandRows[0].map((b) => (
+                <li class="flex items-center gap-8">
+                  <img src={b.src} alt={b.name} width="96" height="96" class="h-16 w-16 rounded-full object-cover sm:h-[72px] sm:w-[72px]" />
+                  <span aria-hidden="true" class="text-sky">✦</span>
+                </li>
               ))}
             </ul>
           ))}
         </div>
       </div>
-      <div aria-hidden="true" class="marquee overflow-hidden border-t-[1.5px] border-wine bg-sky py-4 text-wine">
+      <div class="marquee overflow-hidden border-t-[1.5px] border-wine bg-sky py-4">
         <div class="marquee-track flex w-max" data-reverse>
-          {[0, 1].map(() => (
-            <ul class="flex shrink-0 items-center gap-10 pr-10 text-sm font-semibold tracking-[0.14em] whitespace-nowrap uppercase">
-              {brands.map((b) => <li class="flex items-center gap-10">{b}<span>•</span></li>)}
+          {[0, 1].map((copy) => (
+            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-center gap-8 pr-8">
+              {brandRows[1].map((b) => (
+                <li class="flex items-center gap-8">
+                  <img src={b.src} alt={b.name} width="96" height="96" class="h-14 w-14 rounded-full border-[1.5px] border-wine object-cover sm:h-16 sm:w-16" />
+                  <span aria-hidden="true" class="text-wine">•</span>
+                </li>
+              ))}
             </ul>
           ))}
         </div>

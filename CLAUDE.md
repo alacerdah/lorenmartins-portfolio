@@ -45,7 +45,7 @@ public/
 |---|---|
 | `photos` | Caminhos das fotos do hero e "sobre" |
 | `contact` | Email, Instagram, TikTok, mídia kit |
-| `brands` | Nomes do carrossel de marcas |
+| `brandRows` | Logos do carrossel de marcas (2 faixas). Cada logo é `logo("Nome", "arquivo.png")` e o arquivo fica em `public/images/logos/` |
 | `niches` | Lista de nichos; `top: true` = entra no "Top 3" |
 | `videos` | Vídeos por nicho; com `permalink` do Instagram = embed real |
 | `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem |
@@ -108,7 +108,6 @@ npm run build        # build de produção em dist/
 
 ## Pendências
 
-- [ ] Preencher nomes reais das marcas no array `brands`
 - [ ] Adicionar vídeos reais com `permalink` do Instagram/TikTok
 - [ ] Fotos reais na galeria UGC
 - [ ] Slides reais nos carrosséis
