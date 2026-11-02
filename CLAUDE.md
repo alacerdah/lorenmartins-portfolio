@@ -11,7 +11,7 @@
 |---|---|---|
 | Framework | Astro | 7.3.x |
 | CSS | Tailwind CSS v4 | via `@tailwindcss/vite` |
-| Fontes | Fraunces (display, serif) + Instrument Sans (body) | Google Fonts |
+| Fontes | Fraunces (display, serif) + Instrument Sans (body) + Inter (balões da capa) | Google Fonts |
 | Deploy | Netlify | `netlify.toml` na raiz |
 | Node mínimo | 22 | definido em `engines` e `netlify.toml` |
 
@@ -46,13 +46,14 @@ public/
 | Constante | O que controla |
 |---|---|
 | `photos` | Caminhos das fotos do hero e "sobre" |
+| `heroFeedbacks` | Balões de depoimento sobre a foto da capa: `brand`, `logo`, `text` e posição (`place`) |
 | `contact` | Email, Instagram, TikTok, WhatsApp, mídia kit |
 | `brandRows` | Logos do carrossel de marcas (2 faixas). Cada logo é `logo("Nome", "arquivo.png")` e o arquivo fica em `public/images/logos/` |
 | `niches` | Lista de nichos em ordem de preferência: viram as abas e os botões do "Sobre". `black-friday` é temporário: faixa, aba e botão só aparecem de 1º/out a 30/nov |
 | `videos` / `realVideos` | Vídeos por nicho (quantos quiser; nicho sem nenhum ganha 3 espaços reservados). Em `realVideos` preencha por nicho: `brand`, `src` = arquivo .mp4 (em `public/videos/`) ou `permalink` do Instagram, `badge` opcional (adesivo tipo "+80 mil views") |
 | `englishVideos` | Vídeos em inglês, só na página `/en/`, logo depois do topo |
 | `viralVideos` | Seção "Cases virais": o primeiro em destaque e dois embaixo, com `logo`, `insights` (print em `public/images/insights/`), `tags` e os textos `impact`, `execution` e `goal` |
-| `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem |
+| `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem, `badge` = adesivo na foto, `url` = post original |
 | `gallery` | Fotos UGC: faixas em movimento. Imagem otimizada em `public/images/galeria-web/` (640 px de largura), `brandName` e `logo` |
 | `salesCases` | Cases de venda: marca, vídeo, explicação e números (`kpis`) |
 | `feedbacks` | Parede de feedbacks: cada marca vira um card com as mensagens dela. `logo` = `/images/logos/...` |

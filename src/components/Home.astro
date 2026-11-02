@@ -30,6 +30,13 @@ const photos = {
   sobre: "/images/loren2.png",
 };
 
+// balões de depoimento em cima da foto da capa; `place` só vale em telas a partir de 1280 px (nas menores ficam empilhados abaixo da foto)
+const heroFeedbacks = [
+  { brand: "Deby Fit", logo: "/images/logos/deby-fit.png", text: t("Estamos usando os conteúdos no tráfego pago e tendo retorno.", "We're using the content in paid traffic and seeing returns."), place: "xl:top-[9%] xl:-right-[130px]" },
+  { brand: "Stapellia Moda", logo: "/images/logos/stapellia.jpg", text: t("A entrega foi perfeita, não precisamos ajustar nada.", "The delivery was perfect, we didn't need to adjust anything."), place: "xl:top-[27%] xl:-right-[130px]" },
+  { brand: "Hey Harper", logo: "/images/logos/hey-harper.png", text: "Everything looks great, and the whole delivery is very well organised.", place: "xl:bottom-[7%] xl:-left-28" },
+];
+
 const contact = {
   email: "contatolorenmartins@gmail.com",
   instagram: "https://www.instagram.com/bylorenmartins",
@@ -203,12 +210,15 @@ const viralRows = (v: (typeof viralVideos)[number]) => [
 ];
 
 // carrosséis do feed: `slides` = imagens em ordem; vazio usa `slideCount` espaços reservados
-const carousels: { id: string; brand: string; niche: string; text: string; slides: string[]; slideCount: number }[] = [
+// `badge` = adesivo na foto; `url` = post original (a foto vira link)
+const carousels: { id: string; brand: string; niche: string; text: string; slides: string[]; slideCount: number; badge?: string; url?: string }[] = [
   {
     id: "k1",
     brand: "Kiss New York",
     niche: t("Beleza", "Beauty"),
-    text: t("Mais de 12 mil views", "More than 12K views"),
+    text: "",
+    badge: t("+12 mil views", "+12K views"),
+    url: "https://www.instagram.com/p/DandnJfDpds/",
     slides: ["/images/carrossel/kiss/kiss1.jpg", "/images/carrossel/kiss/kiss2.jpg", "/images/carrossel/kiss/kiss3.jpg", "/images/carrossel/kiss/kiss4.jpg", "/images/carrossel/kiss/kiss5.jpg", "/images/carrossel/kiss/kiss6.jpg"],
     slideCount: 6,
   },
@@ -313,6 +323,7 @@ const feedbacks = [
     brand: "Stapellia Moda", logo: "/images/logos/stapellia.jpg", color: "bg-rose",
     msgs: [
       { from: "brand", text: "A entrega foi perfeita, não precisamos ajustar nada. Ela foi muito profissional e atenta ao briefing! Adoramos a experiência!", en: "The delivery was perfect, we didn't need to adjust anything. She was very professional and attentive to the brief! We loved the experience!", time: "11:20" },
+      { from: "brand", text: "Ficamos muito satisfeitos com o resultado! Você seguiu perfeitamente o briefing e captou o vídeo no tom exato que precisávamos. Obrigado pela entrega e esperamos voltar a trabalhar com você nas próximas campanhas que criarmos! ♥", en: "We were very happy with the result! You followed the brief perfectly and captured the video in the exact tone we needed. Thank you for the delivery, and we hope to work with you again on the next campaigns we create! ♥", time: "" },
       { from: "loren", text: "Muito obrigada pelo feedback! Fico feliz que gostaram, foi incrível trabalhar com a Stapellia. Contem comigo sempre!", time: "11:25" },
     ],
   },
@@ -389,8 +400,8 @@ const linkOr = (url: string) => url || "#contato";
     <section class="mx-auto grid max-w-[1320px] items-center gap-8 px-6 pt-8 md:min-h-[min(calc(100svh-4.5rem-var(--bf-h,0px)),860px)] md:grid-cols-[3fr_2fr]">
       <div class="flex flex-col gap-4 md:pb-8">
         <div data-reveal class="flex flex-wrap gap-2">
-          <span class="rounded-full bg-rose px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">{t("Criadora UGC", "UGC creator")}</span>
-          <span class="rounded-full bg-sky px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">{t("São José dos Campos · SP", "São Paulo State · Brazil")}</span>
+          <span class="rounded-full bg-rose px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">UGC Creator</span>
+          <span class="rounded-full bg-sky px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">Influencer</span>
         </div>
         <h1 data-reveal style="--reveal-delay: 80ms;" class="font-display text-[clamp(2.5rem,min(5.6vw,11vh),5rem)] leading-[1] text-wine">
           {lang === "en" ? <Fragment>Content that <span class="italic">sells</span> without feeling like an ad.</Fragment> : <Fragment>Conteúdo que <span class="italic">vende</span> sem parecer anúncio.</Fragment>}
@@ -412,16 +423,22 @@ const linkOr = (url: string) => url || "#contato";
           <a href="#contato" class="inline-block rounded-full bg-wine px-7 py-4 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">{t("Quero criar com a Loren", "Let's work together")}</a>
         </div>
       </div>
-      <div data-reveal style="--reveal-delay: 120ms;" class="flex justify-center md:self-end">
-        <div class="relative aspect-[4/5] w-full max-w-[420px] md:max-w-[min(100%,calc((100svh-4.5rem-var(--bf-h,0px)-2rem)*0.8),640px)]">
+      <div data-reveal style="--reveal-delay: 120ms;" class="flex justify-center md:self-end xl:justify-end">
+        <div class="relative w-full max-w-[420px] md:max-w-[min(100%,calc((100svh-4.5rem-var(--bf-h,0px)-2rem)*0.8),640px)] xl:mr-[max(0px,calc(122px_-_max(0px,(100vw_-_1320px)/2)))]">
+          <div class="relative aspect-[4/5] w-full">
           <div aria-hidden="true" class="stripes absolute inset-0 translate-x-3 rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine" style="--stripe-w: 22px;"></div>
           <div class="absolute inset-0 overflow-hidden rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine bg-sky">
             <Photo src={photos.hero} alt="Loren Martins" label={t("Foto da Loren", "Photo of Loren")} class="h-full w-full" eager />
           </div>
-          <div class="absolute bottom-8 -left-3 z-10 flex h-24 w-24 -rotate-6 flex-col items-center justify-center rounded-full border-[1.5px] border-wine bg-rose text-center text-wine shadow-[3px_3px_0_var(--color-wine)] sm:-left-6 sm:h-28 sm:w-28">
-            <span class="font-display text-[28px] leading-none sm:text-[32px]">+60</span>
-            <span class="mt-1 px-2 text-[11px] leading-tight font-semibold">{t("marcas trabalhadas", "brands worked with")}</span>
           </div>
+          <ul class="mt-5 mb-8 flex flex-col gap-2.5 md:mb-6 xl:contents">
+            {heroFeedbacks.map((f, i) => (
+              <li data-reveal style={`--reveal-delay: ${450 + i * 180}ms;`} class={`reveal-sm z-20 flex items-center gap-2.5 rounded-xl border border-wine/10 bg-white/90 px-3 py-2.5 text-wine-soft shadow-[0_4px_16px_rgba(58,15,24,0.08)] backdrop-blur-sm xl:absolute xl:w-[225px] ${f.place}`}>
+                <img src={f.logo} alt={f.brand} width="32" height="32" class="h-8 w-8 shrink-0 rounded-full border border-wine/10 object-cover" loading="lazy" />
+                <p class="font-inter text-[12.5px] leading-snug">{f.text}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
@@ -494,7 +511,7 @@ const linkOr = (url: string) => url || "#contato";
           <article data-reveal class="flex flex-col items-center justify-center gap-12 rounded-[28px] border-[1.5px] border-wine bg-rose px-6 pt-16 pb-12 sm:px-12 md:flex-row md:items-start">
             <div data-card class="relative w-full max-w-[250px] shrink-0">
               <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-[24px] bg-offwhite" />
-              <img src={v.logo} alt="" width="96" height="96" class="absolute -top-12 -left-4 z-10 h-24 w-24 rounded-full border-[1.5px] border-wine bg-offwhite object-cover" />
+              <span class="absolute -top-12 -left-4 z-10 h-24 w-24 overflow-hidden rounded-full border-[1.5px] border-wine"><img src={v.logo} alt="" width="96" height="96" class="h-full w-full scale-110 object-cover" /></span>
               <div data-card-cover class="absolute -bottom-4 -left-4 z-10 w-[88%] md:-bottom-20 md:-left-[32%]">
                 {v.insights
                   ? <img src={v.insights} alt={t(`Métricas do vídeo: ${v.impact}`, `Video metrics: ${v.impact}`)} class="w-full rounded-2xl border-[1.5px] border-wine bg-white shadow-[3px_3px_0_var(--color-wine)]" />
@@ -525,7 +542,7 @@ const linkOr = (url: string) => url || "#contato";
             <article data-reveal class="grid gap-8 rounded-[28px] border-[1.5px] border-wine bg-sky px-6 py-8 sm:grid-cols-[210px_minmax(0,1fr)] sm:px-8">
             <div data-card class="relative mx-auto w-full max-w-[210px] shrink-0 self-start">
               <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-[24px] bg-offwhite" />
-              <img src={v.logo} alt="" width="96" height="96" class="absolute -top-4 -left-4 z-10 h-16 w-16 rounded-full border-[1.5px] border-wine bg-offwhite object-cover" />
+              <span class="absolute -top-4 -left-4 z-10 h-16 w-16 overflow-hidden rounded-full border-[1.5px] border-wine"><img src={v.logo} alt="" width="96" height="96" class="h-full w-full scale-110 object-cover" /></span>
               <div data-card-cover class="absolute -bottom-4 -left-4 z-10 w-[62%] -rotate-3">
                 {v.insights
                   ? <img src={v.insights} alt={t(`Métricas do vídeo: ${v.impact}`, `Video metrics: ${v.impact}`)} class="w-full rounded-2xl border-[1.5px] border-wine bg-white shadow-[3px_3px_0_var(--color-wine)]" />
@@ -702,10 +719,13 @@ const linkOr = (url: string) => url || "#contato";
                       <ul data-track aria-label={`${c.brand}: slides`} class="flex aspect-[4/5] snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         {Array.from({ length: total }, (_, s) => (
                           <li class={`relative w-full shrink-0 snap-center ${s % 2 ? "bg-sky" : "bg-rose"}`}>
-                            <Photo src={c.slides[s]} alt={`${c.brand} — slide ${s + 1} ${t("de", "of")} ${total}`} label={s === 0 ? t("Capa · 4:5", "Cover · 4:5") : `Slide ${s + 1} · 4:5`} class="h-full w-full" />
+                            {c.url
+                              ? <a href={c.url} target="_blank" rel="noopener noreferrer" class="block h-full w-full"><Photo src={c.slides[s]} alt={`${c.brand} — slide ${s + 1} ${t("de", "of")} ${total}. ${t("Ver o post original no Instagram", "See the original post on Instagram")}`} class="h-full w-full" /></a>
+                              : <Photo src={c.slides[s]} alt={`${c.brand} — slide ${s + 1} ${t("de", "of")} ${total}`} label={s === 0 ? t("Capa · 4:5", "Cover · 4:5") : `Slide ${s + 1} · 4:5`} class="h-full w-full" />}
                           </li>
                         ))}
                       </ul>
+                      {c.badge && <span class="pointer-events-none absolute bottom-4 left-4 -rotate-6 rounded-full border-[1.5px] border-wine bg-rose px-3.5 py-1.5 text-sm font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">{c.badge}</span>}
                       <span data-counter class="pointer-events-none absolute top-4 right-4 rounded-full bg-wine-deep px-2.5 py-1 text-xs font-semibold text-offwhite">1/{total}</span>
                     </div>
                   </div>
@@ -732,7 +752,9 @@ const linkOr = (url: string) => url || "#contato";
               <div data-panel={`car:${c.id}`} hidden={ci !== 0} class="flex flex-col gap-4">
                 <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">{c.niche} · {c.slides.length || c.slideCount} slides</span>
                 <h3 class="font-display text-[40px] leading-tight text-wine">{c.brand}</h3>
-                <p class="leading-relaxed">{c.text}</p>
+                {c.text && <p class="leading-relaxed">{c.text}</p>}
+                {c.url && <a href={c.url} target="_blank" rel="noopener noreferrer" class="w-fit font-semibold text-wine underline underline-offset-4">{t("Ver o original no Instagram ↗", "See the original on Instagram ↗")}</a>}
+                <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer" class="w-fit rounded-full bg-wine px-6 py-3.5 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">{t("Clique aqui e peça seu orçamento", "Click here and request a quote")}</a>
               </div>
             ))}
             <span class="pt-2 text-sm font-semibold text-wine-soft">{t("Outros carrosséis", "More carousels")}</span>
@@ -756,7 +778,7 @@ const linkOr = (url: string) => url || "#contato";
         <div class="flex flex-col gap-7">
           <div data-reveal class="flex items-center gap-4">
             <Sparkle class="sparkle-animate h-7 w-7 text-wine" style="--sparkle-dur: 2.4s;" />
-            <h3 class="font-display text-4xl text-wine">{t("Fotos", "UGC")} <span class="italic">{t("UGC", "photos")}</span></h3>
+            <h3 class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">{t("Fotos", "UGC")} <span class="italic">{t("UGC", "photos")}</span></h3>
           </div>
           <div class="relative left-1/2 flex w-screen -translate-x-1/2 flex-col gap-3.5">
             {galleryRows.map((row, r) => (
@@ -834,7 +856,7 @@ const linkOr = (url: string) => url || "#contato";
       <div class="mx-auto flex max-w-[1320px] flex-col gap-12 px-6 pt-14 pb-10 sm:pt-16">
         <div class="grid items-start gap-12 md:grid-cols-2">
           <div class="flex flex-col gap-6">
-            <h2 data-reveal class="font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1] text-rose">
+            <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-rose">
               {t("Vamos criar", "Let's create")} <span class="text-sky italic">{t("juntos?", "together?")}</span>
             </h2>
             <p data-reveal class="max-w-md text-lg leading-relaxed">{t("Me conta um pouco sobre a sua marca e o objetivo da campanha.", "Tell me a little about your brand and your campaign goal.")}</p>
