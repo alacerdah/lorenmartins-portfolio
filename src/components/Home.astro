@@ -286,8 +286,6 @@ const feedbacks = [
 const videosOf = (id: string) => videos.filter((v) => v.niche === id);
 const tabVideosOf = (id: string) => videosOf(id).filter((v) => v.src || v.permalink).sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
 const otherNiches = niches.filter((n) => tabVideosOf(n.id).length > 0);
-// a seção de carrosséis e fotos só aparece quando tiver imagens reais
-const showCarousels = carousels.some((c) => c.slides.length > 0) || gallery.some((g) => g.src);
 const isSeasonal = (id: string) => id === "black-friday";
 const isPlaceholder = (brand: string) => brand.startsWith("[");
 
@@ -590,7 +588,7 @@ const linkOr = (url: string) => url || "#contato";
     </section>
 
     <!-- CARROSSÉIS & FOTOS -->
-    {showCarousels && <section id="carrosseis" class="scroll-mt-20 border-t-[1.5px] border-wine">
+    <section id="carrosseis" class="scroll-mt-20 border-t-[1.5px] border-wine">
       <div aria-hidden="true" class="stripes h-5 border-b-[1.5px] border-wine" style="--stripe-a: var(--color-wine); --stripe-w: 20px;"></div>
       <div class="mx-auto flex max-w-[1320px] flex-col gap-20 px-6 py-14 sm:py-16">
         <div class="flex flex-wrap items-end justify-between gap-6">
@@ -682,7 +680,7 @@ const linkOr = (url: string) => url || "#contato";
           </ul>
         </div>
       </div>
-    </section>}
+    </section>
 
     <!-- FEEDBACKS -->
     <section id="feedbacks" class="scroll-mt-20 border-t-[1.5px] border-wine bg-sky px-6 py-14 sm:py-16">
