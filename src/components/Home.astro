@@ -1,0 +1,955 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sparkle from './Sparkle.astro';
+import Photo from './Photo.astro';
+import VideoFrame from './VideoFrame.astro';
+import OvalPortrait from './OvalPortrait.astro';
+
+// a mesma página em dois idiomas: / (pt) e /en/ (en). Textos traduzidos ficam em t("português", "english").
+interface Props {
+  lang?: "pt" | "en";
+}
+const { lang = "pt" } = Astro.props;
+const t = (pt: string, en: string) => (lang === "en" ? en : pt);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTEÚDO — tudo que muda no site fica aqui em cima.
+// Fotos: coloque os arquivos em public/images/ e preencha o caminho ("/images/x.jpg").
+// Caminho vazio ("") = espaço reservado com legenda.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const navLinks = [
+  { href: "#sobre", label: t("Sobre", "About") },
+  { href: lang === "en" ? "#english" : "#virais", label: t("Portfólio", "Portfolio") },
+  { href: "#feedbacks", label: "Feedbacks" },
+  { href: "#contato", label: t("Contato", "Contact") },
+];
+
+const photos = {
+  hero: "/images/loren.webp",
+  sobre: "https://lorenmartins.my.canva.site/_assets/media/c09e20c6d1ae6f791a08674c5d0b3338.png",
+};
+
+const contact = {
+  email: "contatolorenmartins@gmail.com",
+  instagram: "https://www.instagram.com/bylorenmartins",
+  tiktok: "https://www.tiktok.com/@bylorenmartins",
+  mediaKit: "", // PDF em public/ (ex.: "/midia-kit.pdf") ou link
+};
+
+// marcas por reconhecimento: as mais famosas primeiro, para aparecerem assim que a página abre,
+// e sem duas logos da mesma cor lado a lado.
+// marcas do carrossel animado — logos em public/images/logos/. Duas faixas: a de cima e a de baixo (reversa)
+const logo = (name: string, file: string) => ({ name, src: `/images/logos/${file}` });
+const brandRows = [
+  [
+    logo("Philips", "philips.png"), logo("KitKat", "kitkat.png"), logo("Dove", "dove.png"), logo("Neutrogena", "neutrogena.png"),
+    logo("Pernambucanas", "pernambucanas.png"), logo("Mercure Hotel", "mercure.png"), logo("Color Wow", "color-wow.png"), logo("Avène", "avene.png"),
+    logo("Kiss New York", "kiss-new-york.png"), logo("Palmer's", "palmers.png"), logo("Chico Rei", "chico-rei.png"), logo("Loungerie", "loungerie-selo.png"),
+    logo("Disney+", "disney-plus.png"), logo("Don Cream", "don-cream.png"), logo("Hey Harper", "hey-harper.png"), logo("Beyoung", "beyoung.png"),
+    logo("Beleza Brasileira", "beleza-brasileira.png"),
+  ],
+  [
+    logo("Basic", "basic.png"), logo("Thermolife", "thermolife.png"), logo("Rosa Selvagem", "rosa-selvagem.png"), logo("Bianco", "bianco.png"),
+    logo("Peça Rara", "peca-rara.png"), logo("White Align", "white-align.png"), logo("Panda Alianças", "panda-aliancas.png"), logo("Kaisan", "kaisan.png"),
+    logo("Stapellia Moda", "stapellia.jpg"), logo("Clinique", "clinique.png"), logo("HSMT Store", "hsmt-store.png"), logo("CMC Lab", "cmc-lab.png"),
+    logo("Deby Fit", "deby-fit.png"), logo("Tell No One", "tell-no-one.png"), logo("Pure", "pure.png"), logo("", "marca-verde.png"),
+    logo("", "marca-a.png"), logo("", "marca-panda.png"),
+  ],
+];
+
+// nichos em ordem de preferência: viram as abas e os botões do "Sobre"
+const niches = [
+  { id: "moda", label: t("Moda", "Fashion") },
+  { id: "experiencias", label: t("Experiências", "Experiences") },
+  { id: "tech", label: "Tech" },
+  // temporário: aba e botão só aparecem de 1º de outubro a 30 de novembro, junto com a faixa do topo (ver script no fim)
+  { id: "black-friday", label: "Black Friday" },
+  { id: "acessorios", label: t("Acessórios", "Accessories") },
+  { id: "beleza", label: t("Beleza", "Beauty") },
+  { id: "bem-estar", label: t("Bem-estar & fit", "Wellness & fitness") },
+  { id: "bebidas", label: t("Bebidas & drinks", "Drinks") },
+  { id: "pet", label: "Pet" },
+];
+
+// vídeos: `src` (arquivo .mp4) toca direto no site; `permalink` do post/reel do Instagram mostra o embed oficial;
+// sem nenhum dos dois, espaço reservado. Preencha `realVideos` por nicho, quantos vídeos quiser
+// nicho sem nenhum ganha 3 espaços reservados.
+// `brand` = marca do vídeo (só `brand`, sem vídeo = espaço reservado com o nome da marca); `badge` = adesivo sobre o vídeo;
+// `views` = visualizações: nas abas, os vídeos com mais views vêm primeiro; `format` = nota sobre o vídeo (não aparece no site);
+type Video = { niche: string; brand: string; format: string; src?: string; permalink?: string; badge?: string | string[]; views?: number };
+const realVideos: Record<string, Partial<Video>[]> = {
+  beleza: [
+    { brand: "Neutrogena", src: "/videos/autocuidado-neutrogena.mp4", badge: "Aesthetic" },
+    { brand: "Color Wow", src: "/videos/autocuidado-color-wow.mp4" },
+    { brand: "Beleza Brasileira", src: "/videos/beleza-brasileira-3.mp4" },
+    { brand: "Mauve", format: t("Cabelo", "Hair"), src: "/videos/beleza-mauve.mp4", badge: "Aesthetic" },
+    { brand: "Bianco", src: "/videos/beleza-bianco.mp4" },
+    { brand: "White Align", format: t("Caneta clareadora", "Teeth-whitening pen"), src: "/videos/beleza-white-align.mp4" },
+    { brand: "Rosa Selvagem", src: "/videos/beleza-rosa-selvagem.mp4" },
+    { brand: "AF Beauty", src: "/videos/beleza-af-beauty.mp4" },
+    { brand: "CMC Lab", src: "/videos/beleza-cmc-lab.mp4" },
+    { brand: "Beyoung", src: "/videos/beleza-beyoung.mp4" },
+    { brand: "Philips", src: "/videos/mais-vistos-philips-2.mp4", badge: t("+150 mil views", "150K+ views"), views: 150000 },
+  ],
+  "bem-estar": [
+    { brand: "Thermolife", src: "/videos/lifestyle-thermolife.mp4" },
+    { brand: "Marmitas da Deby", src: "/videos/bem-estar-marmitas-deby.mp4" },
+    { brand: "Authentic Nutri", format: t("Colágeno", "Collagen"), src: "/videos/bem-estar-authentic-nutri-colageno.mp4" },
+    { brand: "Authentic Nutri", src: "/videos/bem-estar-authentic-nutri.mp4" },
+    { brand: "Arara Sport", src: "https://lorenmartins.my.canva.site/_assets/video/297213cddf4782496d1d5e4dca9d5255.mp4" },
+  ],
+  acessorios: [
+    { brand: "Panda Alianças", src: "/videos/moda-panda-aliancas.mp4", badge: t("+8 mil views", "8K+ views"), views: 8000 },
+    { brand: "Hey Harper", src: "/videos/moda-hey-harper.mp4" },
+    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-2.mp4" },
+    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-3.mp4" },
+    { brand: "HSMT Store", src: "/videos/moda-hsmt-store.mp4", badge: "Aesthetic" },
+    { brand: "Hoy Óculos", src: "/videos/acessorios-hoy.mp4" },
+  ],
+  moda: [
+    { brand: "Pernambucanas", format: t("TikTok da marca", "Brand's TikTok"), src: "/videos/moda-pernambucanas.mp4", badge: t("+80 mil views", "80K+ views"), views: 80000 },
+    { brand: "Mirante", format: t("Post em collab", "Collab post"), src: "/videos/moda-mirante.mp4", badge: t("+30 mil views", "30K+ views"), views: 30000 },
+    { brand: "Stapellia Moda", src: "/videos/moda-stapellia.mp4" },
+    { brand: "Chico Rei", src: "/videos/moda-chico-rei.mp4", badge: "Festival" },
+    { brand: "Peça Rara", src: "/videos/moda-peca-rara.mp4", badge: "Black Friday" },
+    { brand: "Basic", src: "/videos/moda-basic.mp4" },
+    { brand: "Basic", src: "/videos/moda-basic-2.mp4" },
+    { brand: "Loungerie", src: "/videos/moda-loungerie.mp4" },
+    { brand: "Loungerie", src: "/videos/moda-loungerie-2.mp4" },
+  ],
+  experiencias: [
+    { brand: "Boh Gastronomia", src: "/videos/experiencias-boh.mp4", badge: t("+79 mil views", "79K+ views"), views: 79000 },
+    { brand: "Restaurante Amicci", format: t("Dia dos Namorados", "Valentine's Day"), src: "/videos/experiencias-amicci.mp4", badge: t("+35 mil views", "35K+ views"), views: 35000 },
+    { brand: "Mercure Hotel", src: "/videos/experiencias-mercure.mp4", badge: "Aesthetic" },
+    { brand: "Cats Cabeleireiros", src: "/videos/experiencias-cats.mp4" },
+    { brand: "Eva Café Bar", src: "/videos/experiencias-eva-cafe-bar.mp4", badge: "Aesthetic" },
+    { brand: "Eva Café Bar", src: "/videos/experiencias-eva-cafe-bar-2.mp4", badge: t("+35 mil views", "35K+ views"), views: 35000 },
+    { brand: "KitKat", src: "/videos/experiencias-kitkat.mp4", badge: "Rock in Rio" },
+    { brand: "Gioco Pizzeria", src: "/videos/experiencias-gioco.mp4", badge: t("+23 mil views", "23K+ views"), views: 23000 },
+  ],
+  bebidas: [{ brand: "Don Cream", src: "/videos/bebidas-don-cream.mp4", badge: "Kit" }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-2.mp4", badge: t("Ação promocional", "Promo campaign") }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-3.mp4", badge: "Aesthetic" }],
+  tech: [
+    { brand: "Zapia AI", src: "/videos/tech-zapia.mp4" },
+    { brand: "Howzit English", src: "/videos/tech-howzit.mp4" },
+    { brand: "InfinitePay", src: "/videos/tech-infinitepay-3.mp4" },
+    { brand: "Tour SJC", src: "/videos/tech-tour-sjc.mp4", badge: t("App de experiência", "Experience app") },
+    { brand: "Disney+", src: "/videos/tech-disney-plus.mp4", badge: t("+16 mil views", "16K+ views"), views: 16000 },
+    { brand: "InfinitePay", src: "/videos/tech-infinitepay-2.mp4" },
+    { brand: "InfinitePay", src: "/videos/tech-infinitepay.mp4" },
+  ],
+  pet: [
+    { brand: "Zooby Pet", format: t("Com a Pitchula · sachezinho", "With Pitchula · wet food pouch"), src: "/videos/pet-zooby.mp4" },
+    { brand: "Zooby Pet", format: t("Com a Pitchula · unboxing de tudo que comprei pra minha gatinha", "With Pitchula · unboxing everything I bought for my kitten"), src: "/videos/pet-zooby-unboxing.mp4" },
+    { brand: t("[Vídeo com a Pitchula]", "[Video with Pitchula]") },
+  ],
+};
+// vídeos em public/videos/ usam a capa de mesmo nome (.jpg) gerada junto com o .mp4 comprimido
+const posterOf = (src?: string) => (src?.startsWith("/videos/") ? src.replace(/\.mp4$/, ".jpg") : undefined);
+const videos: (Video & { poster?: string })[] = niches.flatMap((n) => {
+  const real = realVideos[n.id] ?? [{}, {}, {}];
+  return real.map((r, i) => {
+    const v = { niche: n.id, brand: t(`[Marca ${i + 1}]`, `[Brand ${i + 1}]`), format: "[formato]", ...r };
+    return { ...v, poster: posterOf(v.src) };
+  });
+});
+
+// vídeos em inglês: só na página /en/, logo depois do topo
+const englishVideos = [
+  { brand: "Hey Harper", logo: "/images/logos/hey-harper-selo.png", src: "/videos/moda-hey-harper-ingles.mp4" },
+  { brand: "Organic video", logo: "", src: "/videos/ingles-grwm.mp4" },
+  { brand: "Hey Harper", logo: "/images/logos/hey-harper-selo.png", src: "/videos/ingles-hey-harper-2.mp4" },
+];
+
+// números discretos acima dos feedbacks. Marcas e vídeos informados pela Loren;
+// views = soma dos vídeos com número conhecido (cerca de 1,88M); vídeos sem número não entram.
+const stats = [
+  { value: "+60", label: t("marcas atendidas", "brands served") },
+  { value: "+100", label: t("vídeos entregues", "videos delivered") },
+  { value: t("+1,8M", "1.8M+"), label: t("views somadas", "combined views") },
+];
+
+// vídeos virais. `stat` = views, `expect` = o que a marca pode esperar do vídeo,
+// `logo` = selo da marca (sem logo, o selo mostra a inicial).
+const viralVideos = [
+  { brand: "Philips", logo: "/images/logos/philips.png", src: "/videos/mais-vistos-philips.mp4", stat: t("+1,3M views", "1.3M+ views"), expect: t("Demonstração do produto em uso real, mostrando o resultado no cabelo.", "A real-use product demo that shows the result on the hair.") },
+  { brand: "Philips", logo: "/images/logos/philips.png", src: "/videos/mais-vistos-philips-2.mp4", stat: t("+150 mil views", "150K+ views"), expect: t("Gancho criativo que coloca o produto na rotina de quem assiste.", "A creative hook that puts the product in the viewer's routine.") },
+  { brand: "Pernambucanas", logo: "/images/logos/pernambucanas.png", src: "/videos/moda-pernambucanas.mp4", stat: t("+80 mil views", "80K+ views"), expect: t("Looks no provador que dão vontade de ir até a loja.", "Fitting-room looks that make people want to visit the store.") },
+  { brand: "Boh Gastronomia", logo: "/images/logos/boh-gastronomia.png", src: "/videos/experiencias-boh.mp4", stat: t("+79 mil views", "79K+ views"), expect: t("Descoberta local: ambiente, drinks e pratos que dão vontade de conhecer.", "A local discovery: atmosphere, drinks and food people want to try.") },
+];
+
+// carrosséis do feed: `slides` = imagens em ordem; vazio usa `slideCount` espaços reservados
+const carousels = [
+  { id: "k1", brand: "Kiss New York", niche: t("Beleza", "Beauty"), text: t("Carrossel com +12 mil views.", "Carousel with 12K+ views."), slides: [] as string[], slideCount: 6 },
+  { id: "k2", brand: t("[Marca — carrossel 2]", "[Brand — carousel 2]"), niche: "Tech", text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [] as string[], slideCount: 5 },
+  { id: "k3", brand: t("[Marca — carrossel 3]", "[Brand — carousel 3]"), niche: t("Bem-estar & fit", "Wellness & fitness"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [] as string[], slideCount: 4 },
+  { id: "k4", brand: t("[Marca — carrossel 4]", "[Brand — carousel 4]"), niche: t("Experiências", "Experiences"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [] as string[], slideCount: 7 },
+];
+
+// galeria de fotos UGC: `tall` ocupa duas linhas da grade; `shape` arredonda em arco
+const gallery = [
+  { src: "", label: t("Produto · tech", "Product · tech"), tall: true, shape: "arch-top" },
+  { src: "", label: t("Bem-estar", "Wellness") },
+  { src: "", label: "Flat lay" },
+  { src: "", label: t("Beleza", "Beauty"), tall: true },
+  { src: "", label: t("Mão + produto", "Hand + product") },
+  { src: "", label: t("Ambiente", "Setting"), tall: true, shape: "arch-bottom" },
+  { src: "", label: t("Experiência", "Experience") },
+  { src: "", label: t("Detalhe", "Detail") },
+];
+
+// cases de venda: números dos prints enviados pela Loren. Sem `src` = espaço reservado até o vídeo chegar
+const salesCases = [
+  {
+    brand: "Hey Harper",
+    logo: "/images/logos/hey-harper-selo.png",
+    tag: t("Acessórios · vídeo para anúncio", "Accessories · ad creative"),
+    src: "/videos/cases-hey-harper.mp4",
+    text: t(
+      "Com $70,21 investidos em anúncio, esse vídeo gerou $220,91 em compras no site da marca, e 40% das visitas foram de novos visitantes.",
+      "With $70.21 in ad spend, this video generated $220.91 in website purchases, and 40% of visits came from new visitors."
+    ),
+    kpis: [
+      [t("$220,91", "$220.91"), t("em compras no site", "in website purchases")],
+      [t("$70,21", "$70.21"), t("investidos em anúncio", "in ad spend")],
+      ["40%", t("de novos visitantes", "new visitors")],
+    ],
+  },
+  {
+    brand: "Loungerie",
+    logo: "/images/logos/loungerie-selo.png",
+    tag: t("Moda · vídeo para anúncio", "Fashion · ad creative"),
+    src: "/videos/cases-loungerie.mp4",
+    text: t(
+      "Com apenas esse vídeo, a marca fez 23 vendas. O investimento foi de R$ 297 no vídeo UGC e R$ 200 em anúncios, e o retorno, já descontando esses custos, foi de R$ 4.239,48.",
+      "With this one video, the brand made 23 sales. It invested R$297 in the UGC video and R$200 in ads, and the return, after those costs, was R$4,239.48."
+    ),
+    kpis: [
+      ["23", t("vendas", "sales")],
+      [t("R$ 4.736,48", "R$4,736.48"), t("em vendas", "in sales")],
+      [t("R$ 497", "R$497"), t("de investimento", "invested")],
+      [t("R$ 4.239,48", "R$4,239.48"), t("de retorno", "return")],
+    ],
+  },
+];
+
+// feedbacks — cada entrada vira um card na parede (o site mostra só as mensagens da marca).
+// `en` = tradução: na página em inglês, o card mostra o original e um botão para traduzir.
+// avatar: iniciais da marca; cor: bg do avatar (rose ou sky)
+const feedbacks = [
+  {
+    brand: "Hey Harper", logo: "/images/logos/hey-harper.png", color: "bg-sky",
+    msgs: [
+      { from: "brand", text: "Heya Loren! Thank you so much - I love it!! Everything looks great, and the whole delivery is very well organised. I really appreciate all the effort. Gonna be interesting to see the performance, but for now I don't have any extra feedback notes - let's test it!", time: "14:32" },
+      { from: "loren", text: "Omg thank you so much!! I'm so happy you liked it, it was such a pleasure working with hey harper", time: "14:35" },
+    ],
+  },
+  {
+    brand: "Deby Fit", logo: "/images/logos/deby-fit.png", color: "bg-rose",
+    msgs: [
+      { from: "brand", text: "Loren, quero te agradecer pelo trabalho que você vem fazendo com os nossos vídeos e fotos! 🧡\n\nEstamos usando os conteúdos no tráfego pago, no Instagram e Facebook, e estamos tendo retorno e recebendo muitos elogios dos clientes. Você tem conseguido transmitir o cuidado, a qualidade e o carinho que colocamos em cada refeição da Deby Fit.\n\nEstou muito feliz com a nossa parceria! Obrigada pela dedicação e pelo olhar profissional que valoriza tanto o nosso trabalho.", en: "Loren, I want to thank you for the work you've been doing with our videos and photos! 🧡\n\nWe're using the content in paid traffic, on Instagram and Facebook, and we're seeing returns and getting lots of compliments from customers. You've managed to convey the care, quality and love we put into every Deby Fit meal.\n\nI'm very happy with our partnership! Thank you for your dedication and for the professional eye that values our work so much.", time: "" },
+    ],
+  },
+  {
+    brand: "CMC Lab", logo: "/images/logos/cmc-lab.png", color: "bg-rose",
+    msgs: [
+      { from: "brand", text: "Loren, queria agradecer pela parceria, nós adoramos a sua entrega! Dá pra ver seu compromisso com sua entrega, tanto na qualidade do vídeo quanto na construção do roteiro e cenas.", en: "Loren, I wanted to thank you for the partnership, we loved your delivery! You can see your commitment, both in the quality of the video and in how the script and scenes were built.", time: "10:15" },
+      { from: "brand", text: "Foi um vídeo bem pensado e que realmente desperta o interesse de quem assiste. Com certeza, em futuras oportunidades, entraremos em contato novamente!", en: "It was a well-thought-out video that really sparks the interest of whoever watches it. We'll definitely get in touch again for future opportunities!", time: "10:17" },
+      { from: "loren", text: "Que feedback incrível, muito obrigada!! Fico muito feliz que gostaram do resultado, foi um prazer trabalhar com vocês", time: "10:20" },
+    ],
+  },
+  {
+    brand: "Chico Rei", logo: "/images/logos/chico-rei.png", color: "bg-sky",
+    msgs: [
+      { from: "brand", text: "Oi, Loren! Tudo bem?\n\nFicamos muito satisfeitos com o resultado! Você seguiu perfeitamente o briefing e captou o vídeo no tom exato que precisávamos. Obrigado pela entrega e esperamos voltar a trabalhar com você nas próximas campanhas que criarmos! ♥", en: "Hi, Loren! How are you?\n\nWe were very pleased with the result! You followed the brief perfectly and captured the video in exactly the tone we needed. Thank you for the delivery, and we hope to work with you again on the next campaigns we create! ♥", time: "10:07" },
+      { from: "loren", text: "Oi! Muito obrigada pelo retorno, fiquei muito feliz com esse feedback! Foi um prazer trabalhar com a Chico Rei, adorei o projeto. Contem comigo nas próximas!", time: "10:12" },
+    ],
+  },
+  {
+    brand: "Stapellia Moda", logo: "/images/logos/stapellia.jpg", color: "bg-rose",
+    msgs: [
+      { from: "brand", text: "A entrega foi perfeita, não precisamos ajustar nada. Ela foi muito profissional e atenta ao briefing! Adoramos a experiência!", en: "The delivery was perfect, we didn't need to adjust anything. She was very professional and attentive to the brief! We loved the experience!", time: "11:20" },
+      { from: "loren", text: "Muito obrigada pelo feedback! Fico feliz que gostaram, foi incrível trabalhar com a Stapellia. Contem comigo sempre!", time: "11:25" },
+    ],
+  },
+  {
+    brand: "Don Cream", logo: "/images/logos/don-cream.png", color: "bg-sky",
+    msgs: [
+      { from: "brand", text: "Trabalhar com você foi incrível! Além da entrega impecável e dentro dos briefings acordados, você sempre se mostrou solícita a qualquer necessidade de ajuste ou alinhamento. Ansiosa pelas próximas oportunidades de ter você trabalhando com a Don Cream! Conte com o Urso!", en: "Working with you was amazing! Besides the flawless delivery, right on brief, you were always available for any adjustment or alignment needed. Looking forward to the next opportunities to have you working with Don Cream! Count on the Bear!", time: "17:06" },
+      { from: "loren", text: "Que mensagem mais linda!! Muito obrigada, trabalhar com a Don Cream foi demais. Contem comigo sempre! 🐻❤️", time: "17:10" },
+    ],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+const videosOf = (id: string) => videos.filter((v) => v.niche === id);
+const tabVideosOf = (id: string) => videosOf(id).filter((v) => v.src || v.permalink).sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
+const otherNiches = niches.filter((n) => tabVideosOf(n.id).length > 0);
+// a seção de carrosséis e fotos só aparece quando tiver imagens reais
+const showCarousels = carousels.some((c) => c.slides.length > 0) || gallery.some((g) => g.src);
+const isSeasonal = (id: string) => id === "black-friday";
+const isPlaceholder = (brand: string) => brand.startsWith("[");
+
+const kpiBgs = ["bg-rose", "bg-offwhite", "bg-sky", "bg-offwhite"];
+
+const hasEmbeds = videos.some((v) => v.permalink);
+const linkOr = (url: string) => url || "#contato";
+---
+
+<Layout
+  lang={lang}
+  title={t("Loren Martins — Criadora UGC", "Loren Martins — UGC Creator")}
+  description={t(
+    "Criadora de conteúdo UGC bilíngue em moda, experiências, tech, acessórios, beleza, bem-estar, bebidas e pet. São José dos Campos (SP).",
+    "Bilingual UGC creator for fashion, experience, tech, accessories, beauty, wellness, drinks and pet brands. Based in Brazil."
+  )}
+>
+  <main class="overflow-x-clip">
+    <!-- FAIXA DE BLACK FRIDAY (temporária) -->
+    <div
+      data-bf-only
+      hidden
+      class="flex flex-wrap items-center justify-center gap-x-4 gap-y-0.5 bg-rose px-5 py-1.5 text-center text-sm text-wine-deep"
+    >
+      <span class="rounded-full bg-wine px-3 py-0.5 text-xs font-semibold tracking-[0.08em] text-offwhite uppercase">Black Friday</span>
+      <span
+        data-bf-countdown
+        data-many={t("Faltam {n} dias pra Black Friday", "{n} days until Black Friday")}
+        data-one={t("Falta 1 dia pra Black Friday", "1 day until Black Friday")}
+        data-today={t("É hoje a Black Friday", "Black Friday is today")}
+        data-after={t("Ainda dá tempo de aproveitar a Black Friday", "There's still time to make the most of Black Friday")}
+        class="font-semibold"
+      ></span>
+      <button type="button" data-open-lead class="min-h-7 font-semibold underline underline-offset-4">{t("reservar agenda →", "book your slot →")}</button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-30 border-b border-wine/15 bg-offwhite/90 backdrop-blur">
+      <div class="mx-auto flex max-w-[1320px] items-center justify-between gap-6 px-6 py-3">
+        <a href="#" class="font-display text-xl whitespace-nowrap text-wine italic sm:text-2xl">Loren Martins</a>
+        <nav class="hidden items-center gap-7 text-[15px] font-medium lg:flex">
+          {navLinks.map((l) => <a href={l.href} class="text-wine hover:text-wine-deep">{l.label}</a>)}
+        </nav>
+        <div class="flex items-center gap-3">
+          <div role="group" aria-label={t("Idioma", "Language")} class="flex rounded-full border-[1.5px] border-wine p-0.5 text-xs font-semibold">
+            <a href="/" hreflang="pt-BR" aria-label="Português" aria-current={lang === "pt" ? "true" : undefined} class="flex min-h-10 min-w-10 items-center justify-center rounded-full px-2 text-wine aria-[current]:bg-wine aria-[current]:text-offwhite">PT</a>
+            <a href="/en/" hreflang="en" aria-label="English" aria-current={lang === "en" ? "true" : undefined} class="flex min-h-10 min-w-10 items-center justify-center rounded-full px-2 text-wine aria-[current]:bg-wine aria-[current]:text-offwhite">EN</a>
+          </div>
+          <a href="#contato" class="hidden rounded-full bg-wine px-5 py-2.5 text-sm font-semibold text-offwhite transition-transform hover:-translate-y-0.5 sm:block">
+            {t("Vamos conversar", "Let's talk")}
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="mx-auto grid max-w-[1320px] items-center gap-8 px-6 pt-8 md:min-h-[min(calc(100svh-4.5rem-var(--bf-h,0px)),860px)] md:grid-cols-[3fr_2fr]">
+      <div class="flex flex-col gap-4 md:pb-8">
+        <div data-reveal class="flex flex-wrap gap-2">
+          <span class="rounded-full bg-rose px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">{t("Criadora UGC", "UGC creator")}</span>
+          <span class="rounded-full bg-sky px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">{t("São José dos Campos · SP", "São Paulo State · Brazil")}</span>
+        </div>
+        <h1 data-reveal style="--reveal-delay: 80ms;" class="font-display text-[clamp(2.5rem,min(5.6vw,11vh),5rem)] leading-[1] text-wine">
+          {lang === "en" ? <Fragment>Content that <span class="italic">sells</span> without feeling like an ad.</Fragment> : <Fragment>Conteúdo que <span class="italic">vende</span> sem parecer anúncio.</Fragment>}
+        </h1>
+        <p data-reveal style="--reveal-delay: 120ms;" class="max-w-xl text-lg leading-snug font-semibold text-wine">
+          {t("Criadora UGC bilíngue, com vídeos que já passaram de 1 milhão de visualizações.", "Bilingual UGC creator, with videos that have passed 1 million views.")}
+        </p>
+        <p data-reveal style="--reveal-delay: 160ms;" class="max-w-xl leading-relaxed text-wine-soft">
+          {t("Vídeos autênticos de moda, experiências, tech, acessórios, beleza, bem-estar, bebidas e pet, feitos pra prender a atenção e converter.", "Authentic fashion, experience, tech, accessories, beauty, wellness, drinks and pet videos, made to hold attention and convert.")}
+        </p>
+        <p data-reveal style="--reveal-delay: 200ms;" class="flex flex-wrap items-center gap-x-3 gap-y-1 font-semibold text-wine">
+          <span>{t("+100 vídeos", "+100 videos")}</span>
+          <span aria-hidden="true" class="text-wine/40">|</span>
+          <span>{t("+60 marcas", "+60 brands")}</span>
+          <span aria-hidden="true" class="text-wine/40">|</span>
+          <span>{t("+1,8M views", "1.8M+ views")}</span>
+        </p>
+        <div data-reveal style="--reveal-delay: 240ms;">
+          <a href="#contato" class="inline-block rounded-full bg-wine px-7 py-4 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">{t("Quero criar com a Loren", "Let's work together")}</a>
+        </div>
+      </div>
+      <div data-reveal style="--reveal-delay: 120ms;" class="flex justify-center md:self-end">
+        <div class="relative aspect-[4/5] w-full max-w-[420px] md:max-w-[min(100%,calc((100svh-4.5rem-var(--bf-h,0px)-2rem)*0.8),640px)]">
+          <div aria-hidden="true" class="stripes absolute inset-0 translate-x-3 rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine" style="--stripe-w: 22px;"></div>
+          <div class="absolute inset-0 overflow-hidden rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine bg-sky">
+            <Photo src={photos.hero} alt="Loren Martins" label={t("Foto da Loren", "Photo of Loren")} class="h-full w-full" eager />
+          </div>
+          <div class="absolute bottom-8 -left-3 z-10 flex h-24 w-24 -rotate-6 flex-col items-center justify-center rounded-full border-[1.5px] border-wine bg-rose text-center text-wine shadow-[3px_3px_0_var(--color-wine)] sm:-left-6 sm:h-28 sm:w-28">
+            <span class="font-display text-[28px] leading-none sm:text-[32px]">+60</span>
+            <span class="mt-1 px-2 text-[11px] leading-tight font-semibold">{t("marcas trabalhadas", "brands worked with")}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VÍDEOS EM INGLÊS (só em /en/) -->
+    {lang === "en" && (
+      <section id="english" class="scroll-mt-20 border-t-[1.5px] border-wine bg-rose px-6 py-14 sm:py-16">
+        <div class="mx-auto flex max-w-[1320px] flex-col gap-10">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">Videos in <span class="italic">English</span></h2>
+            <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed">See how I communicate with an English-speaking audience.</p>
+          </div>
+          <div class="flex flex-wrap justify-center gap-x-5 gap-y-10">
+            {englishVideos.filter((v) => v.src).map((v, i) => (
+              <figure data-reveal style={`--reveal-delay: ${i * 90}ms;`} class="flex w-[calc(50%-0.625rem)] flex-col gap-3 sm:w-[242px]">
+                <div class="relative">
+                  <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-2xl" />
+                  {v.logo && <img src={v.logo} alt="" width="96" height="96" class="absolute -top-3 -right-2 z-10 h-12 w-12 rounded-full border-[1.5px] border-wine object-cover" />}
+                </div>
+                <figcaption class="px-1 text-[15px] leading-snug font-semibold text-wine">{v.brand}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- MARCAS (carrossel animado) -->
+    <section aria-label={t("Marcas que já confiaram no meu trabalho", "Brands that have trusted my work")} class="border-y-[1.5px] border-wine">
+      <div class="marquee overflow-hidden bg-wine py-5">
+        <div class="marquee-track flex w-max">
+          {[0, 1].map((copy) => (
+            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-center gap-8 pr-8">
+              {brandRows[0].map((b) => (
+                <li class="flex items-center gap-8">
+                  <img src={b.src} alt={b.name} width="96" height="96" class="h-16 w-16 rounded-full object-cover sm:h-[72px] sm:w-[72px]" />
+                  <span aria-hidden="true" class="text-sky">✦</span>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+      <div class="marquee overflow-hidden border-t-[1.5px] border-wine bg-sky py-5">
+        <div class="marquee-track flex w-max" data-reverse>
+          {[0, 1].map((copy) => (
+            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-center gap-8 pr-8">
+              {brandRows[1].map((b) => (
+                <li class="flex items-center gap-8">
+                  <img src={b.src} alt={b.name} width="96" height="96" class="h-16 w-16 rounded-full object-cover sm:h-[72px] sm:w-[72px]" />
+                  <span aria-hidden="true" class="text-wine">•</span>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- VÍDEOS VIRAIS -->
+    <section id="virais" class="mx-auto flex max-w-[1320px] scroll-mt-20 flex-col gap-10 px-6 py-14 sm:py-16">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">
+          {lang === "en" ? <Fragment>Viral <span class="italic">cases</span></Fragment> : <Fragment>Cases <span class="italic">virais</span></Fragment>}
+        </h2>
+        <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed text-wine-soft">{t("O que a sua marca pode esperar de cada vídeo.", "What your brand can expect from each video. From here on, the videos are in Portuguese.")}</p>
+      </div>
+      <div class="flex flex-wrap justify-center gap-x-5 gap-y-10">
+        {viralVideos.map((v, i) => (
+          <figure data-reveal style={`--reveal-delay: ${(i % 4) * 90}ms;`} class="flex w-[calc(50%-0.625rem)] flex-col gap-3 md:w-[calc(25%-0.9375rem)] lg:w-[242px]">
+            <div class="relative">
+              <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-2xl bg-rose" />
+              {v.logo
+                ? <img src={v.logo} alt={v.brand} width="96" height="96" class="absolute -top-3 -right-2 z-10 h-12 w-12 rounded-full border-[1.5px] border-wine bg-offwhite object-cover" />
+                : <span role="img" aria-label={v.brand} class="absolute -top-3 -right-2 z-10 flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-sky font-display text-xl text-wine">{v.brand[0]}</span>}
+            </div>
+            <figcaption class="flex flex-col gap-1.5 px-1">
+              <span class="font-display text-lg leading-tight text-wine uppercase sm:text-2xl">{v.stat}</span>
+              <span class="text-sm leading-snug">{v.expect}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- CASES DE VENDA -->
+    <section id="cases" class="scroll-mt-20 border-t-[1.5px] border-wine bg-sky px-6 py-14 sm:py-16">
+      <div class="mx-auto flex max-w-[1320px] flex-col gap-10">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+          <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">
+            {lang === "en" ? <Fragment>Videos that <span class="italic">sold</span></Fragment> : <Fragment>Vídeos que <span class="italic">venderam</span></Fragment>}
+          </h2>
+          <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed">{t("Resultados de vendas de anúncios feitos com os meus vídeos.", "Sales results from ads made with my videos.")}</p>
+        </div>
+        <div class="grid gap-8 lg:grid-cols-2">
+          {salesCases.map((c, i) => (
+            <article data-reveal style={`--reveal-delay: ${i * 120}ms;`} class="hard-shadow grid gap-6 rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:p-6">
+              <div data-card class="relative mx-auto w-full max-w-[240px] self-start sm:max-w-none">
+                <VideoFrame label={c.brand} src={c.src} poster={posterOf(c.src)} class="rounded-2xl bg-rose" />
+                <img src={c.logo} alt="" width="96" height="96" data-card-cover class="absolute -bottom-4 -left-4 z-10 h-16 w-16 rounded-full border-[1.5px] border-wine object-cover sm:h-20 sm:w-20" />
+              </div>
+              <div class="flex flex-col gap-4">
+                <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">{c.tag}</span>
+                <h3 class="font-display text-4xl text-wine">{c.brand}</h3>
+                <p class="text-[15px] leading-relaxed">{c.text}</p>
+                <dl class="grid grid-cols-2 gap-3">
+                  {c.kpis.map(([value, label], k) => (
+                    <div class={`flex flex-col-reverse gap-1 rounded-2xl border-[1.5px] border-wine p-3 ${kpiBgs[k % 4]}`}>
+                      <dt class="text-[13px] leading-snug font-medium">{label}</dt>
+                      <dd class="font-display text-[clamp(1.05rem,1.7vw,1.375rem)] leading-none whitespace-nowrap text-wine">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- QUEM EU SOU (seção com listras) -->
+    <section id="sobre" class="stripes scroll-mt-20 border-y-[1.5px] border-wine px-6 py-14 sm:py-16">
+      <div data-reveal class="hard-shadow mx-auto grid max-w-5xl items-center gap-10 rounded-[40px] border-[1.5px] border-wine bg-offwhite px-7 py-10 sm:px-12 sm:py-12 md:grid-cols-2">
+        <div class="flex flex-col gap-5">
+          <div class="flex items-center gap-4">
+            <span aria-hidden="true" class="relative h-16 w-[72px] shrink-0">
+              <Sparkle class="sparkle-animate absolute top-1 left-0 h-12 w-12 text-wine" style="--sparkle-dur: 2.4s; --sparkle-delay: 0s;" />
+              <Sparkle class="sparkle-animate absolute top-0 right-0 h-4 w-4 text-sky" outline style="--sparkle-dur: 1.8s; --sparkle-delay: 0.4s;" />
+              <Sparkle class="sparkle-animate absolute right-0.5 bottom-0 h-5 w-5 text-rose" outline style="--sparkle-dur: 2.6s; --sparkle-delay: 0.9s;" />
+            </span>
+            <h2 class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">{t("Oi,", "Hi,")} <span class="italic">{t("marca", "brand")}</span> :)</h2>
+          </div>
+          <p class="text-lg leading-relaxed">
+            {lang === "en"
+              ? <Fragment>My name is <strong class="text-wine">Loren</strong>, I'm 26 and I live in <strong class="text-wine">São José dos Campos, Brazil</strong>.</Fragment>
+              : <Fragment>Me chamo <strong class="text-wine">Loren</strong>, tenho 26 anos e moro em <strong class="text-wine">São José dos Campos (SP)</strong>.</Fragment>}
+          </p>
+          <p class="text-lg leading-relaxed">{t("Sou criadora de conteúdo com foco em:", "I'm a content creator focused on:")}</p>
+          <ul class="flex flex-wrap gap-2.5">
+            {otherNiches.map((n, i) => {
+              return (
+                <li data-bf-only={isSeasonal(n.id) ? "true" : undefined} hidden={isSeasonal(n.id)}>
+                  <a
+                    href="#demais-nichos"
+                    data-open-tab={`niche:${n.id}`}
+                    class={`flex min-h-11 items-center rounded-full border-[1.5px] border-wine px-4 text-sm font-semibold text-wine transition-transform hover:-translate-y-0.5 ${i % 2 ? "bg-sky" : "bg-rose"}`}
+                  >
+                    {n.label.toLowerCase()}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <p class="text-lg leading-relaxed">
+            {lang === "en"
+              ? <Fragment>I make authentic videos built for <strong class="text-wine">retention and conversion</strong>, with a <strong class="text-wine">modern, youthful look</strong> and a voice that brings brands closer to their audience.</Fragment>
+              : <Fragment>Produzo vídeos autênticos voltados para <strong class="text-wine">retenção e conversão</strong>, com <strong class="text-wine">estética moderna e jovem</strong> e uma linguagem que aproxima a marca do público.</Fragment>}
+          </p>
+        </div>
+        <div class="mx-auto w-full max-w-[300px] px-4 pt-10 pb-4">
+          <OvalPortrait src={photos.sobre} alt={t("Loren Martins sorrindo, gravando com o celular", "Loren Martins smiling, filming with her phone")} arcText={t("sobre sua nova creator favorita!", "about your new favorite creator!")} />
+        </div>
+      </div>
+    </section>
+
+    <!-- TRABALHOS POR NICHO -->
+    <section id="demais-nichos" class="mx-auto flex max-w-[1320px] scroll-mt-20 flex-col gap-8 px-6 py-14 sm:py-16">
+      <div data-reveal class="flex flex-col gap-2">
+        <h2 class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">{t("Trabalhos por", "Work by")} <span class="italic">{t("nicho", "niche")}</span></h2>
+        <p class="text-wine-soft">{t("Toque num nicho para ver os trabalhos.", "Tap a niche to see the work.")}</p>
+      </div>
+      <div data-reveal class="flex items-start justify-between gap-4">
+        <div role="group" aria-label={t("Escolher nicho", "Choose a niche")} class="flex flex-wrap gap-3">
+          {otherNiches.map((n, i) => (
+            <button
+              type="button"
+              data-tab={`niche:${n.id}`}
+              data-bf-only={isSeasonal(n.id) ? "true" : undefined}
+              hidden={isSeasonal(n.id)}
+              aria-pressed={i === 0 ? "true" : "false"}
+              class="min-h-12 rounded-full border-[1.5px] border-wine bg-offwhite px-6 text-[15px] font-semibold text-wine transition-colors hover:bg-rose aria-pressed:bg-wine aria-pressed:text-offwhite"
+            >
+              {n.label}
+            </button>
+          ))}
+        </div>
+        <div class="hidden shrink-0 gap-2 md:flex">
+          <button type="button" data-rail-dir="-1" aria-label={t("Vídeos anteriores", "Previous videos")} class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-wine">
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <button type="button" data-rail-dir="1" aria-label={t("Próximos vídeos", "Next videos")} class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-wine text-offwhite">
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+        </div>
+      </div>
+      {otherNiches.map((n, i) => (
+        <div data-panel={`niche:${n.id}`} data-rail hidden={i !== 0} aria-label={n.label} class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-color:var(--color-wine)_transparent] [scrollbar-width:thin]">
+          {tabVideosOf(n.id).map((v, j) => (
+            <figure data-card class="relative w-[200px] shrink-0 snap-start sm:w-[230px]">
+              <VideoFrame label={isPlaceholder(v.brand) ? t(`Vídeo ${j + 1}`, `Video ${j + 1}`) : v.brand} src={v.src} poster={v.poster} permalink={v.permalink} badge={v.badge} class="rounded-2xl bg-rose" />
+              <div data-card-cover class="pointer-events-none absolute inset-0 z-[5]">
+                <span class="absolute bottom-3 left-3 max-w-[calc(100%-1.5rem)] rounded-full border-[1.5px] border-wine bg-offwhite px-3 py-1 text-[13px] leading-snug font-semibold text-wine">{v.brand}</span>
+              </div>
+            </figure>
+          ))}
+        </div>
+      ))}
+    </section>
+
+    <!-- CARROSSÉIS & FOTOS -->
+    {showCarousels && <section id="carrosseis" class="scroll-mt-20 border-t-[1.5px] border-wine">
+      <div aria-hidden="true" class="stripes h-5 border-b-[1.5px] border-wine" style="--stripe-a: var(--color-wine); --stripe-w: 20px;"></div>
+      <div class="mx-auto flex max-w-[1320px] flex-col gap-20 px-6 py-14 sm:py-16">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+          <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">{t("Carrosséis", "Carousels")} <span class="italic">&amp; {t("fotos", "photos")}</span></h2>
+          <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed text-wine-soft">{t("Além dos vídeos: carrosséis pro feed e fotos de produto e lifestyle prontas pra anúncio.", "Beyond video: feed carousels and product and lifestyle photos ready for ads.")}</p>
+        </div>
+
+        <div class="grid items-center gap-14 md:grid-cols-2">
+          <!-- visualizador: um carrossel por vez, os outros escondidos -->
+          <div data-reveal class="flex justify-center">
+            {carousels.map((c, ci) => {
+              const total = c.slides.length || c.slideCount;
+              return (
+                <div data-panel={`car:${c.id}`} hidden={ci !== 0} data-carousel class="flex w-full max-w-[420px] flex-col items-center gap-5">
+                  <div class="relative w-full">
+                    <div aria-hidden="true" class="absolute inset-0 translate-x-7 scale-[0.94] rounded-3xl border-[1.5px] border-wine bg-sky"></div>
+                    <div aria-hidden="true" class="absolute inset-0 translate-x-3.5 scale-[0.97] rounded-3xl border-[1.5px] border-wine bg-rose"></div>
+                    <div class="relative overflow-hidden rounded-3xl border-[1.5px] border-wine bg-offwhite">
+                      <ul data-track aria-label={`${c.brand}: slides`} class="flex aspect-[4/5] snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {Array.from({ length: total }, (_, s) => (
+                          <li class={`relative w-full shrink-0 snap-center ${s % 2 ? "bg-sky" : "bg-rose"}`}>
+                            <Photo src={c.slides[s]} alt={`${c.brand} — slide ${s + 1} ${t("de", "of")} ${total}`} label={s === 0 ? t("Capa · 4:5", "Cover · 4:5") : `Slide ${s + 1} · 4:5`} class="h-full w-full" />
+                          </li>
+                        ))}
+                      </ul>
+                      <span data-counter class="pointer-events-none absolute top-4 right-4 rounded-full bg-wine-deep px-2.5 py-1 text-xs font-semibold text-offwhite">1/{total}</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <button type="button" data-dir="-1" aria-label={t("Slide anterior", "Previous slide")} class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-wine transition-opacity disabled:opacity-35">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                    </button>
+                    <div class="flex gap-2" aria-hidden="true">
+                      {Array.from({ length: total }, (_, s) => (
+                        <span data-dot class={`h-2 rounded-full border border-wine transition-all ${s === 0 ? "w-6 bg-wine" : "w-2 bg-rose"}`}></span>
+                      ))}
+                    </div>
+                    <button type="button" data-dir="1" aria-label={t("Próximo slide", "Next slide")} class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-wine text-offwhite transition-opacity disabled:opacity-35">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div data-reveal style="--reveal-delay: 120ms;" class="flex flex-col gap-5">
+            {carousels.map((c, ci) => (
+              <div data-panel={`car:${c.id}`} hidden={ci !== 0} class="flex flex-col gap-4">
+                <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">{c.niche} · {c.slides.length || c.slideCount} slides</span>
+                <h3 class="font-display text-[40px] leading-tight text-wine">{c.brand}</h3>
+                <p class="leading-relaxed">{c.text}</p>
+              </div>
+            ))}
+            <span class="pt-2 text-sm font-semibold text-wine-soft">{t("Outros carrosséis", "More carousels")}</span>
+            <div role="group" aria-label={t("Escolher carrossel", "Choose a carousel")} class="grid grid-cols-4 gap-3">
+              {carousels.map((c, ci) => (
+                <button
+                  type="button"
+                  data-tab={`car:${c.id}`}
+                  aria-pressed={ci === 0 ? "true" : "false"}
+                  aria-label={c.brand}
+                  class={`aspect-[4/5] overflow-hidden rounded-2xl border-[1.5px] border-dashed border-wine p-0 text-[11px] font-semibold text-wine aria-pressed:border-[3px] aria-pressed:border-solid ${ci % 2 ? "bg-rose" : "bg-sky"}`}
+                >
+                  {c.slides[0] ? <img src={c.slides[0]} alt="" class="h-full w-full object-cover" loading="lazy" /> : t(`Carrossel ${ci + 1}`, `Carousel ${ci + 1}`)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- galeria de fotos -->
+        <div class="flex flex-col gap-7">
+          <div data-reveal class="flex items-center gap-4">
+            <Sparkle class="sparkle-animate h-7 w-7 text-wine" style="--sparkle-dur: 2.4s;" />
+            <h3 class="font-display text-4xl text-wine">{t("Fotos", "UGC")} <span class="italic">{t("UGC", "photos")}</span></h3>
+          </div>
+          <ul class="grid grid-flow-dense auto-rows-[200px] grid-cols-[repeat(auto-fill,minmax(min(100%,220px),1fr))] gap-4">
+            {gallery.map((g, i) => (
+              <li
+                data-reveal
+                style={`--reveal-delay: ${(i % 4) * 90}ms;`}
+                class={`relative overflow-hidden border-[1.5px] border-wine ${g.tall ? "row-span-2" : ""} ${g.shape === "arch-top" ? "rounded-t-[200px] rounded-b-[20px]" : g.shape === "arch-bottom" ? "rounded-t-[20px] rounded-b-[200px]" : "rounded-[20px]"} ${["bg-sky", "bg-rose", "bg-offwhite"][i % 3]}`}
+              >
+                <Photo src={g.src} alt={g.label} class="h-full w-full" />
+                <span class="absolute bottom-4 left-4 rounded-full border border-wine bg-offwhite px-3 py-1.5 text-xs font-semibold text-wine">{g.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>}
+
+    <!-- FEEDBACKS -->
+    <section id="feedbacks" class="scroll-mt-20 border-t-[1.5px] border-wine bg-sky px-6 py-14 sm:py-16">
+      <div class="mx-auto flex max-w-[1320px] flex-col gap-12">
+        <h2 data-reveal class="text-center font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">{t("O que as marcas", "What brands")} <span class="italic">{t("dizem", "say")}</span></h2>
+        <dl class="mx-auto grid w-full max-w-3xl grid-cols-3 gap-3 sm:gap-4">
+          {stats.map((s, i) => (
+            <div data-reveal style={`--reveal-delay: ${i * 90}ms;`} class="flex flex-col-reverse items-center gap-1 rounded-2xl border border-wine/25 bg-offwhite px-2 py-4 text-center">
+              <dt class="text-[13px] leading-snug text-wine-soft">{s.label}</dt>
+              <dd class="font-display text-[clamp(1.5rem,3.5vw,2.25rem)] leading-none text-wine">{s.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <div class="columns-1 gap-6 sm:columns-2 lg:columns-3">
+          {feedbacks.map((fb, i) => (
+            <article data-reveal class={`mb-6 break-inside-avoid rounded-2xl border-[1.5px] border-wine bg-offwhite p-5 shadow-[4px_4px_0_var(--color-wine)] ${["-rotate-1", "rotate-1", "-rotate-[0.5deg]", "rotate-[0.5deg]"][i % 4]}`}>
+              <header class="mb-3 flex items-center gap-2.5">
+                <img src={fb.logo} alt="" class="h-9 w-9 shrink-0 rounded-full border border-wine/20 object-cover" />
+                <h3 class="font-semibold text-wine">{fb.brand}</h3>
+              </header>
+              <div data-fb-original class="flex flex-col gap-2.5">
+                {fb.msgs.filter((m) => m.from === "brand").map((m) => (
+                  <p class="text-[15px] leading-relaxed whitespace-pre-line">{m.text}</p>
+                ))}
+              </div>
+              {lang === "en" && fb.msgs.some((m) => m.en) && (
+                <Fragment>
+                  <div data-fb-translated hidden class="flex flex-col gap-2.5">
+                    {fb.msgs.filter((m) => m.from === "brand").map((m) => (
+                      <p class="text-[15px] leading-relaxed whitespace-pre-line">{m.en}</p>
+                    ))}
+                  </div>
+                  <button type="button" data-fb-translate class="mt-2 min-h-11 text-sm font-semibold text-wine underline underline-offset-4">Translate to English</button>
+                </Fragment>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <footer id="contato" class="scroll-mt-20 bg-wine text-offwhite">
+      <div aria-hidden="true" class="h-7" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 40px, #BFD9EE 40px 80px, #FAF6EF 80px 120px);"></div>
+      <div class="mx-auto flex max-w-[1320px] flex-col gap-12 px-6 pt-14 pb-10 sm:pt-16">
+        <div class="grid items-start gap-12 md:grid-cols-2">
+          <div class="flex flex-col gap-6">
+            <h2 data-reveal class="font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1] text-rose">
+              {t("Vamos criar", "Let's create")} <span class="text-sky italic">{t("juntos?", "together?")}</span>
+            </h2>
+            <p data-reveal class="max-w-md text-lg leading-relaxed">{t("Me conta um pouco sobre a sua marca e o objetivo da campanha.", "Tell me a little about your brand and your campaign goal.")}</p>
+            <div data-reveal style="--reveal-delay: 100ms;" class="flex flex-wrap gap-3">
+              <a href={contact.email ? `mailto:${contact.email}` : "#contato"} class="rounded-full bg-rose px-6 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5">
+                {contact.email || "[email da Loren]"}
+              </a>
+              {[
+                { label: "Instagram", url: contact.instagram },
+                { label: "TikTok", url: contact.tiktok },
+                { label: t("Mídia kit (PDF)", "Media kit (PDF)"), url: contact.mediaKit },
+              ].filter((l) => l.url).map((l) => (
+                <a href={linkOr(l.url)} target={l.url ? "_blank" : undefined} rel={l.url ? "noopener noreferrer" : undefined} class="rounded-full border-[1.5px] border-sky px-6 py-3.5 font-semibold text-sky transition-transform hover:-translate-y-0.5">
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </div>
+          <div data-reveal class="rounded-[24px] bg-offwhite p-6 text-wine-deep sm:p-8">
+            <form data-lead-form name="contato" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="grid gap-4 sm:grid-cols-2">
+              <input type="hidden" name="form-name" value="contato" />
+              <p hidden><label>Não preencha <input name="bot-field" /></label></p>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Nome", "Name")}<input required name="nome" autocomplete="name" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">E-mail<input required type="email" name="email" autocomplete="email" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Marca", "Brand")}<input required name="marca" autocomplete="organization" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Orçamento estimado", "Estimated budget")}<input name="orcamento" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Conta sobre o projeto", "Tell me about the project")}<textarea required name="mensagem" rows="4" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none py-3"></textarea></label>
+              <button type="submit" class="min-h-12 rounded-full bg-wine px-6 font-semibold text-offwhite sm:col-span-2">{t("Enviar mensagem", "Send message")}</button>
+              <p data-form-error hidden class="text-sm sm:col-span-2">{t("Não consegui enviar agora. Me escreve em", "I couldn't send this right now. Email me at")} {contact.email}.</p>
+            </form>
+            <p data-form-success hidden class="font-display text-2xl text-wine">{t("Recebi! Te respondo em breve.", "Got it! I'll get back to you soon.")}</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap justify-between gap-4 border-t border-rose/30 pt-8 text-sm text-rose">
+          <span>© Loren Martins</span>
+          <span class="font-display italic">{t("conteúdo UGC", "UGC content")}</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- BOTÃO FIXO: abre o pop-up da tabela -->
+  <button type="button" data-open-lead class="fixed right-4 bottom-4 z-40 flex min-h-12 items-center gap-2 rounded-full border-[1.5px] border-offwhite bg-wine px-5 text-sm font-semibold text-offwhite shadow-lg transition-transform hover:-translate-y-0.5 sm:right-6 sm:bottom-6">
+    <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 text-rose" fill="currentColor"><path d="M3 4a1 1 0 0 1 1-1h8.6a2 2 0 0 1 1.4.6l6.4 6.4a2 2 0 0 1 0 2.8l-6.6 6.6a2 2 0 0 1-2.8 0L4.6 13A2 2 0 0 1 4 11.6V4zm4.5 2A1.5 1.5 0 1 0 7.5 9a1.5 1.5 0 0 0 0-3z" /></svg>
+    {t("Tabela e pacotes", "Rates & packages")}
+  </button>
+
+  <!-- POP-UP: tabela de investimento -->
+  <dialog data-lead-dialog aria-labelledby="lead-title" class="m-auto w-[calc(100%-2rem)] max-w-md rounded-[24px] border-[1.5px] border-wine bg-offwhite p-6 text-wine-deep backdrop:bg-wine-deep/50 sm:p-8">
+    <button type="button" data-close-lead aria-label={t("Fechar", "Close")} class="absolute top-3 right-3 flex h-11 w-11 items-center justify-center text-wine">
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    </button>
+    <h2 id="lead-title" class="pr-8 font-display text-[28px] leading-tight text-wine">{t("Quer receber minha tabela de investimento e os pacotes UGC?", "Want my rate card and UGC packages?")}</h2>
+    <p class="mt-2 mb-5 leading-relaxed text-wine-soft">{t("Preencha seus dados e eu te envio tudo por WhatsApp. 💌", "Fill in your details and I'll send everything over WhatsApp. 💌")}</p>
+    <form data-lead-form name="tabela" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="flex flex-col gap-4">
+      <input type="hidden" name="form-name" value="tabela" />
+      <p hidden><label>Não preencha <input name="bot-field" /></label></p>
+      <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Seu nome", "Your name")}<input required name="nome" autocomplete="name" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+      <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Nome da marca", "Brand name")}<input required name="marca" autocomplete="organization" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+      <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">WhatsApp<input required type="tel" name="whatsapp" autocomplete="tel" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+      <button type="submit" class="min-h-12 rounded-full bg-wine px-6 font-semibold text-offwhite">{t("Quero receber", "Send it to me")}</button>
+      <p data-form-error hidden class="text-sm">{t("Não consegui enviar agora. Me escreve em", "I couldn't send this right now. Email me at")} {contact.email}.</p>
+    </form>
+    <p data-form-success hidden class="font-display text-2xl text-wine">{t("Recebi! Te envio em breve.", "Got it! I'll send it soon.")}</p>
+  </dialog>
+
+  {hasEmbeds && <script is:inline async src="https://www.instagram.com/embed.js"></script>}
+
+  <script>
+    // abas genéricas: botão data-tab="grupo:id" mostra os data-panel="grupo:id" e esconde o resto do grupo
+    document.querySelectorAll<HTMLButtonElement>("[data-tab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const [group] = (btn.dataset.tab ?? "").split(":");
+        document.querySelectorAll<HTMLButtonElement>(`[data-tab^="${group}:"]`).forEach((b) => {
+          b.setAttribute("aria-pressed", String(b === btn));
+        });
+        document.querySelectorAll<HTMLElement>(`[data-panel^="${group}:"]`).forEach((panel) => {
+          const show = panel.dataset.panel === btn.dataset.tab;
+          panel.hidden = !show;
+          if (!show) panel.querySelectorAll("video").forEach((v) => v.pause());
+          if (show) panel.classList.add("is-visible");
+        });
+      });
+    });
+
+    // faixa de vídeos dos nichos: setas rolam a aba aberta; ao tocar, o nome da marca sai de cima do vídeo
+    document.querySelectorAll<HTMLButtonElement>("[data-rail-dir]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const rail = document.querySelector<HTMLElement>("[data-rail]:not([hidden])");
+        rail?.scrollBy({ left: Number(btn.dataset.railDir) * rail.clientWidth * 0.8, behavior: "smooth" });
+      });
+    });
+    document.querySelectorAll<HTMLElement>("[data-card]").forEach((card) => {
+      card.querySelector("video")?.addEventListener("play", () => {
+        card.querySelector("[data-card-cover]")?.classList.add("hidden");
+      });
+    });
+
+    // feedbacks na página em inglês: alterna entre o texto original e a tradução
+    document.querySelectorAll<HTMLButtonElement>("[data-fb-translate]").forEach((btn) => {
+      const card = btn.closest("article");
+      const original = card?.querySelector<HTMLElement>("[data-fb-original]");
+      const translated = card?.querySelector<HTMLElement>("[data-fb-translated]");
+      if (!original || !translated) return;
+      btn.addEventListener("click", () => {
+        const showTranslation = translated.hidden;
+        translated.hidden = !showTranslation;
+        original.hidden = showTranslation;
+        btn.textContent = showTranslation ? "Show original" : "Translate to English";
+      });
+    });
+
+    // Black Friday: quarta quinta de novembro + 1 dia. O site é estático, então a data é conferida no navegador:
+    // faixa, aba e botão do nicho aparecem de 1º de outubro a 30 de novembro e somem sozinhas em dezembro
+    {
+      const now = new Date();
+      const year = now.getFullYear();
+      const firstNov = new Date(year, 10, 1).getDay();
+      const blackFriday = new Date(year, 10, 1 + ((4 - firstNov + 7) % 7) + 21 + 1);
+      const today = new Date(year, now.getMonth(), now.getDate());
+      if (now.getMonth() === 9 || now.getMonth() === 10) {
+        document.querySelectorAll<HTMLElement>("[data-bf-only]").forEach((el) => (el.hidden = false));
+        const bar = document.querySelector<HTMLElement>("[data-bf-only]");
+        if (bar) document.documentElement.style.setProperty("--bf-h", `${bar.offsetHeight}px`);
+        const label = document.querySelector<HTMLElement>("[data-bf-countdown]");
+        const days = Math.round((blackFriday.getTime() - today.getTime()) / 86400000);
+        if (label) {
+          const { many = "", one = "", today: isToday = "", after = "" } = label.dataset;
+          label.textContent = days > 1 ? many.replace("{n}", String(days)) : days === 1 ? one : days === 0 ? isToday : after;
+        }
+      }
+    }
+
+    // pop-up da tabela: abre pelo botão da faixa e, uma vez por semana, depois de 30 segundos na página
+    {
+      const dialog = document.querySelector<HTMLDialogElement>("[data-lead-dialog]");
+      const openDialog = () => {
+        if (dialog && !dialog.open) dialog.showModal();
+      };
+      document.querySelectorAll("[data-open-lead]").forEach((btn) => btn.addEventListener("click", openDialog));
+      dialog?.querySelector("[data-close-lead]")?.addEventListener("click", () => dialog.close());
+      dialog?.addEventListener("click", (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+      const KEY = "lead-popup-visto";
+      const WEEK = 7 * 86400000;
+      let seen = 0;
+      try {
+        seen = Number(localStorage.getItem(KEY)) || 0;
+      } catch {}
+      if (Date.now() - seen > WEEK) {
+        setTimeout(() => {
+          openDialog();
+          try {
+            localStorage.setItem(KEY, String(Date.now()));
+          } catch {}
+        }, 30000);
+      }
+    }
+
+    // formulários (Netlify Forms): envia sem sair da página
+    document.querySelectorAll<HTMLFormElement>("[data-lead-form]").forEach((form) => {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+        const error = form.querySelector<HTMLElement>("[data-form-error]");
+        const success = form.parentElement?.querySelector<HTMLElement>("[data-form-success]");
+        if (button) button.disabled = true;
+        if (error) error.hidden = true;
+        try {
+          const res = await fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString(),
+          });
+          if (!res.ok) throw new Error(String(res.status));
+          form.hidden = true;
+          if (success) success.hidden = false;
+        } catch {
+          if (error) error.hidden = false;
+          if (button) button.disabled = false;
+        }
+      });
+    });
+
+    // botões de nicho do "Sobre": abrem a aba do nicho (o link já rola até a seção)
+    document.querySelectorAll<HTMLAnchorElement>("[data-open-tab]").forEach((link) => {
+      link.addEventListener("click", () => {
+        document.querySelector<HTMLButtonElement>(`[data-tab="${link.dataset.openTab}"]`)?.click();
+      });
+    });
+
+    // carrosséis do feed: setas, contador e bolinhas acompanham o scroll do trilho
+    document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((car) => {
+      const track = car.querySelector<HTMLElement>("[data-track]");
+      const counter = car.querySelector<HTMLElement>("[data-counter]");
+      const dots = car.querySelectorAll<HTMLElement>("[data-dot]");
+      const [prev, next] = car.querySelectorAll<HTMLButtonElement>("[data-dir]");
+      if (!track) return;
+      const total = track.children.length;
+
+      const update = () => {
+        const idx = Math.round(track.scrollLeft / (track.clientWidth || 1));
+        if (counter) counter.textContent = `${idx + 1}/${total}`;
+        dots.forEach((d, i) => {
+          d.classList.toggle("w-6", i === idx);
+          d.classList.toggle("bg-wine", i === idx);
+          d.classList.toggle("w-2", i !== idx);
+          d.classList.toggle("bg-rose", i !== idx);
+        });
+        prev.disabled = idx === 0;
+        next.disabled = idx === total - 1;
+      };
+
+      [prev, next].forEach((btn) =>
+        btn.addEventListener("click", () => track.scrollBy({ left: Number(btn.dataset.dir) * track.clientWidth }))
+      );
+      track.addEventListener("scroll", update, { passive: true });
+      update();
+    });
+  </script>
+</Layout>

@@ -1,7 +1,7 @@
 # Portfólio UGC — Loren Martins
 
 > Site-portfólio para a criadora de conteúdo **Loren Martins**, de São José dos Campos (SP), 26 anos.
-> Nichos principais: lifestyle, tech, autocuidado e experiências.
+> Nichos, em ordem de preferência: moda, experiências, tech, acessórios, beleza, bem-estar & fit, bebidas & drinks e pet.
 
 ---
 
@@ -20,10 +20,12 @@
 ```
 src/
   pages/
-    index.astro          ← página principal (TODOS os dados ficam no frontmatter)
+    index.astro          ← versão em português (`<Home lang="pt" />`)
+    en/index.astro       ← versão em inglês (`<Home lang="en" />`)
   layouts/
     Layout.astro         ← shell HTML, meta tags, Google Fonts, IntersectionObserver
   components/
+    Home.astro           ← a página inteira (TODOS os dados ficam no frontmatter)
     Photo.astro          ← imagem com placeholder (ícone + legenda quando sem src)
     VideoFrame.astro     ← moldura 9:16 com embed do Instagram (ou placeholder)
     OvalPortrait.astro   ← retrato oval da seção "Quem eu sou" (anel rosa, texto curvo, sparkles animados)
@@ -39,19 +41,22 @@ public/
 
 ## Como editar conteúdo
 
-**Tudo que muda no site** (textos, fotos, marcas, nichos, cases, links de contato) fica no topo do frontmatter de `src/pages/index.astro`, nas constantes:
+**Tudo que muda no site** (textos, fotos, marcas, nichos, cases, links de contato) fica no topo do frontmatter de `src/components/Home.astro`, nas constantes. Textos com tradução usam `t("português", "english")`; `/` e `/en/` renderizam esse mesmo componente:
 
 | Constante | O que controla |
 |---|---|
 | `photos` | Caminhos das fotos do hero e "sobre" |
 | `contact` | Email, Instagram, TikTok, mídia kit |
 | `brandRows` | Logos do carrossel de marcas (2 faixas). Cada logo é `logo("Nome", "arquivo.png")` e o arquivo fica em `public/images/logos/` |
-| `niches` | Lista de nichos; `top: true` = entra no "Top 3" |
-| `videos` / `realVideos` | Vídeos por nicho (3 espaços cada). Em `realVideos` preencha por nicho: `src` = arquivo .mp4 que toca no site, ou `permalink` do Instagram = embed real |
+| `niches` | Lista de nichos em ordem de preferência: viram as abas e os botões do "Sobre". `black-friday` é temporário: faixa, aba e botão só aparecem de 1º/out a 30/nov |
+| `videos` / `realVideos` | Vídeos por nicho (quantos quiser; nicho sem nenhum ganha 3 espaços reservados). Em `realVideos` preencha por nicho: `brand`, `src` = arquivo .mp4 (em `public/videos/`) ou `permalink` do Instagram, `badge` opcional (adesivo tipo "+80 mil views") |
+| `englishVideos` | Vídeos em inglês, só na página `/en/`, logo depois do topo |
+| `stats` | Números discretos acima dos feedbacks (marcas, vídeos e views). |
+| `viralVideos` | Seção "Cases virais": os vídeos com `logo`, views (`stat`) e o que a marca pode esperar (`expect`) |
 | `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem |
 | `gallery` | Fotos UGC da galeria; `tall` = 2 linhas, `shape` = arco |
-| `cases` | Cases de sucesso com KPIs, gráficos de barras e comparativos |
-| `feedbacks` | Conversas estilo WhatsApp (marca + Loren). `logo` = `/images/logos/...` |
+| `salesCases` | Cases de venda: marca, vídeo, explicação e números (`kpis`) |
+| `feedbacks` | Parede de feedbacks: cada marca vira um card com as mensagens dela. `logo` = `/images/logos/...` |
 
 Para adicionar fotos: colocar em `public/images/` e usar o caminho `/images/nome.ext`.
 
@@ -61,11 +66,10 @@ Para adicionar fotos: colocar em `public/images/` e usar o caminho `/images/nome
 2. **Hero** — foto da Loren, tags, headline, CTAs
 3. **Marquee de marcas** — carrossel animado duplo (fundo vinho + faixa azul reversa)
 4. **Quem eu sou** — seção com fundo listrado, card com bio + retrato oval animado
-5. **Top 3 nichos** — 3 cards com moldura arredondada no topo e vídeo placeholder
-6. **Demais nichos** — botões de aba, painel com vídeos filtrados por nicho
-7. **Carrosséis & fotos** — visualizador com cards empilhados + galeria masonry
-8. **Cases de sucesso** — abas por case, cards de KPI, gráfico de barras (views), barras horizontais comparativas (Loren vs. média do nicho), blockquote de depoimento
-9. **Contato/footer** — fundo vinho, faixa colorida, botões de contato
+5. **Trabalhos por nicho** — botões de aba e faixa de vídeos que rola para o lado. Os vídeos com mais views (`views`) sempre vêm primeiro
+6. **Carrosséis & fotos** — visualizador com cards empilhados + galeria masonry
+7. **Cases de venda** — "Vídeos que venderam", logo depois de "Cases virais": vídeo, explicação e números
+8. **Contato/footer** — fundo vinho, faixa colorida, botões de contato
 
 ## Tokens de design (em `global.css`)
 
@@ -83,7 +87,6 @@ sky:      #BFD9EE   (azul bebê)
 - **Scroll reveal** (`[data-reveal]`): elementos entram com fade + slide-up ao rolar. O `IntersectionObserver` no `Layout.astro` adiciona `.is-visible`.
 - **Marquee**: carrossel de marcas com CSS `translateX(-50%)`, pausa no hover.
 - **Sparkle pulse** (`.sparkle-animate`): brilhinhos pulsam com scale + rotação suave, cada um com duração e delay diferentes. Usa `transform-box: fill-box` nos SVGs pra não deslocar do lugar.
-- **Chart bars** (`[data-bar]`): barras dos gráficos crescem quando o card de case entra na viewport.
 - Todas respeitam `prefers-reduced-motion`.
 
 ## Abas interativas
@@ -91,7 +94,11 @@ sky:      #BFD9EE   (azul bebê)
 O sistema de abas é genérico via `data-tab` e `data-panel`:
 - Botão: `data-tab="grupo:id"` + `aria-pressed`
 - Painel: `data-panel="grupo:id"` + `hidden`
-- Grupos usados: `niche:*` (demais nichos), `car:*` (carrosséis), `case:*` (cases)
+- Grupos usados: `niche:*` (demais nichos), `car:*` (carrosséis)
+
+## Formulários
+
+Contato e pop-up da tabela usam Netlify Forms (`contato` e `tabela`). Só funcionam no site publicado: as respostas ficam no painel do Netlify, em Forms, com aviso por e-mail configurado lá.
 
 ## Dev server
 
@@ -109,8 +116,6 @@ npm run build        # build de produção em dist/
 ## Pendências
 
 - [ ] Adicionar vídeos reais com `permalink` do Instagram/TikTok
-- [ ] Fotos reais na galeria UGC
+- [ ] Fotos reais na galeria UGC (a seção de carrosséis e fotos só aparece com imagens reais)
 - [ ] Slides reais nos carrosséis
-- [ ] Dados reais nos cases de sucesso (KPIs, views, comparativos, depoimentos)
 - [ ] Mídia kit (PDF) da Loren
-- [ ] Nichos: confirmar quais além dos 4 principais (experiências, casa, gastronomia, fitness, pets são exemplos)

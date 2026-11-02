@@ -4,16 +4,18 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  lang?: "pt" | "en";
 }
 
 const {
   title = "Loren Martins — Criadora UGC",
-  description = "Criadora de conteúdo UGC em lifestyle, tech, autocuidado e experiências. São José dos Campos (SP).",
+  description = "Criadora de conteúdo UGC em moda, experiências, tech, beleza, bem-estar, bebidas e pet. São José dos Campos (SP).",
+  lang = "pt",
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang={lang === "en" ? "en" : "pt-BR"}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

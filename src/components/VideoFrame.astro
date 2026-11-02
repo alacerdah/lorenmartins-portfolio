@@ -1,21 +1,38 @@
 ---
-// moldura 9:16 de vídeo. Com `src` (arquivo de vídeo direto, ex.: .mp4) toca no próprio site;
+// moldura 9:16 de vídeo. Com `src` (arquivo de vídeo direto, ex.: .mp4) toca no próprio site, com play no centro;
 // com `permalink` (post/reel do Instagram) mostra o embed oficial;
 // sem nenhum, mostra um espaço reservado com a legenda.
+// `badge` = adesivo inclinado no canto (ex.: "+80 mil views"); uma lista empilha vários.
+// `poster` = capa mostrada até o play; com ela o vídeo só é baixado quando a pessoa aperta play.
 interface Props {
   label: string;
   src?: string;
+  poster?: string;
   permalink?: string;
+  badge?: string | string[];
   class?: string;
 }
-const { label, src, permalink, class: className = "" } = Astro.props;
+const { label, src, poster, permalink, badge, class: className = "" } = Astro.props;
+const badges = [badge ?? []].flat();
 ---
 <div
   class={`relative aspect-[9/16] w-full overflow-hidden border-[1.5px] border-wine bg-offwhite ${className}`}
   data-video-embed={permalink && !src ? "true" : undefined}
 >
+  {badges.length > 0 && (
+    <div class="pointer-events-none absolute top-3 right-2 z-10 flex max-w-[88%] flex-col items-end gap-1.5">
+      {badges.map((b) => (
+        <span class="rotate-6 rounded-full border-[1.5px] border-wine bg-rose px-2.5 py-1 text-center text-xs leading-tight font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">
+          {b}
+        </span>
+      ))}
+    </div>
+  )}
   {src ? (
-    <video src={src} controls playsinline preload="metadata" aria-label={label} class="h-full w-full object-cover"></video>
+    <video src={src} poster={poster} playsinline preload={poster ? "none" : "metadata"} aria-label={label} class="h-full w-full object-cover"></video>
+    <button type="button" data-video-play aria-label={`Play: ${label}`} class="absolute top-1/2 left-1/2 z-[6] flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-offwhite/90 text-wine transition-transform hover:scale-105">
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="ml-0.5 h-6 w-6" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+    </button>
   ) : permalink ? (
     /* o embed do Instagram nunca fica mais estreito que 326px: ele nasce no tamanho normal
        dentro do .video-embed-inner e o script abaixo encolhe esse wrapper pra caber na moldura */
@@ -41,6 +58,20 @@ const { label, src, permalink, class: className = "" } = Astro.props;
 </div>
 
 <script>
+  // play no centro: some ao tocar e dá lugar aos controles do navegador; só um vídeo toca por vez
+  document.querySelectorAll<HTMLButtonElement>("[data-video-play]").forEach((btn) => {
+    const video = btn.parentElement?.querySelector("video");
+    if (!video) return;
+    btn.addEventListener("click", () => video.play());
+    video.addEventListener("play", () => {
+      video.controls = true;
+      btn.hidden = true;
+      document.querySelectorAll("video").forEach((other) => {
+        if (other !== video) other.pause();
+      });
+    });
+  });
+
   // encolhe o wrapper interno (não o iframe) pra não quebrar o resize automático do Instagram
   function fitEmbed(wrap: HTMLElement) {
     const inner = wrap.querySelector<HTMLElement>(".video-embed-inner");
