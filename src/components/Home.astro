@@ -27,13 +27,14 @@ const navLinks = [
 
 const photos = {
   hero: "/images/loren.webp",
-  sobre: "https://lorenmartins.my.canva.site/_assets/media/c09e20c6d1ae6f791a08674c5d0b3338.png",
+  sobre: "/images/loren2.png",
 };
 
 const contact = {
   email: "contatolorenmartins@gmail.com",
   instagram: "https://www.instagram.com/bylorenmartins",
   tiktok: "https://www.tiktok.com/@bylorenmartins",
+  whatsapp: "5534991670558", // só números, com DDI e DDD (ex.: "5512999999999"); vazio esconde o botão
   mediaKit: "", // PDF em public/ (ex.: "/midia-kit.pdf") ou link
 };
 
@@ -53,7 +54,7 @@ const brandRows = [
     logo("Basic", "basic.png"), logo("Thermolife", "thermolife.png"), logo("Rosa Selvagem", "rosa-selvagem.png"), logo("Bianco", "bianco.png"),
     logo("Peça Rara", "peca-rara.png"), logo("White Align", "white-align.png"), logo("Panda Alianças", "panda-aliancas.png"), logo("Kaisan", "kaisan.png"),
     logo("Stapellia Moda", "stapellia.jpg"), logo("Clinique", "clinique.png"), logo("HSMT Store", "hsmt-store.png"), logo("CMC Lab", "cmc-lab.png"),
-    logo("Deby Fit", "deby-fit.png"), logo("Tell No One", "tell-no-one.png"), logo("Pure", "pure.png"), logo("", "marca-verde.png"),
+    logo("Deby Fit", "deby-fit.png"), logo("Tell No One", "tell-no-one.png"), logo("Arara Sport", "arara-sport.png"), logo("Pure", "pure.png"), logo("Cabana Ipês", "cabana-ipes.png"), logo("Mirante", "mirante.jpg"), logo("Zapia AI", "zapia.png"),
     logo("", "marca-a.png"), logo("", "marca-panda.png"),
   ],
 ];
@@ -95,7 +96,7 @@ const realVideos: Record<string, Partial<Video>[]> = {
   "bem-estar": [
     { brand: "Thermolife", src: "/videos/lifestyle-thermolife.mp4" },
     { brand: "Marmitas da Deby", src: "/videos/bem-estar-marmitas-deby.mp4" },
-    { brand: "Authentic Nutri", format: t("Colágeno", "Collagen"), src: "/videos/bem-estar-authentic-nutri-colageno.mp4" },
+    { brand: "Authentic Nutri", format: t("Colágeno", "Collagen"), src: "/videos/bem-estar-authentic-nutri-colageno.mp4", badge: "Aesthetic" },
     { brand: "Authentic Nutri", src: "/videos/bem-estar-authentic-nutri.mp4" },
     { brand: "Arara Sport", src: "https://lorenmartins.my.canva.site/_assets/video/297213cddf4782496d1d5e4dca9d5255.mp4" },
   ],
@@ -105,7 +106,7 @@ const realVideos: Record<string, Partial<Video>[]> = {
     { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-2.mp4" },
     { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-3.mp4" },
     { brand: "HSMT Store", src: "/videos/moda-hsmt-store.mp4", badge: "Aesthetic" },
-    { brand: "Hoy Óculos", src: "/videos/acessorios-hoy.mp4" },
+    { brand: "Hoy Óculos", src: "/videos/acessorios-hoy.mp4", badge: "Aesthetic" },
   ],
   moda: [
     { brand: "Pernambucanas", format: t("TikTok da marca", "Brand's TikTok"), src: "/videos/moda-pernambucanas.mp4", badge: t("+80 mil views", "80K+ views"), views: 80000 },
@@ -161,42 +162,85 @@ const englishVideos = [
   { brand: "Hey Harper", logo: "/images/logos/hey-harper-selo.png", src: "/videos/ingles-hey-harper-2.mp4" },
 ];
 
-// números discretos acima dos feedbacks. Marcas e vídeos informados pela Loren;
-// views = soma dos vídeos com número conhecido (cerca de 1,88M); vídeos sem número não entram.
-const stats = [
-  { value: "+60", label: t("marcas atendidas", "brands served") },
-  { value: "+100", label: t("vídeos entregues", "videos delivered") },
-  { value: t("+1,8M", "1.8M+"), label: t("views somadas", "combined views") },
-];
-
-// vídeos virais. `stat` = views, `expect` = o que a marca pode esperar do vídeo,
-// `logo` = selo da marca (sem logo, o selo mostra a inicial).
+// cases virais: o primeiro fica em destaque e os outros dois embaixo.
+// `insights` = print das métricas em public/images/insights/; vazio mostra um espaço reservado.
 const viralVideos = [
-  { brand: "Philips", logo: "/images/logos/philips.png", src: "/videos/mais-vistos-philips.mp4", stat: t("+1,3M views", "1.3M+ views"), expect: t("Demonstração do produto em uso real, mostrando o resultado no cabelo.", "A real-use product demo that shows the result on the hair.") },
-  { brand: "Philips", logo: "/images/logos/philips.png", src: "/videos/mais-vistos-philips-2.mp4", stat: t("+150 mil views", "150K+ views"), expect: t("Gancho criativo que coloca o produto na rotina de quem assiste.", "A creative hook that puts the product in the viewer's routine.") },
-  { brand: "Pernambucanas", logo: "/images/logos/pernambucanas.png", src: "/videos/moda-pernambucanas.mp4", stat: t("+80 mil views", "80K+ views"), expect: t("Looks no provador que dão vontade de ir até a loja.", "Fitting-room looks that make people want to visit the store.") },
-  { brand: "Boh Gastronomia", logo: "/images/logos/boh-gastronomia.png", src: "/videos/experiencias-boh.mp4", stat: t("+79 mil views", "79K+ views"), expect: t("Descoberta local: ambiente, drinks e pratos que dão vontade de conhecer.", "A local discovery: atmosphere, drinks and food people want to try.") },
+  {
+    brand: "Philips",
+    logo: "/images/logos/philips.png",
+    src: "/videos/mais-vistos-philips.mp4",
+    insights: "",
+    tags: t("Demonstração • TikTok da marca", "Product demo • Brand's TikTok"),
+    impact: t("+1,3M de visualizações no TikTok da marca.", "1.3M+ views on the brand's TikTok."),
+    execution: t("Demonstração do secador em uso real, com o resultado aparecendo no cabelo.", "A real-use demo of the hair dryer, with the result showing on the hair."),
+    goal: t("Mostrar o produto funcionando na rotina, de um jeito natural.", "Show the product working in a daily routine, in a natural way."),
+  },
+  {
+    brand: "Pernambucanas",
+    logo: "/images/logos/pernambucanas.png",
+    src: "/videos/moda-pernambucanas.mp4",
+    insights: "",
+    tags: t("Moda • TikTok da marca", "Fashion • Brand's TikTok"),
+    impact: t("+80 mil visualizações no TikTok da marca.", "80K+ views on the brand's TikTok."),
+    execution: t("Looks no provador, com troca de peças.", "Fitting-room looks with outfit changes."),
+    goal: t("Dar vontade de experimentar as peças e ir até a loja.", "Make people want to try the pieces and visit the store."),
+  },
+  {
+    brand: "Boh Gastronomia",
+    logo: "/images/logos/boh-gastronomia.png",
+    src: "/videos/experiencias-boh.mp4",
+    insights: "",
+    tags: t("Experiência • TikTok", "Experience • TikTok"),
+    impact: t("+79 mil visualizações no TikTok.", "79K+ views on TikTok."),
+    execution: t("Descoberta local mostrando ambiente, drinks e pratos.", "A local discovery showing the setting, drinks and food."),
+    goal: t("Despertar a vontade de conhecer o lugar.", "Spark the desire to visit the place."),
+  },
+];
+const viralRows = (v: (typeof viralVideos)[number]) => [
+  { label: t("Impacto", "Impact"), text: v.impact, icon: "M4 20h16M7 20v-5M12 20V10M17 20V5" },
+  { label: t("Execução", "Execution"), text: v.execution, icon: "M4 9h16v11H4zM4 9l1.5-4.5 14 3L20 9M10 12.5v4l3.5-2z" },
+  { label: t("Objetivo", "Goal"), text: v.goal, icon: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 12l8-8" },
 ];
 
 // carrosséis do feed: `slides` = imagens em ordem; vazio usa `slideCount` espaços reservados
-const carousels = [
-  { id: "k1", brand: "Kiss New York", niche: t("Beleza", "Beauty"), text: t("Carrossel com +12 mil views.", "Carousel with 12K+ views."), slides: [] as string[], slideCount: 6 },
-  { id: "k2", brand: t("[Marca — carrossel 2]", "[Brand — carousel 2]"), niche: "Tech", text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [] as string[], slideCount: 5 },
-  { id: "k3", brand: t("[Marca — carrossel 3]", "[Brand — carousel 3]"), niche: t("Bem-estar & fit", "Wellness & fitness"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [] as string[], slideCount: 4 },
-  { id: "k4", brand: t("[Marca — carrossel 4]", "[Brand — carousel 4]"), niche: t("Experiências", "Experiences"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [] as string[], slideCount: 7 },
+const carousels: { id: string; brand: string; niche: string; text: string; slides: string[]; slideCount: number }[] = [
+  {
+    id: "k1",
+    brand: "Kiss New York",
+    niche: t("Beleza", "Beauty"),
+    text: t("Mais de 12 mil views", "More than 12K views"),
+    slides: ["/images/carrossel/kiss/kiss1.jpg", "/images/carrossel/kiss/kiss2.jpg", "/images/carrossel/kiss/kiss3.jpg", "/images/carrossel/kiss/kiss4.jpg", "/images/carrossel/kiss/kiss5.jpg", "/images/carrossel/kiss/kiss6.jpg"],
+    slideCount: 6,
+  },
+  { id: "k2", brand: t("[Marca — carrossel 2]", "[Brand — carousel 2]"), niche: "Tech", text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [], slideCount: 5 },
+  { id: "k3", brand: t("[Marca — carrossel 3]", "[Brand — carousel 3]"), niche: t("Bem-estar & fit", "Wellness & fitness"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [], slideCount: 4 },
+  { id: "k4", brand: t("[Marca — carrossel 4]", "[Brand — carousel 4]"), niche: t("Experiências", "Experiences"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [], slideCount: 7 },
 ];
 
 // galeria de fotos UGC: `tall` ocupa duas linhas da grade; `shape` arredonda em arco
-const gallery = [
-  { src: "", label: t("Produto · tech", "Product · tech"), tall: true, shape: "arch-top" },
-  { src: "", label: t("Bem-estar", "Wellness") },
-  { src: "", label: "Flat lay" },
-  { src: "", label: t("Beleza", "Beauty"), tall: true },
-  { src: "", label: t("Mão + produto", "Hand + product") },
-  { src: "", label: t("Ambiente", "Setting"), tall: true, shape: "arch-bottom" },
-  { src: "", label: t("Experiência", "Experience") },
-  { src: "", label: t("Detalhe", "Detail") },
+// `position` = qual parte da foto aparece no corte (ex.: object-bottom mostra mais o corpo)
+const gallery: { src: string; label: string; brandName: string; logo?: string; position?: string }[] = [
+  { src: "/images/galeria-web/philips.jpg", label: t("Philips · cabelo", "Philips · hair"), brandName: "Philips", logo: "/images/logos/philips.png", position: "object-[50%_70%]" },
+  { src: "/images/galeria-web/kiss-new-york.jpg", label: t("Kiss New York · unhas", "Kiss New York · nails"), brandName: "Kiss New York", logo: "/images/logos/kiss-new-york.png" },
+  { src: "/images/galeria-web/color-wow.jpg", label: t("Color Wow · cabelo", "Color Wow · hair"), brandName: "Color Wow", logo: "/images/logos/color-wow.png", position: "object-[50%_65%]" },
+  { src: "/images/galeria-web/zapia.jpg", label: t("Zapia AI · tech", "Zapia AI · tech"), brandName: "Zapia AI", logo: "/images/logos/zapia.png", position: "object-[50%_65%]" },
+  { src: "/images/galeria-web/don-cream.jpg", label: t("Don Cream · bebidas", "Don Cream · drinks"), brandName: "Don Cream", logo: "/images/logos/don-cream.png" },
+  { src: "/images/galeria-web/mirante.jpg", label: t("Mirante · moda", "Mirante · fashion"), brandName: "Mirante", logo: "/images/logos/mirante.jpg" },
+  { src: "/images/galeria-web/panda-aliancas.jpg", label: t("Panda Alianças · acessórios", "Panda Alianças · accessories"), brandName: "Panda Alianças", logo: "/images/logos/panda-aliancas.png" },
+  { src: "/images/galeria-web/bianco.jpg", label: t("Bianco · cuidado dental", "Bianco · dental care"), brandName: "Bianco", logo: "/images/logos/bianco.png", position: "object-[50%_60%]" },
+  { src: "/images/galeria-web/mercure-2.jpg", label: t("Mercure Hotel · experiência", "Mercure Hotel · experience"), brandName: "Mercure Hotel", logo: "/images/logos/mercure.png" },
+  { src: "/images/galeria-web/beleza-brasileira.jpg", label: t("Beleza Brasileira · beleza", "Beleza Brasileira · beauty"), brandName: "Beleza Brasileira", logo: "/images/logos/beleza-brasileira.png", position: "object-[50%_70%]" },
+  { src: "/images/galeria-web/white-align.jpg", label: t("White Align · cuidado dental", "White Align · dental care"), brandName: "White Align", logo: "/images/logos/white-align.png", position: "object-bottom" },
+  { src: "/images/galeria-web/kaisan.jpg", label: t("Kaisan · moda", "Kaisan · fashion"), brandName: "Kaisan", logo: "/images/logos/kaisan.png", position: "object-bottom" },
+  { src: "/images/galeria-web/mercure.jpg", label: t("Mercure Hotel · experiência", "Mercure Hotel · experience"), brandName: "Mercure Hotel", logo: "/images/logos/mercure.png", position: "object-bottom" },
+  { src: "/images/galeria-web/kiss-new-york-2.jpg", label: t("Kiss New York · cílios", "Kiss New York · lashes"), brandName: "Kiss New York", logo: "/images/logos/kiss-new-york.png" },
+  { src: "/images/galeria-web/arara-sport.jpg", label: t("Arara Sport · fitness", "Arara Sport · fitness"), brandName: "Arara Sport", logo: "/images/logos/arara-sport.png", position: "object-bottom" },
+  { src: "/images/galeria-web/cabana-ipes.jpg", label: t("Cabana Ipês · experiência", "Cabana Ipês · experience"), brandName: "Cabana Ipês", logo: "/images/logos/cabana-ipes.png" },
 ];
+// duas faixas em movimento, cada uma com as suas fotos
+const galleryRows = [gallery.slice(0, Math.ceil(gallery.length / 2)), gallery.slice(Math.ceil(gallery.length / 2))];
+// cada faixa repete as fotos até passar da largura de telas grandes, para o movimento não mostrar buraco
+const fillRow = <T,>(row: T[]) => (row.length * 214 < 2560 ? [...row, ...row] : row);
 
 // cases de venda: números dos prints enviados pela Loren. Sem `src` = espaço reservado até o vídeo chegar
 const salesCases = [
@@ -240,14 +284,14 @@ const feedbacks = [
   {
     brand: "Hey Harper", logo: "/images/logos/hey-harper.png", color: "bg-sky",
     msgs: [
-      { from: "brand", text: "Heya Loren! Thank you so much - I love it!! Everything looks great, and the whole delivery is very well organised. I really appreciate all the effort. Gonna be interesting to see the performance, but for now I don't have any extra feedback notes - let's test it!", time: "14:32" },
+      { from: "brand", text: "Heya Loren! Thank you so much - I love it!! Everything looks great, and the whole delivery is very well organised. I really appreciate all the effort. Gonna be interesting to see the performance, but for now I don't have any extra feedback notes - let's test it!", pt: "Oi, Loren! Muito obrigada, adorei! Está tudo ótimo, e toda a entrega está muito bem organizada. Agradeço muito por todo o empenho. Vai ser interessante acompanhar o desempenho, mas, por enquanto, não tenho nenhum outro comentário de ajuste. Vamos testar!", time: "14:32" },
       { from: "loren", text: "Omg thank you so much!! I'm so happy you liked it, it was such a pleasure working with hey harper", time: "14:35" },
     ],
   },
   {
     brand: "Deby Fit", logo: "/images/logos/deby-fit.png", color: "bg-rose",
     msgs: [
-      { from: "brand", text: "Loren, quero te agradecer pelo trabalho que você vem fazendo com os nossos vídeos e fotos! 🧡\n\nEstamos usando os conteúdos no tráfego pago, no Instagram e Facebook, e estamos tendo retorno e recebendo muitos elogios dos clientes. Você tem conseguido transmitir o cuidado, a qualidade e o carinho que colocamos em cada refeição da Deby Fit.\n\nEstou muito feliz com a nossa parceria! Obrigada pela dedicação e pelo olhar profissional que valoriza tanto o nosso trabalho.", en: "Loren, I want to thank you for the work you've been doing with our videos and photos! 🧡\n\nWe're using the content in paid traffic, on Instagram and Facebook, and we're seeing returns and getting lots of compliments from customers. You've managed to convey the care, quality and love we put into every Deby Fit meal.\n\nI'm very happy with our partnership! Thank you for your dedication and for the professional eye that values our work so much.", time: "" },
+      { from: "brand", text: "Estamos usando os conteúdos no tráfego pago, no Instagram e Facebook, e estamos tendo retorno e recebendo muitos elogios dos clientes. Você tem conseguido transmitir o cuidado, a qualidade e o carinho que colocamos em cada refeição da Deby Fit.\n\nEstou muito feliz com a nossa parceria! Obrigada pela dedicação e pelo olhar profissional que valoriza tanto o nosso trabalho.", en: "We're using the content in paid traffic, on Instagram and Facebook, and we're seeing returns and getting lots of compliments from customers. You've managed to convey the care, quality and love we put into every Deby Fit meal.\n\nI'm very happy with our partnership! Thank you for your dedication and for the professional eye that values our work so much.", time: "" },
     ],
   },
   {
@@ -445,21 +489,69 @@ const linkOr = (url: string) => url || "#contato";
         </h2>
         <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed text-wine-soft">{t("O que a sua marca pode esperar de cada vídeo.", "What your brand can expect from each video. From here on, the videos are in Portuguese.")}</p>
       </div>
-      <div class="flex flex-wrap justify-center gap-x-5 gap-y-10">
-        {viralVideos.map((v, i) => (
-          <figure data-reveal style={`--reveal-delay: ${(i % 4) * 90}ms;`} class="flex w-[calc(50%-0.625rem)] flex-col gap-3 md:w-[calc(25%-0.9375rem)] lg:w-[242px]">
-            <div class="relative">
-              <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-2xl bg-rose" />
-              {v.logo
-                ? <img src={v.logo} alt={v.brand} width="96" height="96" class="absolute -top-3 -right-2 z-10 h-12 w-12 rounded-full border-[1.5px] border-wine bg-offwhite object-cover" />
-                : <span role="img" aria-label={v.brand} class="absolute -top-3 -right-2 z-10 flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-sky font-display text-xl text-wine">{v.brand[0]}</span>}
+      <div class="flex flex-col gap-8 md:gap-16">
+        {viralVideos.slice(0, 1).map((v) => (
+          <article data-reveal class="flex flex-col items-center justify-center gap-12 rounded-[28px] border-[1.5px] border-wine bg-rose px-6 pt-16 pb-12 sm:px-12 md:flex-row md:items-start">
+            <div data-card class="relative w-full max-w-[250px] shrink-0">
+              <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-[24px] bg-offwhite" />
+              <img src={v.logo} alt="" width="96" height="96" class="absolute -top-12 -left-4 z-10 h-24 w-24 rounded-full border-[1.5px] border-wine bg-offwhite object-cover" />
+              <div data-card-cover class="absolute -bottom-4 -left-4 z-10 w-[88%] md:-bottom-20 md:-left-[32%]">
+                {v.insights
+                  ? <img src={v.insights} alt={t(`Métricas do vídeo: ${v.impact}`, `Video metrics: ${v.impact}`)} class="w-full rounded-2xl border-[1.5px] border-wine bg-white shadow-[3px_3px_0_var(--color-wine)]" />
+                  : <span class="flex h-28 items-center justify-center rounded-2xl border-[1.5px] border-dashed border-wine bg-offwhite px-2 text-center text-[11px] leading-tight font-semibold text-wine">{t("Print dos insights", "Insights screenshot")}</span>}
+              </div>
             </div>
-            <figcaption class="flex flex-col gap-1.5 px-1">
-              <span class="font-display text-lg leading-tight text-wine uppercase sm:text-2xl">{v.stat}</span>
-              <span class="text-sm leading-snug">{v.expect}</span>
-            </figcaption>
-          </figure>
+            <div class="flex w-full max-w-[440px] min-w-0 flex-col gap-6 md:pt-2">
+              <div class="flex flex-col gap-1 border-b border-wine/25 pb-5">
+                <h3 class="font-display text-[clamp(2.25rem,4vw,3.25rem)] leading-tight text-wine">{v.brand}</h3>
+                <span class="text-sm font-semibold tracking-[0.1em] text-wine uppercase">{v.tags}</span>
+              </div>
+              <dl class="flex flex-col gap-6">
+                {viralRows(v).map((row) => (
+                  <div class="flex items-start gap-4">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" class="h-10 w-10 shrink-0 text-wine" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={row.icon} /></svg>
+                    <div class="text-[17px] leading-snug">
+                      <dt class="inline font-bold text-wine uppercase">{row.label}:</dt>
+                      <dd class="inline"> {row.text}</dd>
+                    </div>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </article>
         ))}
+        <div class="grid gap-8 lg:grid-cols-2">
+          {viralVideos.slice(1).map((v) => (
+            <article data-reveal class="grid gap-8 rounded-[28px] border-[1.5px] border-wine bg-sky px-6 py-8 sm:grid-cols-[210px_minmax(0,1fr)] sm:px-8">
+            <div data-card class="relative mx-auto w-full max-w-[210px] shrink-0 self-start">
+              <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-[24px] bg-offwhite" />
+              <img src={v.logo} alt="" width="96" height="96" class="absolute -top-4 -left-4 z-10 h-16 w-16 rounded-full border-[1.5px] border-wine bg-offwhite object-cover" />
+              <div data-card-cover class="absolute -bottom-4 -left-4 z-10 w-[62%] -rotate-3">
+                {v.insights
+                  ? <img src={v.insights} alt={t(`Métricas do vídeo: ${v.impact}`, `Video metrics: ${v.impact}`)} class="w-full rounded-2xl border-[1.5px] border-wine bg-white shadow-[3px_3px_0_var(--color-wine)]" />
+                  : <span class="flex h-16 items-center justify-center rounded-2xl border-[1.5px] border-dashed border-wine bg-offwhite px-2 text-center text-[11px] leading-tight font-semibold text-wine">{t("Print dos insights", "Insights screenshot")}</span>}
+              </div>
+            </div>
+            <div class="flex min-w-0 flex-col gap-4">
+              <div class="flex flex-col gap-1">
+                <h3 class="font-display text-[32px] leading-tight text-wine">{v.brand}</h3>
+                <span class="text-xs font-semibold tracking-[0.1em] text-wine uppercase">{v.tags}</span>
+              </div>
+              <dl class="flex flex-col gap-3.5">
+                {viralRows(v).map((row) => (
+                  <div class="flex items-start gap-3">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" class="h-7 w-7 shrink-0 text-wine" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={row.icon} /></svg>
+                    <div class="text-[15px] leading-snug">
+                      <dt class="inline font-bold text-wine uppercase">{row.label}:</dt>
+                      <dd class="inline"> {row.text}</dd>
+                    </div>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </article>
+          ))}
+        </div>
       </div>
     </section>
 
@@ -538,7 +630,7 @@ const linkOr = (url: string) => url || "#contato";
           </p>
         </div>
         <div class="mx-auto w-full max-w-[300px] px-4 pt-10 pb-4">
-          <OvalPortrait src={photos.sobre} alt={t("Loren Martins sorrindo, gravando com o celular", "Loren Martins smiling, filming with her phone")} arcText={t("sobre sua nova creator favorita!", "about your new favorite creator!")} />
+          <OvalPortrait src={photos.sobre} alt={t("Loren Martins sorrindo, de blazer marrom", "Loren Martins smiling, wearing a brown blazer")} arcText={t("sobre sua nova creator favorita!", "about your new favorite creator!")} />
         </div>
       </div>
     </section>
@@ -666,18 +758,32 @@ const linkOr = (url: string) => url || "#contato";
             <Sparkle class="sparkle-animate h-7 w-7 text-wine" style="--sparkle-dur: 2.4s;" />
             <h3 class="font-display text-4xl text-wine">{t("Fotos", "UGC")} <span class="italic">{t("UGC", "photos")}</span></h3>
           </div>
-          <ul class="grid grid-flow-dense auto-rows-[200px] grid-cols-[repeat(auto-fill,minmax(min(100%,220px),1fr))] gap-4">
-            {gallery.map((g, i) => (
-              <li
-                data-reveal
-                style={`--reveal-delay: ${(i % 4) * 90}ms;`}
-                class={`relative overflow-hidden border-[1.5px] border-wine ${g.tall ? "row-span-2" : ""} ${g.shape === "arch-top" ? "rounded-t-[200px] rounded-b-[20px]" : g.shape === "arch-bottom" ? "rounded-t-[20px] rounded-b-[200px]" : "rounded-[20px]"} ${["bg-sky", "bg-rose", "bg-offwhite"][i % 3]}`}
-              >
-                <Photo src={g.src} alt={g.label} class="h-full w-full" />
-                <span class="absolute bottom-4 left-4 rounded-full border border-wine bg-offwhite px-3 py-1.5 text-xs font-semibold text-wine">{g.label}</span>
-              </li>
+          <div class="relative left-1/2 flex w-screen -translate-x-1/2 flex-col gap-3.5">
+            {galleryRows.map((row, r) => (
+              <div class="marquee overflow-hidden bg-wine-deep">
+                <div class="marquee-track flex w-max" data-reverse={r === 1 ? "true" : undefined} style={`animation-duration: ${r === 1 ? 115 : 100}s;`}>
+                  {[0, 1].map((copy) => (
+                    <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 gap-3.5 pr-3.5">
+                      {fillRow(row).map((g, i) => (
+                        <li class="flex w-[160px] shrink-0 flex-col sm:w-[200px]">
+                          <span class="flex h-6 items-center text-[10px] font-semibold tracking-[0.14em] text-rose/80 uppercase">{t("Fotos UGC", "UGC photos")}</span>
+                          <div class="relative aspect-[4/5] overflow-hidden bg-wine">
+                            <Photo src={g.src} alt={g.label} class={`h-full w-full ${g.position ?? ""}`} />
+                            {g.logo && (
+                              <span role="img" aria-label={g.brandName} class="absolute top-2 right-2 flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border-[1.5px] border-offwhite">
+                                <img src={g.logo} alt="" class="h-full w-full scale-105 object-cover" loading="lazy" />
+                              </span>
+                            )}
+                          </div>
+                          <span aria-hidden="true" class="flex h-6 items-center self-end text-[10px] text-rose/80">▸ {String((i % row.length) + 1).padStart(2, "0")}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ))}
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -686,14 +792,6 @@ const linkOr = (url: string) => url || "#contato";
     <section id="feedbacks" class="scroll-mt-20 border-t-[1.5px] border-wine bg-sky px-6 py-14 sm:py-16">
       <div class="mx-auto flex max-w-[1320px] flex-col gap-12">
         <h2 data-reveal class="text-center font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">{t("O que as marcas", "What brands")} <span class="italic">{t("dizem", "say")}</span></h2>
-        <dl class="mx-auto grid w-full max-w-3xl grid-cols-3 gap-3 sm:gap-4">
-          {stats.map((s, i) => (
-            <div data-reveal style={`--reveal-delay: ${i * 90}ms;`} class="flex flex-col-reverse items-center gap-1 rounded-2xl border border-wine/25 bg-offwhite px-2 py-4 text-center">
-              <dt class="text-[13px] leading-snug text-wine-soft">{s.label}</dt>
-              <dd class="font-display text-[clamp(1.5rem,3.5vw,2.25rem)] leading-none text-wine">{s.value}</dd>
-            </div>
-          ))}
-        </dl>
         <div class="columns-1 gap-6 sm:columns-2 lg:columns-3">
           {feedbacks.map((fb, i) => (
             <article data-reveal class={`mb-6 break-inside-avoid rounded-2xl border-[1.5px] border-wine bg-offwhite p-5 shadow-[4px_4px_0_var(--color-wine)] ${["-rotate-1", "rotate-1", "-rotate-[0.5deg]", "rotate-[0.5deg]"][i % 4]}`}>
@@ -706,14 +804,22 @@ const linkOr = (url: string) => url || "#contato";
                   <p class="text-[15px] leading-relaxed whitespace-pre-line">{m.text}</p>
                 ))}
               </div>
-              {lang === "en" && fb.msgs.some((m) => m.en) && (
+              {((lang === "en" && fb.msgs.some((m) => m.en)) || (lang === "pt" && fb.msgs.some((m) => m.pt))) && (
                 <Fragment>
                   <div data-fb-translated hidden class="flex flex-col gap-2.5">
                     {fb.msgs.filter((m) => m.from === "brand").map((m) => (
-                      <p class="text-[15px] leading-relaxed whitespace-pre-line">{m.en}</p>
+                      <p class="text-[15px] leading-relaxed whitespace-pre-line">{lang === "en" ? m.en : m.pt}</p>
                     ))}
                   </div>
-                  <button type="button" data-fb-translate class="mt-2 min-h-11 text-sm font-semibold text-wine underline underline-offset-4">Translate to English</button>
+                  <button
+                    type="button"
+                    data-fb-translate
+                    data-translation-label={lang === "en" ? "Translate to English" : "Traduzir para português"}
+                    data-original-label={lang === "en" ? "Show original" : "Ver original"}
+                    class="mt-2 min-h-11 text-sm font-semibold text-wine underline underline-offset-4"
+                  >
+                    {lang === "en" ? "Translate to English" : "Traduzir para português"}
+                  </button>
                 </Fragment>
               )}
             </article>
@@ -737,6 +843,7 @@ const linkOr = (url: string) => url || "#contato";
                 {contact.email || "[email da Loren]"}
               </a>
               {[
+                { label: "WhatsApp", url: contact.whatsapp && `https://wa.me/${contact.whatsapp}` },
                 { label: "Instagram", url: contact.instagram },
                 { label: "TikTok", url: contact.tiktok },
                 { label: t("Mídia kit (PDF)", "Media kit (PDF)"), url: contact.mediaKit },
@@ -751,11 +858,11 @@ const linkOr = (url: string) => url || "#contato";
             <form data-lead-form name="contato" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="grid gap-4 sm:grid-cols-2">
               <input type="hidden" name="form-name" value="contato" />
               <p hidden><label>Não preencha <input name="bot-field" /></label></p>
-              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Nome", "Name")}<input required name="nome" autocomplete="name" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
-              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">E-mail<input required type="email" name="email" autocomplete="email" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
-              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Marca", "Brand")}<input required name="marca" autocomplete="organization" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
-              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Orçamento estimado", "Estimated budget")}<input name="orcamento" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
-              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Conta sobre o projeto", "Tell me about the project")}<textarea required name="mensagem" rows="4" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none py-3"></textarea></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Nome", "Name")}<input required name="nome" autocomplete="name" placeholder={t("Seu nome", "Your name")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">E-mail<input required type="email" name="email" autocomplete="email" placeholder={t("voce@marca.com", "you@brand.com")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Marca", "Brand")}<input required name="marca" autocomplete="organization" placeholder={t("Nome da marca", "Brand name")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Orçamento estimado", "Estimated budget")}<input name="orcamento" placeholder={t("Ex: R$ 2.500", "E.g. $500")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+              <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Conta sobre o projeto", "Tell me about the project")}<textarea required name="mensagem" rows="4" placeholder={t("Categoria, formato, prazo, objetivo da campanha...", "Category, format, deadline, campaign goal...")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none py-3"></textarea></label>
               <button type="submit" class="min-h-12 rounded-full bg-wine px-6 font-semibold text-offwhite sm:col-span-2">{t("Enviar mensagem", "Send message")}</button>
               <p data-form-error hidden class="text-sm sm:col-span-2">{t("Não consegui enviar agora. Me escreve em", "I couldn't send this right now. Email me at")} {contact.email}.</p>
             </form>
@@ -827,7 +934,7 @@ const linkOr = (url: string) => url || "#contato";
       });
     });
 
-    // feedbacks na página em inglês: alterna entre o texto original e a tradução
+    // Alterna entre o texto original e a tradução dos feedbacks.
     document.querySelectorAll<HTMLButtonElement>("[data-fb-translate]").forEach((btn) => {
       const card = btn.closest("article");
       const original = card?.querySelector<HTMLElement>("[data-fb-original]");
@@ -837,7 +944,7 @@ const linkOr = (url: string) => url || "#contato";
         const showTranslation = translated.hidden;
         translated.hidden = !showTranslation;
         original.hidden = showTranslation;
-        btn.textContent = showTranslation ? "Show original" : "Translate to English";
+        btn.textContent = showTranslation ? btn.dataset.originalLabel : btn.dataset.translationLabel;
       });
     });
 

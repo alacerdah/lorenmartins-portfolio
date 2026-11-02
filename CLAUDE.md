@@ -35,7 +35,7 @@ src/
 public/
   images/                ← fotos do portfólio (referenciadas como "/images/nome.ext")
     loren.webp           ← foto principal (hero)
-    loren-sobre.png      ← foto da seção "Quem eu sou" (oval portrait)
+    loren2.png           ← foto da seção "Quem eu sou" (oval portrait)
   favicon.svg
 ```
 
@@ -46,15 +46,14 @@ public/
 | Constante | O que controla |
 |---|---|
 | `photos` | Caminhos das fotos do hero e "sobre" |
-| `contact` | Email, Instagram, TikTok, mídia kit |
+| `contact` | Email, Instagram, TikTok, WhatsApp, mídia kit |
 | `brandRows` | Logos do carrossel de marcas (2 faixas). Cada logo é `logo("Nome", "arquivo.png")` e o arquivo fica em `public/images/logos/` |
 | `niches` | Lista de nichos em ordem de preferência: viram as abas e os botões do "Sobre". `black-friday` é temporário: faixa, aba e botão só aparecem de 1º/out a 30/nov |
 | `videos` / `realVideos` | Vídeos por nicho (quantos quiser; nicho sem nenhum ganha 3 espaços reservados). Em `realVideos` preencha por nicho: `brand`, `src` = arquivo .mp4 (em `public/videos/`) ou `permalink` do Instagram, `badge` opcional (adesivo tipo "+80 mil views") |
 | `englishVideos` | Vídeos em inglês, só na página `/en/`, logo depois do topo |
-| `stats` | Números discretos acima dos feedbacks (marcas, vídeos e views). |
-| `viralVideos` | Seção "Cases virais": os vídeos com `logo`, views (`stat`) e o que a marca pode esperar (`expect`) |
+| `viralVideos` | Seção "Cases virais": o primeiro em destaque e dois embaixo, com `logo`, `insights` (print em `public/images/insights/`), `tags` e os textos `impact`, `execution` e `goal` |
 | `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem |
-| `gallery` | Fotos UGC da galeria; `tall` = 2 linhas, `shape` = arco |
+| `gallery` | Fotos UGC: faixas em movimento. Imagem otimizada em `public/images/galeria-web/` (640 px de largura), `brandName` e `logo` |
 | `salesCases` | Cases de venda: marca, vídeo, explicação e números (`kpis`) |
 | `feedbacks` | Parede de feedbacks: cada marca vira um card com as mensagens dela. `logo` = `/images/logos/...` |
 
