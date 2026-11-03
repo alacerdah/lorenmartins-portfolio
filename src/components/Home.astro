@@ -28,6 +28,7 @@ const navLinks = [
 const photos = {
   hero: "/images/loren.webp",
   sobre: "/images/loren2.png",
+  contato: "/images/loren-contato.jpg", // foto da polaroid na última seção
 };
 
 // balões de depoimento em cima da foto da capa; `place` só vale em telas a partir de 1280 px (nas menores ficam empilhados abaixo da foto)
@@ -88,43 +89,44 @@ const niches = [
 type Video = { niche: string; brand: string; format: string; src?: string; permalink?: string; badge?: string | string[]; views?: number };
 const realVideos: Record<string, Partial<Video>[]> = {
   beleza: [
-    { brand: "Neutrogena", src: "/videos/autocuidado-neutrogena.mp4", badge: "Aesthetic" },
     { brand: "Color Wow", src: "/videos/autocuidado-color-wow.mp4" },
+    { brand: "Philips", src: "/videos/mais-vistos-philips-2.mp4", badge: t("+150 mil views", "150K+ views") },
+    { brand: "Neutrogena", src: "/videos/autocuidado-neutrogena.mp4", badge: "Aesthetic" },
     { brand: "Beleza Brasileira", src: "/videos/beleza-brasileira-3.mp4" },
     { brand: "Mauve", format: t("Cabelo", "Hair"), src: "/videos/beleza-mauve.mp4", badge: "Aesthetic" },
-    { brand: "Bianco", src: "/videos/beleza-bianco.mp4" },
     { brand: "White Align", format: t("Caneta clareadora", "Teeth-whitening pen"), src: "/videos/beleza-white-align.mp4" },
-    { brand: "Rosa Selvagem", src: "/videos/beleza-rosa-selvagem.mp4" },
-    { brand: "AF Beauty", src: "/videos/beleza-af-beauty.mp4" },
-    { brand: "CMC Lab", src: "/videos/beleza-cmc-lab.mp4" },
     { brand: "Beyoung", src: "/videos/beleza-beyoung.mp4" },
-    { brand: "Philips", src: "/videos/mais-vistos-philips-2.mp4", badge: t("+150 mil views", "150K+ views"), views: 150000 },
+    { brand: "AF Beauty", src: "/videos/beleza-af-beauty.mp4" },
+    { brand: "Rosa Selvagem", src: "/videos/beleza-rosa-selvagem.mp4" },
+    { brand: "Bianco", src: "/videos/beleza-bianco.mp4" },
+    { brand: "CMC Lab", src: "/videos/beleza-cmc-lab.mp4" },
   ],
   "bem-estar": [
-    { brand: "Thermolife", src: "/videos/lifestyle-thermolife.mp4" },
     { brand: "Marmitas da Deby", src: "/videos/bem-estar-marmitas-deby.mp4" },
+    { brand: "Arara Sport", src: "https://lorenmartins.my.canva.site/_assets/video/297213cddf4782496d1d5e4dca9d5255.mp4" },
+    { brand: "Thermolife", src: "/videos/lifestyle-thermolife.mp4" },
+    { brand: "Marmitas da Deby", src: "/videos/bem-estar-marmitas-deby-2.mp4" },
     { brand: "Authentic Nutri", format: t("Colágeno", "Collagen"), src: "/videos/bem-estar-authentic-nutri-colageno.mp4", badge: "Aesthetic" },
     { brand: "Authentic Nutri", src: "/videos/bem-estar-authentic-nutri.mp4" },
-    { brand: "Arara Sport", src: "https://lorenmartins.my.canva.site/_assets/video/297213cddf4782496d1d5e4dca9d5255.mp4" },
+    { brand: "Mirante", format: t("Post em collab", "Collab post"), src: "/videos/moda-mirante.mp4", badge: t("+30 mil views", "30K+ views") },
   ],
   acessorios: [
     { brand: "Panda Alianças", src: "/videos/moda-panda-aliancas.mp4", badge: t("+8 mil views", "8K+ views"), views: 8000 },
     { brand: "Hey Harper", src: "/videos/moda-hey-harper.mp4" },
-    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-2.mp4" },
-    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-3.mp4" },
     { brand: "HSMT Store", src: "/videos/moda-hsmt-store.mp4", badge: "Aesthetic" },
+    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-2.mp4" },
     { brand: "Hoy Óculos", src: "/videos/acessorios-hoy.mp4", badge: "Aesthetic" },
+    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-3.mp4" },
   ],
   moda: [
     { brand: "Pernambucanas", format: t("TikTok da marca", "Brand's TikTok"), src: "/videos/moda-pernambucanas.mp4", badge: t("+80 mil views", "80K+ views"), views: 80000 },
-    { brand: "Mirante", format: t("Post em collab", "Collab post"), src: "/videos/moda-mirante.mp4", badge: t("+30 mil views", "30K+ views"), views: 30000 },
     { brand: "Stapellia Moda", src: "/videos/moda-stapellia.mp4" },
-    { brand: "Chico Rei", src: "/videos/moda-chico-rei.mp4", badge: "Festival" },
     { brand: "Peça Rara", src: "/videos/moda-peca-rara.mp4", badge: "Black Friday" },
-    { brand: "Basic", src: "/videos/moda-basic.mp4" },
-    { brand: "Basic", src: "/videos/moda-basic-2.mp4" },
     { brand: "Loungerie", src: "/videos/moda-loungerie.mp4" },
+    { brand: "Chico Rei", src: "/videos/moda-chico-rei.mp4", badge: "Festival" },
+    { brand: "Basic", src: "/videos/moda-basic.mp4" },
     { brand: "Loungerie", src: "/videos/moda-loungerie-2.mp4" },
+    { brand: "Basic", src: "/videos/moda-basic-2.mp4", badge: "Aesthetic" },
   ],
   experiencias: [
     { brand: "Boh Gastronomia", src: "/videos/experiencias-boh.mp4", badge: t("+79 mil views", "79K+ views"), views: 79000 },
@@ -138,13 +140,13 @@ const realVideos: Record<string, Partial<Video>[]> = {
   ],
   bebidas: [{ brand: "Don Cream", src: "/videos/bebidas-don-cream.mp4", badge: "Kit" }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-2.mp4", badge: t("Ação promocional", "Promo campaign") }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-3.mp4", badge: "Aesthetic" }],
   tech: [
+    { brand: "InfinitePay", src: "/videos/tech-infinitepay.mp4", badge: "Black Friday" },
+    { brand: "Disney+", src: "/videos/tech-disney-plus.mp4", badge: t("+16 mil views", "16K+ views") },
     { brand: "Zapia AI", src: "/videos/tech-zapia.mp4" },
     { brand: "Howzit English", src: "/videos/tech-howzit.mp4" },
     { brand: "InfinitePay", src: "/videos/tech-infinitepay-3.mp4" },
     { brand: "Tour SJC", src: "/videos/tech-tour-sjc.mp4", badge: t("App de experiência", "Experience app") },
-    { brand: "Disney+", src: "/videos/tech-disney-plus.mp4", badge: t("+16 mil views", "16K+ views"), views: 16000 },
     { brand: "InfinitePay", src: "/videos/tech-infinitepay-2.mp4" },
-    { brand: "InfinitePay", src: "/videos/tech-infinitepay.mp4" },
   ],
   pet: [
     { brand: "Zooby Pet", format: t("Com a Pitchula · sachezinho", "With Pitchula · wet food pouch"), src: "/videos/pet-zooby.mp4" },
@@ -169,62 +171,73 @@ const englishVideos = [
   { brand: "Hey Harper", logo: "/images/logos/hey-harper-selo.png", src: "/videos/ingles-hey-harper-2.mp4" },
 ];
 
-// cases virais: o primeiro fica em destaque e os outros dois embaixo.
-// `insights` = print das métricas em public/images/insights/; vazio mostra um espaço reservado.
+// cases virais: vídeos soltos com balão de views; o do meio da lista, o mais visto, fica um pouco maior.
+// `insights` = print das métricas em public/images/insights/; quando existe, o balão abre o print.
 const viralVideos = [
-  {
-    brand: "Philips",
-    logo: "/images/logos/philips.png",
-    src: "/videos/mais-vistos-philips.mp4",
-    insights: "",
-    tags: t("Demonstração • TikTok da marca", "Product demo • Brand's TikTok"),
-    impact: t("+1,3M de visualizações no TikTok da marca.", "1.3M+ views on the brand's TikTok."),
-    execution: t("Demonstração do secador em uso real, com o resultado aparecendo no cabelo.", "A real-use demo of the hair dryer, with the result showing on the hair."),
-    goal: t("Mostrar o produto funcionando na rotina, de um jeito natural.", "Show the product working in a daily routine, in a natural way."),
-  },
   {
     brand: "Pernambucanas",
     logo: "/images/logos/pernambucanas.png",
     src: "/videos/moda-pernambucanas.mp4",
     insights: "",
-    tags: t("Moda • TikTok da marca", "Fashion • Brand's TikTok"),
-    impact: t("+80 mil visualizações no TikTok da marca.", "80K+ views on the brand's TikTok."),
-    execution: t("Looks no provador, com troca de peças.", "Fitting-room looks with outfit changes."),
-    goal: t("Dar vontade de experimentar as peças e ir até a loja.", "Make people want to try the pieces and visit the store."),
+    views: t("+80 mil", "80K+"),
+    text: t("Transições de looks que destacam as peças e inspiram novas combinações.", "Outfit transitions that highlight the pieces and inspire new combinations."),
+  },
+  {
+    brand: "Philips",
+    logo: "/images/logos/philips.png",
+    src: "/videos/mais-vistos-philips.mp4",
+    insights: "",
+    views: t("+1,3M", "1.3M+"),
+    text: t("Gancho criativo e linguagem natural para capturar a atenção no TikTok.", "A creative hook and natural language to capture attention on TikTok."),
   },
   {
     brand: "Boh Gastronomia",
     logo: "/images/logos/boh-gastronomia.png",
     src: "/videos/experiencias-boh.mp4",
     insights: "",
-    tags: t("Experiência • TikTok", "Experience • TikTok"),
-    impact: t("+79 mil visualizações no TikTok.", "79K+ views on TikTok."),
-    execution: t("Descoberta local mostrando ambiente, drinks e pratos.", "A local discovery showing the setting, drinks and food."),
-    goal: t("Despertar a vontade de conhecer o lugar.", "Spark the desire to visit the place."),
+    views: t("+79 mil", "79K+"),
+    text: t("Conteúdo visual que valoriza os pratos e desperta o desejo de conhecer o restaurante.", "Visual content that showcases the food and sparks the desire to visit the restaurant."),
   },
 ];
-const viralRows = (v: (typeof viralVideos)[number]) => [
-  { label: t("Impacto", "Impact"), text: v.impact, icon: "M4 20h16M7 20v-5M12 20V10M17 20V5" },
-  { label: t("Execução", "Execution"), text: v.execution, icon: "M4 9h16v11H4zM4 9l1.5-4.5 14 3L20 9M10 12.5v4l3.5-2z" },
-  { label: t("Objetivo", "Goal"), text: v.goal, icon: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 12l8-8" },
-];
+const viralTilt = ["-rotate-[2.5deg] lg:mt-7", "rotate-[1.5deg]", "-rotate-1 lg:mt-9"];
 
 // carrosséis do feed: `slides` = imagens em ordem; vazio usa `slideCount` espaços reservados
-// `badge` = adesivo na foto; `url` = post original (a foto vira link)
-const carousels: { id: string; brand: string; niche: string; text: string; slides: string[]; slideCount: number; badge?: string; url?: string }[] = [
+// um slide pode ser imagem ou vídeo .mp4 (toca sozinho, sem som); `badge` = adesivo na foto
+const carousels: { id: string; brand: string; niche: string; text: string; slides: string[]; slideCount: number; badge?: string }[] = [
+  {
+    id: "k3",
+    brand: "Óculos Hoy",
+    niche: t("Acessórios", "Accessories"),
+    text: "",
+    badge: t("+30 mil views", "30K+ views"),
+    slides: ["/images/carrossel/hoy/hoy1.jpg", "/images/carrossel/hoy/hoy2.jpg", "/images/carrossel/hoy/hoy3.jpg", "/images/carrossel/hoy/hoy4.jpg", "/images/carrossel/hoy/hoy5.jpg", "/images/carrossel/hoy/hoy6.jpg"],
+    slideCount: 6,
+  },
   {
     id: "k1",
     brand: "Kiss New York",
     niche: t("Beleza", "Beauty"),
     text: "",
     badge: t("+12 mil views", "+12K views"),
-    url: "https://www.instagram.com/p/DandnJfDpds/",
     slides: ["/images/carrossel/kiss/kiss1.jpg", "/images/carrossel/kiss/kiss2.jpg", "/images/carrossel/kiss/kiss3.jpg", "/images/carrossel/kiss/kiss4.jpg", "/images/carrossel/kiss/kiss5.jpg", "/images/carrossel/kiss/kiss6.jpg"],
     slideCount: 6,
   },
-  { id: "k2", brand: t("[Marca — carrossel 2]", "[Brand — carousel 2]"), niche: "Tech", text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [], slideCount: 5 },
-  { id: "k3", brand: t("[Marca — carrossel 3]", "[Brand — carousel 3]"), niche: t("Bem-estar & fit", "Wellness & fitness"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [], slideCount: 4 },
-  { id: "k4", brand: t("[Marca — carrossel 4]", "[Brand — carousel 4]"), niche: t("Experiências", "Experiences"), text: t("[Ideia do carrossel: tema, objetivo e resultado.]", "[Carousel idea: topic, goal and result.]"), slides: [], slideCount: 7 },
+  {
+    id: "k2",
+    brand: "Hey Harper",
+    niche: t("Acessórios", "Accessories"),
+    text: "",
+    slides: ["/images/carrossel/hh/hhcapa.jpg", "/images/carrossel/hh/snapinsta-1793675207456.mp4", "/images/carrossel/hh/hh3.jpg", "/images/carrossel/hh/hh4.jpg", "/images/carrossel/hh/hh1.jpg", "/images/carrossel/hh/hh6.jpg"],
+    slideCount: 6,
+  },
+  {
+    id: "k4",
+    brand: "Gaha Wellness",
+    niche: t("Bem-estar & fit", "Wellness & fitness"),
+    text: "",
+    slides: ["/images/carrossel/gaha/gaha1.jpg", "/images/carrossel/gaha/gaha2.jpg", "/images/carrossel/gaha/gaha3.jpg", "/images/carrossel/gaha/gaha4.jpg", "/images/carrossel/gaha/gaha5.jpg", "/images/carrossel/gaha/gaha6.jpg"],
+    slideCount: 6,
+  },
 ];
 
 // galeria de fotos UGC: `tall` ocupa duas linhas da grade; `shape` arredonda em arco
@@ -234,21 +247,20 @@ const gallery: { src: string; label: string; brandName: string; logo?: string; p
   { src: "/images/galeria-web/kiss-new-york.jpg", label: t("Kiss New York · unhas", "Kiss New York · nails"), brandName: "Kiss New York", logo: "/images/logos/kiss-new-york.png" },
   { src: "/images/galeria-web/color-wow.jpg", label: t("Color Wow · cabelo", "Color Wow · hair"), brandName: "Color Wow", logo: "/images/logos/color-wow.png", position: "object-[50%_65%]" },
   { src: "/images/galeria-web/zapia.jpg", label: t("Zapia AI · tech", "Zapia AI · tech"), brandName: "Zapia AI", logo: "/images/logos/zapia.png", position: "object-[50%_65%]" },
+  { src: "/images/galeria-web/kaisan.jpg", label: t("Kaisan · moda", "Kaisan · fashion"), brandName: "Kaisan", logo: "/images/logos/kaisan.png", position: "object-bottom" },
   { src: "/images/galeria-web/don-cream.jpg", label: t("Don Cream · bebidas", "Don Cream · drinks"), brandName: "Don Cream", logo: "/images/logos/don-cream.png" },
   { src: "/images/galeria-web/mirante.jpg", label: t("Mirante · moda", "Mirante · fashion"), brandName: "Mirante", logo: "/images/logos/mirante.jpg" },
   { src: "/images/galeria-web/panda-aliancas.jpg", label: t("Panda Alianças · acessórios", "Panda Alianças · accessories"), brandName: "Panda Alianças", logo: "/images/logos/panda-aliancas.png" },
-  { src: "/images/galeria-web/bianco.jpg", label: t("Bianco · cuidado dental", "Bianco · dental care"), brandName: "Bianco", logo: "/images/logos/bianco.png", position: "object-[50%_60%]" },
   { src: "/images/galeria-web/mercure-2.jpg", label: t("Mercure Hotel · experiência", "Mercure Hotel · experience"), brandName: "Mercure Hotel", logo: "/images/logos/mercure.png" },
   { src: "/images/galeria-web/beleza-brasileira.jpg", label: t("Beleza Brasileira · beleza", "Beleza Brasileira · beauty"), brandName: "Beleza Brasileira", logo: "/images/logos/beleza-brasileira.png", position: "object-[50%_70%]" },
   { src: "/images/galeria-web/white-align.jpg", label: t("White Align · cuidado dental", "White Align · dental care"), brandName: "White Align", logo: "/images/logos/white-align.png", position: "object-bottom" },
-  { src: "/images/galeria-web/kaisan.jpg", label: t("Kaisan · moda", "Kaisan · fashion"), brandName: "Kaisan", logo: "/images/logos/kaisan.png", position: "object-bottom" },
+  { src: "/images/galeria-web/arara-sport.jpg", label: t("Arara Sport · fitness", "Arara Sport · fitness"), brandName: "Arara Sport", logo: "/images/logos/arara-sport.png", position: "object-bottom" },
   { src: "/images/galeria-web/mercure.jpg", label: t("Mercure Hotel · experiência", "Mercure Hotel · experience"), brandName: "Mercure Hotel", logo: "/images/logos/mercure.png", position: "object-bottom" },
   { src: "/images/galeria-web/kiss-new-york-2.jpg", label: t("Kiss New York · cílios", "Kiss New York · lashes"), brandName: "Kiss New York", logo: "/images/logos/kiss-new-york.png" },
-  { src: "/images/galeria-web/arara-sport.jpg", label: t("Arara Sport · fitness", "Arara Sport · fitness"), brandName: "Arara Sport", logo: "/images/logos/arara-sport.png", position: "object-bottom" },
   { src: "/images/galeria-web/cabana-ipes.jpg", label: t("Cabana Ipês · experiência", "Cabana Ipês · experience"), brandName: "Cabana Ipês", logo: "/images/logos/cabana-ipes.png" },
 ];
 // duas faixas em movimento, cada uma com as suas fotos
-const galleryRows = [gallery.slice(0, Math.ceil(gallery.length / 2)), gallery.slice(Math.ceil(gallery.length / 2))];
+const galleryRows = [gallery.slice(0, 9), gallery.slice(9)];
 // cada faixa repete as fotos até passar da largura de telas grandes, para o movimento não mostrar buraco
 const fillRow = <T,>(row: T[]) => (row.length * 214 < 2560 ? [...row, ...row] : row);
 
@@ -505,69 +517,27 @@ const linkOr = (url: string) => url || "#contato";
         </h2>
         <p data-reveal style="--reveal-delay: 80ms;" class="max-w-sm leading-relaxed text-wine-soft">{t("O que a sua marca pode esperar de cada vídeo.", "What your brand can expect from each video. From here on, the videos are in Portuguese.")}</p>
       </div>
-      <div class="flex flex-col gap-8 md:gap-16">
-        {viralVideos.slice(0, 1).map((v) => (
-          <article data-reveal class="flex flex-col items-center justify-center gap-12 rounded-[28px] border-[1.5px] border-wine bg-rose px-6 pt-16 pb-12 sm:px-12 md:flex-row md:items-start">
-            <div data-card class="relative w-full max-w-[250px] shrink-0">
-              <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-[24px] bg-offwhite" />
-              <span class="absolute -top-12 -left-4 z-10 h-24 w-24 overflow-hidden rounded-full border-[1.5px] border-wine"><img src={v.logo} alt="" width="96" height="96" class="h-full w-full scale-110 object-cover" /></span>
-              <div data-card-cover class="absolute -bottom-4 -left-4 z-10 w-[88%] md:-bottom-20 md:-left-[32%]">
-                {v.insights
-                  ? <img src={v.insights} alt={t(`Métricas do vídeo: ${v.impact}`, `Video metrics: ${v.impact}`)} class="w-full rounded-2xl border-[1.5px] border-wine bg-white shadow-[3px_3px_0_var(--color-wine)]" />
-                  : <span class="flex h-28 items-center justify-center rounded-2xl border-[1.5px] border-dashed border-wine bg-offwhite px-2 text-center text-[11px] leading-tight font-semibold text-wine">{t("Print dos insights", "Insights screenshot")}</span>}
+      <div class="-mx-6 flex snap-x snap-mandatory scroll-px-6 items-start gap-4 overflow-x-auto px-6 pt-5 pb-6 [scrollbar-width:none] lg:justify-center lg:gap-8 lg:overflow-visible xl:gap-16 [&::-webkit-scrollbar]:hidden">
+        {viralVideos.map((v, i) => {
+          const Sticker = v.insights ? "a" : "div";
+          return (
+            <article data-reveal style={`--reveal-delay: ${i * 90}ms;`} class={`flex shrink-0 snap-start flex-col items-center ${i === 1 ? "w-[270px] lg:w-[290px]" : "w-[240px] lg:w-[260px]"} ${viralTilt[i]}`}>
+              <div data-card class={`relative ${i === 1 ? "w-[210px] lg:w-[235px]" : "w-[180px] lg:w-[200px]"}`}>
+                <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class={`rounded-[22px] bg-offwhite ${i === 1 ? "shadow-[6px_6px_0_var(--color-sky)]" : "shadow-[6px_6px_0_var(--color-rose)]"}`} />
+                <span class="absolute -top-3 -left-3.5 z-10 h-[50px] w-[50px] overflow-hidden rounded-full border-[1.5px] border-wine"><img src={v.logo} alt="" width="96" height="96" class="h-full w-full scale-110 object-cover" /></span>
+                <Sticker data-card-cover href={v.insights || undefined} target={v.insights ? "_blank" : undefined} rel={v.insights ? "noopener noreferrer" : undefined} class="absolute -right-8 bottom-10 z-10 flex items-center gap-2 rounded-xl border border-wine/10 bg-white/95 py-1.5 pr-3 pl-1.5 font-inter text-wine-deep shadow-[0_6px_18px_rgba(58,15,24,0.16)]">
+                  <span aria-hidden="true" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-rose"><svg viewBox="0 0 24 24" class="h-3.5 w-3.5 fill-wine"><path d="M8 5l12 7-12 7z" /></svg></span>
+                  <span class="flex flex-col">
+                    <span class={`leading-tight font-semibold whitespace-nowrap ${i === 1 ? "text-lg" : "text-[15px]"}`}>{v.views}</span>
+                    <span class="text-[10px] leading-tight text-wine-soft">{t("visualizações", "views")}</span>
+                  </span>
+                </Sticker>
               </div>
-            </div>
-            <div class="flex w-full max-w-[440px] min-w-0 flex-col gap-6 md:pt-2">
-              <div class="flex flex-col gap-1 border-b border-wine/25 pb-5">
-                <h3 class="font-display text-[clamp(2.25rem,4vw,3.25rem)] leading-tight text-wine">{v.brand}</h3>
-                <span class="text-sm font-semibold tracking-[0.1em] text-wine uppercase">{v.tags}</span>
-              </div>
-              <dl class="flex flex-col gap-6">
-                {viralRows(v).map((row) => (
-                  <div class="flex items-start gap-4">
-                    <svg aria-hidden="true" viewBox="0 0 24 24" class="h-10 w-10 shrink-0 text-wine" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={row.icon} /></svg>
-                    <div class="text-[17px] leading-snug">
-                      <dt class="inline font-bold text-wine uppercase">{row.label}:</dt>
-                      <dd class="inline"> {row.text}</dd>
-                    </div>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </article>
-        ))}
-        <div class="grid gap-8 lg:grid-cols-2">
-          {viralVideos.slice(1).map((v) => (
-            <article data-reveal class="grid gap-8 rounded-[28px] border-[1.5px] border-wine bg-sky px-6 py-8 sm:grid-cols-[210px_minmax(0,1fr)] sm:px-8">
-            <div data-card class="relative mx-auto w-full max-w-[210px] shrink-0 self-start">
-              <VideoFrame label={v.brand} src={v.src} poster={posterOf(v.src)} class="rounded-[24px] bg-offwhite" />
-              <span class="absolute -top-4 -left-4 z-10 h-16 w-16 overflow-hidden rounded-full border-[1.5px] border-wine"><img src={v.logo} alt="" width="96" height="96" class="h-full w-full scale-110 object-cover" /></span>
-              <div data-card-cover class="absolute -bottom-4 -left-4 z-10 w-[62%] -rotate-3">
-                {v.insights
-                  ? <img src={v.insights} alt={t(`Métricas do vídeo: ${v.impact}`, `Video metrics: ${v.impact}`)} class="w-full rounded-2xl border-[1.5px] border-wine bg-white shadow-[3px_3px_0_var(--color-wine)]" />
-                  : <span class="flex h-16 items-center justify-center rounded-2xl border-[1.5px] border-dashed border-wine bg-offwhite px-2 text-center text-[11px] leading-tight font-semibold text-wine">{t("Print dos insights", "Insights screenshot")}</span>}
-              </div>
-            </div>
-            <div class="flex min-w-0 flex-col gap-4">
-              <div class="flex flex-col gap-1">
-                <h3 class="font-display text-[32px] leading-tight text-wine">{v.brand}</h3>
-                <span class="text-xs font-semibold tracking-[0.1em] text-wine uppercase">{v.tags}</span>
-              </div>
-              <dl class="flex flex-col gap-3.5">
-                {viralRows(v).map((row) => (
-                  <div class="flex items-start gap-3">
-                    <svg aria-hidden="true" viewBox="0 0 24 24" class="h-7 w-7 shrink-0 text-wine" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={row.icon} /></svg>
-                    <div class="text-[15px] leading-snug">
-                      <dt class="inline font-bold text-wine uppercase">{row.label}:</dt>
-                      <dd class="inline"> {row.text}</dd>
-                    </div>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </article>
-          ))}
-        </div>
+              <h3 class="mt-5 font-display text-[26px] leading-tight text-wine">{v.brand}</h3>
+              <p class="mt-1 max-w-[260px] text-center text-[15px] leading-snug text-wine-soft">{v.text}</p>
+            </article>
+          );
+        })}
       </div>
     </section>
 
@@ -718,13 +688,13 @@ const linkOr = (url: string) => url || "#contato";
                       <ul data-track aria-label={`${c.brand}: slides`} class="flex aspect-[4/5] snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         {Array.from({ length: total }, (_, s) => (
                           <li class={`relative w-full shrink-0 snap-center ${s % 2 ? "bg-sky" : "bg-rose"}`}>
-                            {c.url
-                              ? <a href={c.url} target="_blank" rel="noopener noreferrer" class="block h-full w-full"><Photo src={c.slides[s]} alt={`${c.brand} — slide ${s + 1} ${t("de", "of")} ${total}. ${t("Ver o post original no Instagram", "See the original post on Instagram")}`} class="h-full w-full" /></a>
+                            {c.slides[s]?.endsWith(".mp4")
+                              ? <video src={c.slides[s]} aria-label={`${c.brand} — slide ${s + 1} ${t("de", "of")} ${total}`} autoplay muted loop playsinline class="h-full w-full object-cover"></video>
                               : <Photo src={c.slides[s]} alt={`${c.brand} — slide ${s + 1} ${t("de", "of")} ${total}`} label={s === 0 ? t("Capa · 4:5", "Cover · 4:5") : `Slide ${s + 1} · 4:5`} class="h-full w-full" />}
                           </li>
                         ))}
                       </ul>
-                      {c.badge && <span class="pointer-events-none absolute bottom-4 left-4 -rotate-6 rounded-full border-[1.5px] border-wine bg-rose px-3.5 py-1.5 text-sm font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">{c.badge}</span>}
+                      {c.badge && <span class="pointer-events-none absolute top-4 left-4 -rotate-6 rounded-full border-[1.5px] border-wine bg-rose px-3.5 py-1.5 text-sm font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">{c.badge}</span>}
                       <span data-counter class="pointer-events-none absolute top-4 right-4 rounded-full bg-wine-deep px-2.5 py-1 text-xs font-semibold text-offwhite">1/{total}</span>
                     </div>
                   </div>
@@ -752,7 +722,6 @@ const linkOr = (url: string) => url || "#contato";
                 <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">{c.niche} · {c.slides.length || c.slideCount} slides</span>
                 <h3 class="font-display text-[40px] leading-tight text-wine">{c.brand}</h3>
                 {c.text && <p class="leading-relaxed">{c.text}</p>}
-                {c.url && <a href={c.url} target="_blank" rel="noopener noreferrer" class="w-fit font-semibold text-wine underline underline-offset-4">{t("Ver o original no Instagram ↗", "See the original on Instagram ↗")}</a>}
                 <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer" class="w-fit rounded-full bg-wine px-6 py-3.5 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">{t("Clique aqui e peça seu orçamento", "Click here and request a quote")}</a>
               </div>
             ))}
@@ -782,7 +751,7 @@ const linkOr = (url: string) => url || "#contato";
           <div class="relative left-1/2 flex w-screen -translate-x-1/2 flex-col gap-3.5">
             {galleryRows.map((row, r) => (
               <div class="marquee overflow-hidden bg-wine-deep">
-                <div class="marquee-track flex w-max" data-reverse={r === 1 ? "true" : undefined} style={`animation-duration: ${r === 1 ? 115 : 100}s;`}>
+                <div class="marquee-track flex w-max" data-reverse={r === 1 ? "true" : undefined} style={`animation-duration: ${r === 1 ? 75 : 112}s;`}>
                   {[0, 1].map((copy) => (
                     <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 gap-3.5 pr-3.5">
                       {fillRow(row).map((g, i) => (
@@ -791,8 +760,8 @@ const linkOr = (url: string) => url || "#contato";
                           <div class="relative aspect-[4/5] overflow-hidden bg-wine">
                             <Photo src={g.src} alt={g.label} class={`h-full w-full ${g.position ?? ""}`} />
                             {g.logo && (
-                              <span role="img" aria-label={g.brandName} class="absolute top-2 right-2 flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border-[1.5px] border-offwhite">
-                                <img src={g.logo} alt="" class="h-full w-full scale-105 object-cover" loading="lazy" />
+                              <span role="img" aria-label={g.brandName} class="absolute top-2 right-2 h-9 w-9 overflow-hidden rounded-full">
+                                <img src={g.logo} alt="" class="h-full w-full scale-110 object-cover" loading="lazy" />
                               </span>
                             )}
                           </div>
@@ -853,7 +822,8 @@ const linkOr = (url: string) => url || "#contato";
     <footer id="contato" class="scroll-mt-20 bg-wine text-offwhite">
       <div aria-hidden="true" class="h-7" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 40px, #BFD9EE 40px 80px, #FAF6EF 80px 120px);"></div>
       <div class="mx-auto flex max-w-[1320px] flex-col gap-12 px-6 pt-14 pb-10 sm:pt-16">
-        <div class="grid items-start gap-12 md:grid-cols-2">
+        <div class="grid items-start gap-12 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_520px]">
+          <div class="grid items-start gap-8 xl:grid-cols-[minmax(0,1fr)_250px] xl:gap-5">
           <div class="flex flex-col gap-6">
             <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-rose">
               {t("Vamos criar", "Let's create")} <span class="text-sky italic">{t("juntos?", "together?")}</span>
@@ -874,6 +844,14 @@ const linkOr = (url: string) => url || "#contato";
                 </a>
               ))}
             </div>
+          </div>
+          <figure data-reveal style="--reveal-delay: 160ms;" class="relative mx-auto mt-2 w-full max-w-[250px] rotate-[4deg] bg-offwhite p-3 shadow-[5px_5px_0_var(--color-rose)]">
+            <span aria-hidden="true" class="absolute -top-2.5 left-1/2 h-[22px] w-[84px] -translate-x-1/2 -rotate-3 bg-sky/90"></span>
+            <div class="aspect-[4/5] overflow-hidden bg-rose">
+              <Photo src={photos.contato} alt="Loren Martins" label={t("Foto da Loren", "Photo of Loren")} class="h-full w-full object-[50%_70%]" />
+            </div>
+            <figcaption class="mt-2.5 text-center font-display text-[19px] text-wine italic">{t("te espero por aqui 💌", "talk soon 💌")}</figcaption>
+          </figure>
           </div>
           <div data-reveal class="rounded-[24px] bg-offwhite p-6 text-wine-deep sm:p-8">
             <form data-lead-form name="contato" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="grid gap-4 sm:grid-cols-2">
