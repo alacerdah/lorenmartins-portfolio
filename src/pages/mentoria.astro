@@ -1,0 +1,427 @@
+---
+import Layout from '../layouts/Layout.astro';
+import OvalPortrait from '../components/OvalPortrait.astro';
+import Photo from '../components/Photo.astro';
+import Sparkle from '../components/Sparkle.astro';
+
+// ===== configuração da oferta: preço e link de WhatsApp ficam só aqui =====
+const PRECO_MENTORIA = "R$897";
+const WHATSAPP_URL = "https://wa.me/5534991670558?text=Oi%20Loren%2C%20vi%20sua%20p%C3%A1gina%20e%20quero%20saber%20mais%20sobre%20a%20mentoria";
+const INSTAGRAM_URL = "https://www.instagram.com/bylorenmartins";
+
+const navLinks = [
+  { href: "#como-funciona", label: "O formato" },
+  { href: "#material", label: "Material" },
+  { href: "#investimento", label: "Investimento" },
+  { href: "#perguntas", label: "Perguntas" },
+];
+
+const audience = [
+  "Sente que está fazendo tudo, mas não entende o que falta para ser escolhida nas campanhas.",
+  "Quer sair das permutas e conquistar campanhas remuneradas.",
+  "Tem dúvidas se o seu portfólio realmente valoriza seu potencial como creator.",
+  "Quer criar conteúdos estratégicos que despertem desejo, valorizem produtos e ajudem a impulsionar vendas.",
+  "Já fez cursos, mas sente dificuldade em transformar o que aprendeu em ações e resultados.",
+];
+
+const facts = [
+  { value: "4 encontros", text: "individuais, por chamada de vídeo" },
+  { value: "Semanais", text: "ao longo de 30 dias" },
+  { value: "Suporte", text: "durante os 30 dias" },
+];
+
+const weekSteps = [
+  { title: "Encontro individual", text: "Por chamada de vídeo, você e a Loren trabalham o momento em que você está." },
+  { title: "Material da conversa", text: "Depois do encontro, você recebe uma apresentação personalizada, pronta pra aplicar." },
+  { title: "Suporte", text: "Tirar uma dúvida, mostrar uma proposta, aprovar um roteiro antes de gravar: quem responde é a própria Loren." },
+];
+
+// ícones: caminhos SVG de traço, no viewBox 0 0 24 24
+const method = [
+  { title: "Diagnosticar", text: "Um olhar atento pro seu perfil: bio, portfólio e nicho prioritário.", icon: "M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3" },
+  { title: "Ajustar", text: "O que precisa mudar vira próximos passos que cabem na sua rotina.", icon: "M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" },
+  { title: "Executar", text: "Você grava e aplica, com roteiros aprovados antes de gravar.", icon: "M3 8h18v12H3zM3 8l1.5-4.5 16 3L21 8M10 11.5v5l4.5-2.5z" },
+  { title: "Otimizar", text: "Com feedback em cima do que você fez, ajusta e segue.", icon: "M21 12a9 9 0 1 1-2.6-6.4L21 8M21 3v5h-5" },
+];
+
+const methodTilt = ["lg:-rotate-1", "lg:rotate-1 lg:mt-3", "lg:-rotate-[0.6deg]", "lg:rotate-1 lg:mt-3"];
+
+const buildTopics = [
+  { title: "Posicionamento", text: "Nicho definido, bio certa no perfil e uma identidade visual com a sua cara." },
+  { title: "Portfólio e conteúdo", text: "O que aproveitar do que você já gravou, ideias a partir da sua rotina e roteiros no seu jeito de falar." },
+  { title: "Prospecção", text: "Como abordar as marcas, lista do seu nicho e plataformas de UGC pra se candidatar." },
+  { title: "Rotina", text: "Uma semana organizada, com blocos de gravação que cabem na sua agenda." },
+];
+
+const bonuses = [
+  { title: "O caminho UGC tech, Canvas e em dólar", text: "Indicação de apps, como aquecer contas, como abordar e como começar nesse mundo.", icon: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM2 12h20M12 2c3 3 4 6 4 10s-1 7-4 10c-3-3-4-6-4-10s1-7 4-10z" },
+  { title: "Template de roteiro que as marcas amam", text: "Uma estrutura pronta pra adaptar ao seu jeito de falar.", icon: "M6 2h9l4 4v16H6zM14 2v5h5M9 12h7M9 16h7" },
+  { title: "Pack de mensagens e prompts", text: "Mensagens pra falar com as marcas e comandos prontos pra usar com IA.", icon: "M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z" },
+];
+const bonusTilt = ["lg:-rotate-1", "lg:rotate-[0.8deg] lg:mt-2.5", "lg:-rotate-[0.6deg]"];
+
+const included = [
+  "4 encontros individuais e semanais",
+  "Apresentação personalizada depois de cada encontro",
+  "Suporte direto com a Loren durante os 30 dias",
+  "Diagnóstico do seu perfil",
+  "Ideias de conteúdo sob medida",
+  "Lista de marcas do seu nicho e plataformas de UGC",
+  "Estudo e pesquisa guiados",
+  "Organização da sua agenda de gravação",
+  "Plano de ação com os próximos passos",
+];
+
+const topBar = "Para quem quer monetizar criando conteúdo";
+
+// prints de feedback: só reais e autorizados, sem dados que identifiquem quem não autorizou.
+// Salve em public/images/feedbacks/ e preencha `src`; `src` vazio mostra um espaço reservado.
+const feedbackPrints = [
+  { src: "", alt: "Print de feedback de aluna" },
+  { src: "", alt: "Print de feedback de aluna" },
+  { src: "", alt: "Print de feedback de aluna" },
+  { src: "", alt: "Print de feedback de aluna" },
+  { src: "", alt: "Print de feedback de aluna" },
+];
+
+const faq = [
+  { q: "O que é UGC?", a: "É o conteúdo que você cria pra uma marca usar nos canais dela, como anúncios e redes sociais. O vídeo não precisa sair no seu perfil." },
+  { q: "Preciso ter muitos seguidores ou já ter feito campanhas?", a: "Não. No UGC, a marca está contratando o vídeo que você cria, e a Loren mesma fechou parcerias antes de ter mil seguidores. A mentoria também é pra quem ainda não fez nenhuma campanha: o trabalho começa pelo diagnóstico do seu perfil." },
+  { q: "Já trabalho com marcas. Faz sentido pra mim?", a: "Faz. A mentoria também é pra quem já produz e quer se profissionalizar. O trabalho muda conforme o seu momento: em vez de primeiros passos, o foco vai pro que precisa evoluir hoje." },
+  { q: "Como funcionam os encontros e o suporte?", a: "É uma chamada de vídeo individual por semana, ao longo de 30 dias, a partir do que é prioridade pra você naquele momento. Depois, você recebe um material com o que foi trabalhado. Nos 30 dias, você fala direto com a Loren pelo WhatsApp pra tirar dúvidas, mostrar uma proposta e aprovar roteiros antes de gravar. Plataforma e duração: [a confirmar]" },
+  { q: "Trabalho ou estudo o dia todo. Consigo acompanhar?", a: "A mentoria parte da sua rotina, e a Loren começou criando conteúdo ainda sendo CLT. Horários e remarcação dos encontros: [a confirmar]" },
+  { q: "Preciso de celular caro, equipamento ou saber editar?", a: "[a confirmar]" },
+  { q: "Por quanto tempo posso usar o material?", a: "[a confirmar]" },
+];
+
+const primaryButton = "inline-flex min-h-12 items-center justify-center rounded-full bg-wine px-7 py-3.5 text-center font-semibold text-offwhite transition-transform hover:-translate-y-0.5";
+// grifo de marca-texto sob as palavras em itálico dos títulos
+const marker = "bg-[linear-gradient(transparent_68%,var(--color-rose)_68%)]";
+const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.05] text-wine";
+---
+
+<Layout
+  title="Mentoria UGC com Loren Martins"
+  description="Mentoria individual com a Loren Martins: 4 encontros semanais por chamada de vídeo, material feito só pra você depois de cada conversa e suporte durante 30 dias."
+  image="/images/mentoria-og.jpg"
+>
+  <div class="marquee overflow-hidden bg-wine py-2 text-sm font-medium text-offwhite">
+    <div class="marquee-track flex w-max" style="animation-duration: 45s;">
+      {[0, 1].map((copy) => (
+        <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-center">
+          {Array.from({ length: 8 }, () => (
+            <li class="flex items-center gap-6 pr-6 whitespace-nowrap">
+              {topBar}
+              <Sparkle class="h-3 w-3 text-rose" />
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+
+  <header class="sticky top-0 z-30 border-b border-wine/15 bg-offwhite/90 backdrop-blur">
+    <div class="mx-auto flex max-w-[1320px] items-center justify-between gap-6 px-6 py-3">
+      <a href="/" class="font-display text-xl whitespace-nowrap text-wine italic sm:text-2xl">Loren Martins</a>
+      <nav aria-label="Seções da página" class="hidden items-center gap-7 text-[15px] font-medium lg:flex">
+        {navLinks.map((l) => <a href={l.href} class="text-wine hover:text-wine-deep">{l.label}</a>)}
+      </nav>
+      <div class="flex items-center gap-5">
+        <a href="/" class="text-[15px] font-medium text-wine hover:text-wine-deep">Portfólio</a>
+        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="hidden rounded-full bg-wine px-5 py-2.5 text-sm font-semibold text-offwhite transition-transform hover:-translate-y-0.5 sm:block">Falar com a Loren</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="overflow-x-clip">
+    <!-- HERO -->
+    <section class="mx-auto grid max-w-[1320px] items-center gap-8 px-6 pt-8 md:min-h-[min(calc(100svh-6.75rem),860px)] md:grid-cols-[3fr_2fr]">
+      <div class="flex flex-col gap-4 md:pb-8">
+        <div data-reveal class="flex flex-wrap gap-2">
+          <span class="rounded-full bg-rose px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">Mentoria individual</span>
+          <span class="rounded-full bg-sky px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase">30 dias</span>
+        </div>
+        <h1 data-reveal style="--reveal-delay: 80ms;" class="font-display text-[clamp(2.5rem,min(5.6vw,11vh),5rem)] leading-[1] text-wine">
+          Monetize seu conteúdo do jeito que <span class="italic">cabe na sua rotina.</span>
+        </h1>
+        <p data-reveal style="--reveal-delay: 140ms;" class="max-w-xl text-lg leading-relaxed text-wine-soft">
+          Mentoria individual com a Loren Martins: diagnóstico, direção e material feito só pra você, com suporte durante toda a mentoria.
+        </p>
+        <div data-reveal style="--reveal-delay: 200ms;" class="mt-2 flex flex-wrap items-center gap-3">
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class={primaryButton}>Falar com a Loren</a>
+          <a href="#como-funciona" class="inline-flex min-h-12 items-center justify-center rounded-full border-[1.5px] border-wine px-7 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5">Ver como funciona</a>
+        </div>
+        <p data-reveal style="--reveal-delay: 260ms;" class="flex items-center gap-2 text-sm text-wine-soft">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-wine" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h12v10H6zM8.500 11V7.500a3.500 3.500 0 0 1 7 0V11" /></svg>
+          Tudo feito pela Loren, de forma individual.
+        </p>
+      </div>
+      <div data-reveal style="--reveal-delay: 120ms;" class="flex justify-center md:self-end">
+        <div class="relative aspect-[4/5] w-full max-w-[420px] md:max-w-[min(100%,calc((100svh-6.75rem-2rem)*0.8),640px)]">
+          <div aria-hidden="true" class="stripes absolute inset-0 translate-x-3 rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine" style="--stripe-w: 22px;"></div>
+          <div class="absolute inset-0 overflow-hidden rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine bg-sky">
+            <Photo src="/images/loren.webp" alt="Loren Martins sorrindo, com a mão apoiada no rosto" class="h-full w-full" eager />
+          </div>
+          <div class="absolute bottom-6 -left-3 z-10 flex -rotate-2 flex-col rounded-2xl border-[1.5px] border-wine bg-rose px-5 py-3 text-wine shadow-[3px_3px_0_var(--color-wine)] sm:-left-6">
+            <span class="font-display text-[40px] leading-none">+60</span>
+            <span class="mt-1 text-xs font-semibold tracking-[0.04em] uppercase">marcas trabalhadas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRA QUEM É -->
+    <section class="border-t-[1.5px] border-wine"><div class="mx-auto grid max-w-[1320px] gap-10 px-6 py-14 sm:py-20 md:grid-cols-2 lg:gap-16">
+      <h2 data-reveal class={sectionTitle}>Essa mentoria é <span class={`italic ${marker}`}>para você que...</span></h2>
+      <ul class="border-b-[1.5px] border-wine">
+        {audience.map((item, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 50}ms;`} class="group flex items-start gap-4 border-t-[1.5px] border-wine px-2 py-5 transition-colors hover:bg-rose">
+            <Sparkle class="mt-1.5 h-4 w-4 shrink-0 text-wine transition-transform group-hover:rotate-45" />
+            <span class="font-display text-[clamp(1.25rem,2vw,1.5rem)] leading-snug text-wine-deep">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div></section>
+
+    <!-- O FORMATO -->
+    <section id="como-funciona" class="scroll-mt-20 border-y-[1.5px] border-wine bg-rose py-14 sm:py-20">
+      <div class="mx-auto max-w-[1320px] px-6">
+        <div data-reveal class="hard-shadow overflow-hidden rounded-[32px] border-[1.5px] border-wine bg-offwhite">
+          <div class="grid md:grid-cols-[3fr_2fr]">
+            <div class="flex flex-col justify-center gap-5 px-7 py-10 sm:px-12 sm:py-14">
+              <h2 class={sectionTitle}>O <span class={`italic ${marker}`}>formato</span></h2>
+              <p class="max-w-xl text-lg leading-relaxed text-wine-soft">
+                Nada de aula pronta pra assistir e se virar depois. Durante 30 dias, você tem um encontro individual por semana, por chamada de vídeo, e cada conversa parte do seu perfil, do seu nicho e da sua rotina. Toda semana segue o mesmo ritmo:
+              </p>
+            </div>
+            <div class="border-t-[1.5px] border-wine bg-sky px-7 py-9 sm:px-10 md:border-t-0 md:border-l-[1.5px]">
+              <h3 class="mb-6 text-xs font-semibold tracking-[0.14em] text-wine uppercase">Toda semana</h3>
+              <ol class="flex flex-col">
+                {weekSteps.map((step, i) => (
+                  <li class="relative flex gap-4 pb-7 last:pb-0">
+                    {i < weekSteps.length - 1 && <span aria-hidden="true" class="absolute top-10 bottom-1 left-[18px] border-l-[1.5px] border-dashed border-wine/50"></span>}
+                    <span aria-hidden="true" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-xs font-semibold text-wine shadow-[2px_2px_0_var(--color-wine)]">{String(i + 1).padStart(2, "0")}</span>
+                    <div class="flex flex-col gap-1">
+                      <h4 class="font-display text-[22px] leading-tight text-wine">{step.title}</h4>
+                      <p class="leading-snug">{step.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+          <dl class="grid border-t-[1.5px] border-wine bg-rose/40 sm:grid-cols-3">
+            {facts.map((item, i) => (
+              <div class={`flex flex-wrap items-baseline justify-center gap-x-2 px-4 py-4 text-center ${i ? "border-t-[1.5px] border-wine sm:border-t-0 sm:border-l-[1.5px]" : ""}`}>
+                <dt class="order-2 text-sm text-wine-deep">{item.text}</dt>
+                <dd class="order-1 font-display text-xl text-wine italic">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÉTODO -->
+    <section id="metodo" class="mx-auto flex max-w-[1320px] scroll-mt-[4.5rem] flex-col justify-center gap-10 px-6 py-14 sm:py-16 lg:min-h-[calc(100svh-4.5rem)] lg:gap-8 lg:py-10">
+      <div class="flex flex-col items-center gap-3 text-center">
+        <span data-reveal class="rounded-full border-[1.5px] border-wine px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-wine uppercase">O método</span>
+        <h2 data-reveal style="--reveal-delay: 60ms;" class={sectionTitle}>Quatro etapas, <span class={`italic ${marker}`}>um caminho só seu</span></h2>
+        <p data-reveal style="--reveal-delay: 100ms;" class="mt-1 max-w-2xl text-lg leading-relaxed text-wine-soft">Um processo claro, do olhar pro seu perfil ao ajuste do que você já colocou em prática.</p>
+      </div>
+      <ol class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        {method.map((step, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 90}ms;`} class={`relative flex flex-col gap-3 overflow-hidden rounded-[22px] border-[1.5px] border-wine p-6 shadow-[5px_5px_0_var(--color-wine)] sm:p-8 lg:min-h-[380px] ${i % 2 ? "bg-sky" : "bg-rose"} ${methodTilt[i]}`}>
+            <span aria-hidden="true" class="pointer-events-none absolute -top-1 right-3 font-display text-[96px] leading-none font-semibold text-wine/15">{String(i + 1).padStart(2, "0")}</span>
+            <span aria-hidden="true" class="relative mb-3 flex h-16 w-16 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-wine shadow-[3px_3px_0_var(--color-wine)]">
+              <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={step.icon} /></svg>
+            </span>
+            <span class="text-xs font-semibold tracking-[0.14em] text-wine uppercase">Etapa {i + 1}</span>
+            <h3 class="font-display text-[32px] leading-tight text-wine">{step.title}</h3>
+            <p class="text-lg leading-relaxed text-wine-deep">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p data-reveal class="text-center text-sm font-semibold tracking-[0.08em] text-wine-soft uppercase">
+        Pronta pra começar? <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="ml-1 text-wine underline underline-offset-4">Falar com a Loren →</a>
+      </p>
+    </section>
+
+    <!-- QUEM VAI TE GUIAR -->
+    <section id="sobre" class="stripes scroll-mt-20 border-y-[1.5px] border-wine px-6 py-14 sm:py-16">
+      <div data-reveal class="hard-shadow mx-auto grid max-w-5xl items-center gap-10 rounded-[40px] border-[1.5px] border-wine bg-offwhite px-7 py-10 sm:px-12 sm:py-12 md:grid-cols-2">
+        <div class="flex flex-col gap-5">
+          <div class="flex items-center gap-4">
+            <span aria-hidden="true" class="relative h-16 w-[72px] shrink-0">
+              <Sparkle class="sparkle-animate absolute top-1 left-0 h-12 w-12 text-wine" style="--sparkle-dur: 2.4s; --sparkle-delay: 0s;" />
+              <Sparkle class="sparkle-animate absolute top-0 right-0 h-4 w-4 text-sky" outline style="--sparkle-dur: 1.8s; --sparkle-delay: 0.4s;" />
+              <Sparkle class="sparkle-animate absolute right-0.5 bottom-0 h-5 w-5 text-rose" outline style="--sparkle-dur: 2.6s; --sparkle-delay: 0.9s;" />
+            </span>
+            <h2 class={sectionTitle}>Quem vai te <span class="italic">guiar</span></h2>
+          </div>
+          <p class="text-lg leading-relaxed">
+            Sou a Loren Martins, criadora UGC com <strong class="text-wine">anos de experiência na área de tecnologia</strong> e projetos para <strong class="text-wine">marcas nacionais e internacionais</strong>.
+          </p>
+          <p class="text-lg leading-relaxed">
+            Sou especialista em <strong class="text-wine">cases virais e de performance</strong>: entendo como as plataformas funcionam e junto criatividade, tendências e estratégia pra criar vídeos que prendem a atenção e ajudam as marcas a alcançar seus objetivos.
+          </p>
+          <p class="text-lg leading-relaxed">
+            Comecei criando conteúdo <strong class="text-wine">ainda sendo CLT</strong> e fechei parcerias <strong class="text-wine">antes de ter mil seguidores</strong>. Foi assim que aprendi a otimizar processos com tecnologia, sem perder a criatividade e a personalidade.
+          </p>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" class="w-fit font-semibold text-wine underline underline-offset-4">@bylorenmartins</a>
+        </div>
+        <div class="flex justify-center">
+          <OvalPortrait src="/images/mentoria-sobre.jpg" alt="Loren Martins sorrindo enquanto olha para o celular, de blazer bege" arcText="quem vai te acompanhar" arcOffset={14} />
+        </div>
+      </div>
+    </section>
+
+    <!-- O QUE A GENTE CONSTRÓI -->
+    <section id="material" class="scroll-mt-20 border-t-[1.5px] border-wine">
+      <div aria-hidden="true" class="stripes h-5 border-b-[1.5px] border-wine" style="--stripe-a: var(--color-wine); --stripe-w: 20px;"></div>
+      <div class="mx-auto grid max-w-[1320px] items-start gap-10 px-6 py-14 sm:py-20 lg:grid-cols-[2fr_3fr] lg:gap-16">
+        <div class="flex flex-col gap-5 lg:sticky lg:top-28">
+          <h2 data-reveal class={sectionTitle}>O que a gente constrói <span class={`italic ${marker}`}>juntas</span></h2>
+          <p data-reveal style="--reveal-delay: 80ms;" class="text-lg leading-relaxed text-wine-soft">
+            O que a gente trabalha pra você sair como profissional. A ordem e o foco mudam conforme o seu momento.
+          </p>
+        </div>
+        <ol class="flex flex-col">
+          {buildTopics.map((topic, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 70}ms;`} class="relative flex gap-5 pb-8 last:pb-0">
+              {i < buildTopics.length - 1 && <span aria-hidden="true" class="absolute top-14 bottom-1 left-[27px] border-l-[1.5px] border-wine/40"></span>}
+              <span aria-hidden="true" class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-[1.5px] border-wine bg-rose font-display text-2xl text-wine italic shadow-[3px_3px_0_var(--color-wine)]">{i + 1}</span>
+              <div class="flex-1 rounded-[22px] border-[1.5px] border-wine bg-offwhite px-6 py-5 transition-transform hover:-translate-y-0.5">
+                <h3 class="font-display text-[26px] leading-tight text-wine">{topic.title}</h3>
+                <p class="mt-1.5 text-lg leading-relaxed">{topic.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- BÔNUS -->
+    <section class="border-y-[1.5px] border-wine bg-sky py-14 sm:py-16">
+      <div class="mx-auto flex max-w-[1320px] flex-col gap-11 px-6">
+        <div class="flex flex-col items-center gap-3.5 text-center">
+          <span data-reveal class="flex w-fit -rotate-2 items-center gap-1.5 rounded-full border-[1.5px] border-wine bg-rose px-3.5 py-1 text-xs font-semibold tracking-[0.08em] text-wine uppercase shadow-[2px_2px_0_var(--color-wine)]">
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8S10.500 3 8 3a2.500 2.500 0 0 0 0 5zM12 8s1.500-5 4-5a2.500 2.500 0 0 1 0 5z" /></svg>
+            Bônus exclusivos
+          </span>
+          <h2 data-reveal style="--reveal-delay: 60ms;" class={sectionTitle}>Além da mentoria, <span class="italic">você também leva</span></h2>
+        </div>
+        <ul class="grid gap-6 lg:grid-cols-3">
+          {bonuses.map((b, i) => (
+            <li data-reveal style={`--reveal-delay: ${i * 90}ms;`} class={`relative flex flex-col gap-2.5 rounded-[24px] border-[1.5px] border-wine bg-offwhite p-7 shadow-[6px_6px_0_var(--color-wine)] ${bonusTilt[i]}`}>
+              <span class="absolute -top-3.5 right-5 rotate-3 rounded-full border-[1.5px] border-wine bg-rose px-3 py-1 text-xs font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">Bônus {i + 1}</span>
+              <span aria-hidden="true" class="mb-2 flex h-[60px] w-[60px] items-center justify-center rounded-full border-[1.5px] border-wine bg-sky text-wine shadow-[3px_3px_0_var(--color-wine)]">
+                <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={b.icon} /></svg>
+              </span>
+              <h3 class="font-display text-[30px] leading-[1.1] text-wine">{b.title}</h3>
+              <p class="text-[17px] leading-relaxed">{b.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- PRINTS DE FEEDBACK -->
+    <section class="border-b-[1.5px] border-wine bg-rose py-14 sm:py-20">
+      <div class="mx-auto max-w-[1320px] px-6">
+        <h2 data-reveal class={sectionTitle}>O que dizem sobre <span class="italic">a mentoria</span></h2>
+      </div>
+      <div class="marquee mt-10 overflow-hidden motion-reduce:overflow-x-auto">
+        <div class="marquee-track flex w-max" style="animation-duration: 70s;">
+          {[0, 1].map((copy) => (
+            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 gap-5 pr-5">
+              {[...feedbackPrints, ...feedbackPrints].map((print, j) => {
+                const original = copy === 0 && j < feedbackPrints.length;
+                return (
+                  <li aria-hidden={!original && copy === 0 ? "true" : undefined} class={`aspect-[3/4] w-[220px] shrink-0 overflow-hidden rounded-[20px] border-[1.5px] border-wine bg-offwhite sm:w-[260px] ${print.src ? "shadow-[4px_4px_0_var(--color-wine)]" : "border-dashed"}`}>
+                    <Photo src={print.src} alt={original ? print.alt : ""} label={`Print ${(j % feedbackPrints.length) + 1}`} class="h-full w-full object-contain" />
+                  </li>
+                );
+              })}
+            </ul>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- INVESTIMENTO -->
+    <section id="investimento" class="stripes scroll-mt-20 px-6 py-14 sm:py-20">
+      <div data-reveal class="hard-shadow relative mx-auto grid max-w-5xl rounded-[40px] border-[1.5px] border-wine bg-offwhite md:grid-cols-[1fr_1fr]">
+        <div class="flex flex-col gap-6 px-7 py-10 sm:px-12 sm:py-12">
+          <h2 class="flex items-center gap-3 font-display text-[clamp(1.75rem,3vw,2.25rem)] leading-tight text-wine">
+            <Sparkle class="h-6 w-6 shrink-0 text-wine" />
+            Você recebe
+          </h2>
+          <ul class="flex flex-col gap-3.5">
+            {included.map((item) => (
+              <li class="flex items-start gap-3 text-lg leading-snug">
+                <span aria-hidden="true" class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-wine text-offwhite">
+                  <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500" /></svg>
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div class="flex items-center gap-3 rounded-2xl border-[1.5px] border-dashed border-wine bg-sky px-4 py-3">
+            <span aria-hidden="true" class="flex h-9 w-9 shrink-0 -rotate-6 items-center justify-center rounded-full border-[1.5px] border-wine bg-rose text-wine">
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8S10.500 3 8 3a2.500 2.500 0 0 0 0 5zM12 8s1.500-5 4-5a2.500 2.500 0 0 1 0 5z" /></svg>
+            </span>
+            <p class="leading-snug"><strong class="font-display text-lg font-normal text-wine italic">3 bônus:</strong> UGC tech, Canvas e dólar, template de roteiro, pack de mensagens e prompts</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-5 border-t-[1.5px] border-wine px-7 py-10 text-center sm:px-12 sm:py-12 md:border-t-0 md:border-l-[1.5px]">
+          <h2 class="flex items-center gap-3 text-sm font-semibold tracking-[0.14em] text-wine uppercase">
+            <Sparkle class="sparkle-animate h-5 w-5 text-wine" style="--sparkle-dur: 2.4s;" />
+            Investimento
+            <Sparkle class="sparkle-animate h-5 w-5 text-wine" style="--sparkle-dur: 2.8s; --sparkle-delay: 0.5s;" />
+          </h2>
+          <p class="font-display text-[clamp(4rem,8vw,6.5rem)] leading-none text-wine">{PRECO_MENTORIA}</p>
+          <p class="text-sm font-semibold tracking-[0.1em] text-wine-soft uppercase">Pix ou cartão*</p>
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class={`${primaryButton} w-full`}>Falar com a Loren</a>
+          </div>
+        <span class="absolute -top-4 right-6 rotate-3 rounded-full border-[1.5px] border-wine bg-rose px-4 py-1.5 text-sm font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">Vagas limitadas.</span>
+      </div>
+    </section>
+
+    <!-- PERGUNTAS FREQUENTES -->
+    <section id="perguntas" class="mx-auto grid max-w-[1320px] scroll-mt-20 items-start gap-10 border-t-[1.5px] border-wine px-6 py-14 sm:py-20 md:grid-cols-[2fr_3fr]">
+      <h2 data-reveal class={sectionTitle}>Perguntas <span class="italic">frequentes</span></h2>
+      <div class="flex flex-col gap-3">
+        {faq.map((item, i) => (
+          <details data-reveal style={`--reveal-delay: ${i * 50}ms;`} class="group rounded-[20px] border-[1.5px] border-wine bg-offwhite transition-shadow open:bg-rose/30 open:shadow-[4px_4px_0_var(--color-wine)]">
+            <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 rounded-[20px] px-5 py-4 font-semibold text-wine [&::-webkit-details-marker]:hidden">
+              {item.q}
+              <span aria-hidden="true" class="shrink-0 text-2xl leading-none font-normal transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="px-5 pb-5 leading-relaxed">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <!-- CTA FINAL -->
+  <footer class="bg-wine text-offwhite">
+    <div aria-hidden="true" class="h-7" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 40px, #BFD9EE 40px 80px, #FAF6EF 80px 120px);"></div>
+    <div class="mx-auto flex max-w-[1320px] flex-col items-center gap-6 px-6 pt-14 pb-12 text-center sm:pt-20 sm:pb-16">
+      <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.05] max-w-4xl text-rose">Você pode continuar tentando adivinhar o que falta. <span class="text-sky italic">Ou perguntar pra quem já passou por isso.</span></h2>
+      <a data-reveal style="--reveal-delay: 80ms;" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-12 items-center justify-center rounded-full bg-rose px-8 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5 focus-visible:outline-offwhite">Falar com a Loren · {PRECO_MENTORIA} →</a>
+      <p data-reveal style="--reveal-delay: 140ms;" class="font-semibold">Vagas limitadas.</p>
+    </div>
+    <div class="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-4 border-t border-offwhite/25 px-6 pt-6 pb-24 text-sm md:pb-8">
+      <span>© Loren Martins</span>
+      <span class="flex gap-5">
+        <a href="/" class="underline underline-offset-4 focus-visible:outline-offwhite">Portfólio</a>
+        <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 focus-visible:outline-offwhite">@bylorenmartins</a>
+      </span>
+    </div>
+  </footer>
+
+  <!-- botão fixo no celular -->
+  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="fixed right-4 bottom-4 z-40 flex min-h-12 items-center rounded-full border-[1.5px] border-offwhite bg-wine px-5 text-sm font-semibold text-offwhite shadow-lg md:hidden">Falar com a Loren</a>
+</Layout>

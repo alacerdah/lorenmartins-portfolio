@@ -45,6 +45,7 @@ const contact = {
   whatsapp: "5534991670558", // só números, com DDI e DDD (ex.: "5512999999999"); vazio esconde o botão
   mediaKit: "", // PDF em public/ (ex.: "/midia-kit.pdf") ou link
 };
+const web3formsKey = ""; // chave do Web3Forms: as respostas dos formulários vão para o e-mail cadastrado nela
 
 // marcas por reconhecimento: as mais famosas primeiro, para aparecerem assim que a página abre,
 // e sem duas logos da mesma cor lado a lado.
@@ -854,9 +855,10 @@ const linkOr = (url: string) => url || "#contato";
           </figure>
           </div>
           <div data-reveal class="rounded-[24px] bg-offwhite p-6 text-wine-deep sm:p-8">
-            <form data-lead-form name="contato" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="grid gap-4 sm:grid-cols-2">
-              <input type="hidden" name="form-name" value="contato" />
-              <p hidden><label>Não preencha <input name="bot-field" /></label></p>
+            <form data-lead-form action="https://api.web3forms.com/submit" method="POST" class="grid gap-4 sm:grid-cols-2">
+              <input type="hidden" name="access_key" value={web3formsKey} />
+              <input type="hidden" name="subject" value="Novo contato pelo portfólio" />
+              <p hidden><label>Não preencha <input name="botcheck" /></label></p>
               <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Nome", "Name")}<input required name="nome" autocomplete="name" placeholder={t("Seu nome", "Your name")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
               <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">E-mail<input required type="email" name="email" autocomplete="email" placeholder={t("voce@marca.com", "you@brand.com")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
               <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em] sm:col-span-2">{t("Marca", "Brand")}<input required name="marca" autocomplete="organization" placeholder={t("Nome da marca", "Brand name")} class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
@@ -889,9 +891,10 @@ const linkOr = (url: string) => url || "#contato";
     </button>
     <h2 id="lead-title" class="pr-8 font-display text-[28px] leading-tight text-wine">{t("Quer receber minha tabela de investimento e os pacotes UGC?", "Want my rate card and UGC packages?")}</h2>
     <p class="mt-2 mb-5 leading-relaxed text-wine-soft">{t("Preencha seus dados e eu te envio tudo por WhatsApp. 💌", "Fill in your details and I'll send everything over WhatsApp. 💌")}</p>
-    <form data-lead-form name="tabela" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="flex flex-col gap-4">
-      <input type="hidden" name="form-name" value="tabela" />
-      <p hidden><label>Não preencha <input name="bot-field" /></label></p>
+    <form data-lead-form action="https://api.web3forms.com/submit" method="POST" class="flex flex-col gap-4">
+      <input type="hidden" name="access_key" value={web3formsKey} />
+      <input type="hidden" name="subject" value="Pedido de tabela pelo portfólio" />
+      <p hidden><label>Não preencha <input name="botcheck" /></label></p>
       <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Seu nome", "Your name")}<input required name="nome" autocomplete="name" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
       <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">{t("Nome da marca", "Brand name")}<input required name="marca" autocomplete="organization" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
       <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">WhatsApp<input required type="tel" name="whatsapp" autocomplete="tel" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
@@ -995,7 +998,7 @@ const linkOr = (url: string) => url || "#contato";
       }
     }
 
-    // formulários (Netlify Forms): envia sem sair da página
+    // formulários (Web3Forms): manda para o e-mail da Loren sem sair da página
     document.querySelectorAll<HTMLFormElement>("[data-lead-form]").forEach((form) => {
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -1005,12 +1008,13 @@ const linkOr = (url: string) => url || "#contato";
         if (button) button.disabled = true;
         if (error) error.hidden = true;
         try {
-          const res = await fetch("/", {
+          const res = await fetch(form.action, {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString(),
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(Object.fromEntries(new FormData(form))),
           });
-          if (!res.ok) throw new Error(String(res.status));
+          const data = await res.json();
+          if (!res.ok || !data.success) throw new Error(data.message || String(res.status));
           form.hidden = true;
           if (success) success.hidden = false;
         } catch {

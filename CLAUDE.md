@@ -22,6 +22,7 @@ src/
   pages/
     index.astro          ← versão em português (`<Home lang="pt" />`)
     en/index.astro       ← versão em inglês (`<Home lang="en" />`)
+    mentoria.astro       ← página de venda da mentoria; preço (`PRECO_MENTORIA`), WhatsApp e textos ficam no topo do arquivo
   layouts/
     Layout.astro         ← shell HTML, meta tags, Google Fonts, IntersectionObserver
   components/
@@ -98,7 +99,7 @@ O sistema de abas é genérico via `data-tab` e `data-panel`:
 
 ## Formulários
 
-Contato e pop-up da tabela usam Netlify Forms (`contato` e `tabela`). Só funcionam no site publicado: as respostas ficam no painel do Netlify, em Forms, com aviso por e-mail configurado lá.
+Contato e pop-up da tabela usam o Web3Forms: cada resposta chega no e-mail cadastrado na chave `web3formsKey`, no topo de `Home.astro`. A chave pode aparecer na página.
 
 ## Dev server
 

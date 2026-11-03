@@ -5,13 +5,17 @@ interface Props {
   title?: string;
   description?: string;
   lang?: "pt" | "en";
+  image?: string;
 }
 
 const {
   title = "Loren Martins — Criadora UGC",
   description = "Criadora de conteúdo UGC em moda, experiências, tech, beleza, bem-estar, bebidas e pet. São José dos Campos (SP).",
   lang = "pt",
+  image,
 } = Astro.props;
+// o Open Graph pede endereço completo: a imagem só sai com `site` definido em astro.config
+const ogImage = image && Astro.site ? new URL(image, Astro.site).href : undefined;
 ---
 
 <!doctype html>
@@ -23,6 +27,8 @@ const {
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
