@@ -249,9 +249,9 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
 
     <!-- QUEM VAI TE GUIAR -->
     <section id="sobre" class="stripes scroll-mt-20 border-y-[1.5px] border-wine px-6 py-14 sm:py-16">
-      <div data-reveal class="hard-shadow mx-auto grid max-w-5xl items-center gap-10 rounded-[40px] border-[1.5px] border-wine bg-offwhite px-7 py-10 sm:px-12 sm:py-12 md:grid-cols-2">
-        <div class="flex flex-col gap-5">
-          <div class="flex items-center gap-4">
+      <div data-reveal class="hard-shadow mx-auto grid max-w-5xl items-center gap-10 rounded-[40px] border-[1.5px] border-wine bg-offwhite px-7 py-10 sm:px-12 sm:py-12 max-md:grid-cols-1 max-md:gap-6 md:grid-cols-2">
+        <div class="flex flex-col gap-5 max-md:contents">
+          <div class="flex items-center gap-4 max-md:order-1">
             <span aria-hidden="true" class="relative h-16 w-[72px] shrink-0">
               <Sparkle class="sparkle-animate absolute top-1 left-0 h-12 w-12 text-wine" style="--sparkle-dur: 2.4s; --sparkle-delay: 0s;" />
               <Sparkle class="sparkle-animate absolute top-0 right-0 h-4 w-4 text-sky" outline style="--sparkle-dur: 1.8s; --sparkle-delay: 0.4s;" />
@@ -259,6 +259,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
             </span>
             <h2 class={sectionTitle}>Quem vai te <span class="italic">guiar</span></h2>
           </div>
+          <div class="flex flex-col gap-5 max-md:order-3 md:contents">
           <p class="text-lg leading-relaxed">
             Sou a Loren Martins, criadora UGC com <strong class="text-wine">anos de experiência na área de tecnologia</strong> e projetos para <strong class="text-wine">marcas nacionais e internacionais</strong>.
           </p>
@@ -269,8 +270,9 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
             Comecei criando conteúdo <strong class="text-wine">ainda sendo CLT</strong> e fechei parcerias <strong class="text-wine">antes de ter mil seguidores</strong>. Foi assim que aprendi a otimizar processos com tecnologia, sem perder a criatividade e a personalidade.
           </p>
           <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" class="w-fit font-semibold text-wine underline underline-offset-4">@bylorenmartins</a>
+          </div>
         </div>
-        <div class="flex justify-center">
+        <div class="flex justify-center max-md:order-2 max-md:pt-8">
           <OvalPortrait src="/images/mentoria-sobre.jpg" alt="Loren Martins sorrindo enquanto olha para o celular, de blazer bege" arcText="quem vai te acompanhar" arcOffset={14} />
         </div>
       </div>
@@ -311,9 +313,9 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
           </span>
           <h2 data-reveal style="--reveal-delay: 60ms;" class={sectionTitle}>Além da mentoria, <span class="italic">você também leva</span></h2>
         </div>
-        <ul class="grid gap-6 lg:grid-cols-3">
+        <ul data-bonus-carousel class="grid gap-6 lg:grid-cols-3 max-md:-mx-6 max-md:touch-pan-y max-md:overflow-x-clip max-md:px-6 max-md:py-5">
           {bonuses.map((b, i) => (
-            <li data-reveal style={`--reveal-delay: ${i * 90}ms;`} class={`relative flex flex-col gap-2.5 rounded-[24px] border-[1.5px] border-wine bg-offwhite p-7 shadow-[6px_6px_0_var(--color-wine)] ${bonusTilt[i]}`}>
+            <li data-reveal style={`--reveal-delay: ${i * 90}ms;`} class={`relative flex flex-col gap-2.5 rounded-[24px] border-[1.5px] border-wine bg-offwhite p-7 shadow-[6px_6px_0_var(--color-wine)] max-md:col-start-1 max-md:row-start-1 max-md:w-[80%] max-md:justify-self-center ${bonusTilt[i]}`}>
               <span class="absolute -top-3.5 right-5 rotate-3 rounded-full border-[1.5px] border-wine bg-rose px-3 py-1 text-xs font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">Bônus {i + 1}</span>
               <span aria-hidden="true" class="mb-2 flex h-[60px] w-[60px] items-center justify-center rounded-full border-[1.5px] border-wine bg-sky text-wine shadow-[3px_3px_0_var(--color-wine)]">
                 <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={b.icon} /></svg>
@@ -323,6 +325,17 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
             </li>
           ))}
         </ul>
+        <div class="-mt-4 flex flex-col items-center gap-3 md:hidden">
+          <div data-bonus-dots class="flex justify-center"></div>
+          <div class="flex gap-4">
+            <button type="button" data-bonus-prev aria-label="Bônus anterior" class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-wine shadow-[3px_3px_0_var(--color-wine)] transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+            </button>
+            <button type="button" data-bonus-next aria-label="Próximo bônus" class="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-wine text-offwhite shadow-[3px_3px_0_var(--color-rose)] transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -421,6 +434,19 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
       </span>
     </div>
   </footer>
+
+  <script>
+    import { initCoverflow } from "../scripts/coverflow";
+
+    // bônus no celular: carrossel; no desktop os 3 cards ficam lado a lado e nada disso roda
+    const list = document.querySelector<HTMLElement>("[data-bonus-carousel]");
+    const dotsBox = document.querySelector<HTMLElement>("[data-bonus-dots]");
+    const prevBtn = document.querySelector<HTMLElement>("[data-bonus-prev]");
+    const nextBtn = document.querySelector<HTMLElement>("[data-bonus-next]");
+    if (list && dotsBox && prevBtn && nextBtn) {
+      initCoverflow({ list, dotsBox, prevBtn, nextBtn, mobileQuery: "(max-width: 767px)", dotLabel: "Bônus" });
+    }
+  </script>
 
   <!-- botão fixo no celular -->
   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="fixed right-4 bottom-4 z-40 flex min-h-12 items-center rounded-full border-[1.5px] border-offwhite bg-wine px-5 text-sm font-semibold text-offwhite shadow-lg md:hidden">Falar com a Loren</a>
