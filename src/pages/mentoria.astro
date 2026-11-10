@@ -75,12 +75,15 @@ const topBar = "Para quem quer monetizar criando conteúdo";
 
 // prints de feedback: só reais e autorizados, sem dados que identifiquem quem não autorizou.
 // Salve em public/images/feedbacks/ e preencha `src`; `src` vazio mostra um espaço reservado.
-const feedbackPrints = [
-  { src: "", alt: "Print de feedback de aluna" },
-  { src: "", alt: "Print de feedback de aluna" },
-  { src: "", alt: "Print de feedback de aluna" },
-  { src: "", alt: "Print de feedback de aluna" },
-  { src: "", alt: "Print de feedback de aluna" },
+// Os feedback-*.png já vêm com moldura e sombra, sem foto e sem nome das alunas: aparecem inteiros, sem borda extra.
+const feedbackPrints: { src: string; alt: string; w?: number; h?: number }[] = [
+  { src: "/images/feedbacks/feedback-01.png", w: 704, h: 992, alt: "Print de aluna da mentoria, aprovada em 1 mês: \"Miga, eu fui aprovada na minha primeira campanha\"" },
+  { src: "/images/feedbacks/feedback-02.png", w: 708, h: 974, alt: "Print de aluna da mentoria, aprovada em 1 mês: \"Fechei minha primeira parceria\" e \"Passei na fase teste da Astra e vou ganhar em DÓLARRR!!!\"" },
+  { src: "/images/feedbacks/feedback-03.png", w: 708, h: 998, alt: "Print de aluna da mentoria: \"A mentoria me ajudou muito nesse começo no UGC, desde a montagem de todo o meu perfil do zero\"" },
+  { src: "/images/feedbacks/feedback-04.png", w: 682, h: 594, alt: "Print de aluna da mentoria, 2 campanhas aprovadas em menos de 1 mês: \"FUI APROVADA EM MAIS UMA\"" },
+  { src: "/images/feedbacks/feedback-05.png", w: 708, h: 704, alt: "Print de aluna da mentoria, influencer e UGC: \"Recebi um e-mail de uma parceria estrangeira!!\"" },
+  { src: "/images/feedbacks/feedback-06.png", w: 708, h: 730, alt: "Print de aluna da consultoria, evolução nítida nos vídeos: \"Hoje junto com você eu realmente estou vendo evolução\"" },
+  { src: "/images/feedbacks/feedback-07.png", w: 682, h: 658, alt: "Print de aluna da consultoria, 2 abordagens com retorno em 1 semana: \"Uma das abordagens já deu certo\"" },
 ];
 
 const faq = [
@@ -339,12 +342,14 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
       <div class="marquee mt-10 overflow-hidden motion-reduce:overflow-x-auto">
         <div class="marquee-track flex w-max" style="animation-duration: 70s;">
           {[0, 1].map((copy) => (
-            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 gap-5 pr-5">
+            <ul aria-hidden={copy === 1 ? "true" : undefined} class="flex shrink-0 items-start gap-5 pr-5">
               {[...feedbackPrints, ...feedbackPrints].map((print, j) => {
                 const original = copy === 0 && j < feedbackPrints.length;
                 return (
-                  <li aria-hidden={!original && copy === 0 ? "true" : undefined} class={`aspect-[3/4] w-[220px] shrink-0 overflow-hidden rounded-[20px] border-[1.5px] border-wine bg-offwhite sm:w-[260px] ${print.src ? "shadow-[4px_4px_0_var(--color-wine)]" : "border-dashed"}`}>
-                    <Photo src={print.src} alt={original ? print.alt : ""} label={`Print ${(j % feedbackPrints.length) + 1}`} class="h-full w-full object-contain" />
+                  <li aria-hidden={!original && copy === 0 ? "true" : undefined} class={print.src ? "w-[250px] shrink-0 sm:w-[300px]" : "aspect-[3/4] w-[220px] shrink-0 overflow-hidden rounded-[20px] border-[1.5px] border-dashed border-wine bg-offwhite sm:w-[260px]"}>
+                    {print.src
+                      ? <img src={print.src} alt={original ? print.alt : ""} width={print.w} height={print.h} loading="lazy" class="h-auto w-full" />
+                      : <Photo src="" alt={original ? print.alt : ""} label={`Print ${(j % feedbackPrints.length) + 1}`} class="h-full w-full" />}
                   </li>
                 );
               })}
