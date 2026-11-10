@@ -9,6 +9,14 @@ const PRECO_MENTORIA = "R$897";
 const WHATSAPP_URL = "https://wa.me/5534991670558?text=Oi%20Loren%2C%20vi%20sua%20p%C3%A1gina%20e%20quero%20saber%20mais%20sobre%20a%20mentoria";
 const INSTAGRAM_URL = "https://www.instagram.com/bylorenmartins";
 
+// lista de espera: com true, o preço some e os botões levam pro formulário da lista;
+// cada inscrição chega no e-mail da chave do Web3Forms (a mesma do portfólio). Com false, volta o preço e o WhatsApp.
+const LISTA_DE_ESPERA = true;
+const WEB3FORMS_KEY = "3b64e019-f7bd-4370-a0eb-69ccf1a98da6";
+const cta = LISTA_DE_ESPERA
+  ? { href: "#lista-de-espera", label: "Entrar na lista de espera", target: undefined, rel: undefined }
+  : { href: WHATSAPP_URL, label: "Falar com a Loren", target: "_blank", rel: "noopener noreferrer" };
+
 const navLinks = [
   { href: "#como-funciona", label: "O formato" },
   { href: "#material", label: "Material" },
@@ -131,7 +139,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
       </nav>
       <div class="flex items-center gap-5">
         <a href="/" class="text-[15px] font-medium text-wine hover:text-wine-deep">Portfólio</a>
-        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="hidden rounded-full bg-wine px-5 py-2.5 text-sm font-semibold text-offwhite transition-transform hover:-translate-y-0.5 sm:block">Falar com a Loren</a>
+        <a href={cta.href} target={cta.target} rel={cta.rel} class="hidden rounded-full bg-wine px-5 py-2.5 text-sm font-semibold text-offwhite transition-transform hover:-translate-y-0.5 sm:block">{cta.label}</a>
       </div>
     </div>
   </header>
@@ -151,7 +159,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
           Mentoria individual: diagnóstico, direção e material feito só pra você, com suporte durante toda a mentoria.
         </p>
         <div data-reveal style="--reveal-delay: 200ms;" class="mt-2 flex flex-wrap items-center gap-3">
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class={primaryButton}>Falar com a Loren</a>
+          <a href={cta.href} target={cta.target} rel={cta.rel} class={primaryButton}>{cta.label}</a>
           <a href="#como-funciona" class="inline-flex min-h-12 items-center justify-center rounded-full border-[1.5px] border-wine px-7 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5">Ver como funciona</a>
         </div>
       </div>
@@ -238,7 +246,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
         ))}
       </ol>
       <p data-reveal class="text-center text-sm font-semibold tracking-[0.08em] text-wine-soft uppercase">
-        Pronta pra começar? <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="ml-1 text-wine underline underline-offset-4">Falar com a Loren →</a>
+        Pronta pra começar? <a href={cta.href} target={cta.target} rel={cta.rel} class="ml-1 text-wine underline underline-offset-4">{cta.label} →</a>
       </p>
     </section>
 
@@ -390,9 +398,30 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
             Investimento
             <Sparkle class="sparkle-animate h-5 w-5 text-wine" style="--sparkle-dur: 2.8s; --sparkle-delay: 0.5s;" />
           </h2>
-          <p class="font-display text-[clamp(4rem,8vw,6.5rem)] leading-none text-wine">{PRECO_MENTORIA}</p>
-          <p class="text-sm font-semibold tracking-[0.1em] text-wine-soft uppercase">Pix ou cartão*</p>
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class={`${primaryButton} w-full`}>Falar com a Loren</a>
+          {LISTA_DE_ESPERA ? (
+            <div id="lista-de-espera" class="flex w-full scroll-mt-28 flex-col gap-5">
+              <p class="font-display text-[clamp(2rem,4vw,2.75rem)] leading-[1.05] text-wine">Vagas abertas <span class="italic">em breve</span></p>
+              <p class="leading-relaxed text-wine-soft">Entre na lista de espera e a Loren te chama no WhatsApp quando as vagas abrirem, com o valor e todos os detalhes.</p>
+              <form data-lead-form action="https://api.web3forms.com/submit" method="POST" class="flex flex-col gap-3.5 text-left">
+                <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+                <input type="hidden" name="subject" value="Lista de espera da mentoria" />
+                <p hidden><label>Não preencha <input name="botcheck" /></label></p>
+                <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">Seu nome<input required name="nome" autocomplete="name" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-base font-normal text-wine-deep focus:border-wine focus:outline-none" /></label>
+                <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]">WhatsApp<input required type="tel" inputmode="tel" name="whatsapp" autocomplete="tel" placeholder="(11) 91234-5678" data-br-phone data-invalid-msg="Digite um WhatsApp válido com DDD, ex.: (11) 91234-5678." class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-base font-normal text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+                <label class="flex flex-col gap-1.5 text-[13px] font-semibold tracking-[0.04em]"><span>Seu @ no Instagram ou TikTok <span class="font-normal text-wine-soft">(opcional)</span></span><input name="perfil" placeholder="@seuperfil" class="min-h-12 w-full rounded-xl border-[1.5px] border-wine/30 bg-white px-4 text-base font-normal text-wine-deep placeholder:text-wine-soft/60 focus:border-wine focus:outline-none" /></label>
+                <button type="submit" class={`${primaryButton} mt-1 w-full`}>Entrar na lista de espera</button>
+                <p data-form-error hidden class="text-sm">Não consegui enviar agora. Me chama no <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="underline">WhatsApp</a>.</p>
+                <p class="text-center text-xs text-wine-soft">Sem e-mails: o contato é só pelo WhatsApp.</p>
+              </form>
+              <p data-form-success hidden class="font-display text-2xl leading-snug text-wine">Pronto, você está na lista! 💌 <span class="block pt-2 font-body text-base text-wine-soft">Quando as vagas abrirem, a Loren te chama no WhatsApp.</span></p>
+            </div>
+          ) : (
+            <>
+              <p class="font-display text-[clamp(4rem,8vw,6.5rem)] leading-none text-wine">{PRECO_MENTORIA}</p>
+              <p class="text-sm font-semibold tracking-[0.1em] text-wine-soft uppercase">Pix ou cartão*</p>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class={`${primaryButton} w-full`}>Falar com a Loren</a>
+            </>
+          )}
           </div>
         <span class="absolute -top-4 right-6 rotate-3 rounded-full border-[1.5px] border-wine bg-rose px-4 py-1.5 text-sm font-bold text-wine shadow-[2px_2px_0_var(--color-wine)]">Vagas limitadas.</span>
       </div>
@@ -420,7 +449,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
     <div aria-hidden="true" class="h-7" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 40px, #BFD9EE 40px 80px, #FAF6EF 80px 120px);"></div>
     <div class="mx-auto flex max-w-[1320px] flex-col items-center gap-6 px-6 pt-14 pb-12 text-center sm:pt-20 sm:pb-16">
       <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.05] max-w-4xl text-rose">Você pode continuar tentando adivinhar o que falta. <span class="text-sky italic">Ou perguntar pra quem já passou por isso.</span></h2>
-      <a data-reveal style="--reveal-delay: 80ms;" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-12 items-center justify-center rounded-full bg-rose px-8 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5 focus-visible:outline-offwhite">Falar com a Loren · {PRECO_MENTORIA} →</a>
+      <a data-reveal style="--reveal-delay: 80ms;" href={cta.href} target={cta.target} rel={cta.rel} class="inline-flex min-h-12 items-center justify-center rounded-full bg-rose px-8 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5 focus-visible:outline-offwhite">{LISTA_DE_ESPERA ? `${cta.label} →` : `Falar com a Loren · ${PRECO_MENTORIA} →`}</a>
       <p data-reveal style="--reveal-delay: 140ms;" class="font-semibold">Vagas limitadas.</p>
     </div>
     <div class="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-4 border-t border-offwhite/25 px-6 pt-6 pb-24 text-sm md:pb-8">
@@ -443,8 +472,58 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
     if (list && dotsBox && prevBtn && nextBtn) {
       initCoverflow({ list, dotsBox, prevBtn, nextBtn, mobileQuery: "(max-width: 767px)", dotLabel: "Bônus" });
     }
+
+    // telefone BR: máscara (11) 91234-5678 e validação de DDD, 9º dígito e número repetido
+    const DDDS = new Set("11 12 13 14 15 16 17 18 19 21 22 24 27 28 31 32 33 34 35 37 38 41 42 43 44 45 46 47 48 49 51 53 54 55 61 62 63 64 65 66 67 68 69 71 73 74 75 77 79 81 82 83 84 85 86 87 88 89 91 92 93 94 95 96 97 98 99".split(" "));
+    const nationalDigits = (value: string) => {
+      let d = value.replace(/\D/g, "");
+      if (d.length > 11 && d.startsWith("55")) d = d.slice(2);
+      return d.slice(0, 11);
+    };
+    const isValidBrPhone = (d: string) => {
+      if (!DDDS.has(d.slice(0, 2))) return false;
+      const number = d.slice(2);
+      if (/^(\d)\1+$/.test(number)) return false;
+      if (d.length === 11) return number[0] === "9";
+      if (d.length === 10) return /[2-5]/.test(number[0]);
+      return false;
+    };
+    document.querySelectorAll<HTMLInputElement>("input[data-br-phone]").forEach((input) => {
+      input.addEventListener("input", () => {
+        const d = nationalDigits(input.value);
+        const split = d[2] === "9" ? 7 : 6;
+        input.value = d.length > 6 ? `(${d.slice(0, 2)}) ${d.slice(2, split)}-${d.slice(split)}` : d.length > 2 ? `(${d.slice(0, 2)}) ${d.slice(2)}` : d;
+        input.setCustomValidity(isValidBrPhone(d) ? "" : input.dataset.invalidMsg ?? "");
+      });
+    });
+
+    // lista de espera (Web3Forms): a inscrição chega no e-mail da Loren sem sair da página
+    document.querySelectorAll<HTMLFormElement>("[data-lead-form]").forEach((form) => {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+        const error = form.querySelector<HTMLElement>("[data-form-error]");
+        const success = form.parentElement?.querySelector<HTMLElement>("[data-form-success]");
+        if (button) button.disabled = true;
+        if (error) error.hidden = true;
+        try {
+          const res = await fetch(form.action, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(Object.fromEntries(new FormData(form))),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.success) throw new Error(data.message || String(res.status));
+          form.hidden = true;
+          if (success) success.hidden = false;
+        } catch {
+          if (error) error.hidden = false;
+          if (button) button.disabled = false;
+        }
+      });
+    });
   </script>
 
   <!-- botão fixo no celular -->
-  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="fixed right-4 bottom-4 z-40 flex min-h-12 items-center rounded-full border-[1.5px] border-offwhite bg-wine px-5 text-sm font-semibold text-offwhite shadow-lg md:hidden">Falar com a Loren</a>
+  <a href={cta.href} target={cta.target} rel={cta.rel} class="fixed right-4 bottom-4 z-40 flex min-h-12 items-center rounded-full border-[1.5px] border-offwhite bg-wine px-5 text-sm font-semibold text-offwhite shadow-lg md:hidden">{cta.label}</a>
 </Layout>
