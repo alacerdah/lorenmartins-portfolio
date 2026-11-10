@@ -169,7 +169,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
       <h2 data-reveal class={sectionTitle}>Essa mentoria é <span class={`italic ${marker}`}>para você que...</span></h2>
       <ul class="border-b-[1.5px] border-wine">
         {audience.map((item, i) => (
-          <li data-reveal style={`--reveal-delay: ${i * 50}ms;`} class="group flex items-start gap-4 border-t-[1.5px] border-wine px-2 py-5 transition-colors hover:bg-rose">
+          <li data-reveal style={`--reveal-delay: ${i * 50}ms;`} class="group flex items-start gap-4 border-t-[1.5px] border-wine px-2 py-5 first:border-t-0 transition-colors hover:bg-rose">
             <Sparkle class="mt-1.5 h-4 w-4 shrink-0 text-wine transition-transform group-hover:rotate-45" />
             <span class="font-display text-[clamp(1.25rem,2vw,1.5rem)] leading-snug text-wine-deep">{item}</span>
           </li>
