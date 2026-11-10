@@ -25,8 +25,8 @@ const navLinks = [
 ];
 
 const audience = [
-  "Sente que está fazendo tudo, mas não entende o que falta para ser escolhida nas campanhas.",
   "Quer sair das permutas e conquistar campanhas remuneradas.",
+  "Sente que está fazendo tudo, mas não entende o que falta para ser escolhida nas campanhas.",
   "Tem dúvidas se o seu portfólio realmente valoriza seu potencial como creator.",
   "Quer criar conteúdos estratégicos que despertem desejo, valorizem produtos e ajudem a impulsionar vendas.",
   "Já fez cursos, mas sente dificuldade em transformar o que aprendeu em ações e resultados.",
@@ -34,7 +34,6 @@ const audience = [
 
 const facts = [
   { value: "4 encontros", text: "individuais, por chamada de vídeo" },
-  { value: "Flexíveis", text: "datas combinadas ao longo de 30 dias" },
   { value: "Suporte", text: "durante os 30 dias" },
 ];
 
@@ -71,9 +70,11 @@ const bonusTilt = ["lg:-rotate-1", "lg:rotate-[0.8deg] lg:mt-2.5", "lg:-rotate-[
 const included = [
   "4 encontros individuais",
   "Suporte direto com a Loren durante os 30 dias",
-  "Diagnóstico do seu perfil",
-  "Estrutura de abordagem",
+  "Análise completa do perfil",
+  "Análise do posicionamento",
+  "Diagnóstico do conteúdo",
   "Revisão do portfólio",
+  "Estrutura de abordagem",
   "Cronograma de conteúdo",
   "Plano de ação personalizado",
 ];
@@ -212,7 +213,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
               </ol>
             </div>
           </div>
-          <dl class="grid border-t-[1.5px] border-wine bg-rose/40 sm:grid-cols-3">
+          <dl class="grid border-t-[1.5px] border-wine bg-rose/40 sm:grid-cols-2">
             {facts.map((item, i) => (
               <div class={`flex flex-wrap items-baseline justify-center gap-x-2 px-4 py-4 text-center ${i ? "border-t-[1.5px] border-wine sm:border-t-0 sm:border-l-[1.5px]" : ""}`}>
                 <dt class="order-2 text-sm text-wine-deep">{item.text}</dt>
@@ -388,7 +389,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
             <span aria-hidden="true" class="flex h-9 w-9 shrink-0 -rotate-6 items-center justify-center rounded-full border-[1.5px] border-wine bg-rose text-wine">
               <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13M12 8S10.500 3 8 3a2.500 2.500 0 0 0 0 5zM12 8s1.500-5 4-5a2.500 2.500 0 0 1 0 5z" /></svg>
             </span>
-            <p class="leading-snug"><strong class="font-display text-lg font-normal text-wine italic">+3 bônus:</strong> dólar e tech, roteiro e mensagens</p>
+            <p class="leading-snug"><strong class="font-display text-lg font-normal text-wine italic">3 bônus:</strong> como ganhar em dólar e começar no tech, template de roteiro, pack de mensagens e prompts</p>
           </div>
         </div>
         <div class="flex flex-col items-center justify-center gap-5 border-t-[1.5px] border-wine px-7 py-10 text-center sm:px-12 sm:py-12 md:border-t-0 md:border-l-[1.5px]">
