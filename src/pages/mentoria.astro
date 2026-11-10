@@ -15,7 +15,7 @@ const LISTA_DE_ESPERA = false;
 const WEB3FORMS_KEY = "3b64e019-f7bd-4370-a0eb-69ccf1a98da6";
 const cta = LISTA_DE_ESPERA
   ? { href: "#lista-de-espera", label: "Entrar na lista de espera", target: undefined, rel: undefined }
-  : { href: WHATSAPP_URL, label: "Falar com a Loren", target: "_blank", rel: "noopener noreferrer" };
+  : { href: WHATSAPP_URL, label: "Quero minha vaga", target: "_blank", rel: "noopener noreferrer" };
 
 const navLinks = [
   { href: "#como-funciona", label: "O formato" },
@@ -417,7 +417,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
             <>
               <p class="font-display text-[clamp(4rem,8vw,6.5rem)] leading-none text-wine">{PRECO_MENTORIA}</p>
               <p class="text-sm font-semibold tracking-[0.1em] text-wine-soft uppercase">Pix ou cartão*</p>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class={`${primaryButton} w-full`}>Falar com a Loren</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class={`${primaryButton} w-full`}>Quero minha vaga</a>
             </>
           )}
           </div>
@@ -447,7 +447,7 @@ const sectionTitle = "font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.0
     <div aria-hidden="true" class="h-7" style="background: repeating-linear-gradient(90deg, #F4C9D2 0 40px, #BFD9EE 40px 80px, #FAF6EF 80px 120px);"></div>
     <div class="mx-auto flex max-w-[1320px] flex-col items-center gap-6 px-6 pt-14 pb-12 text-center sm:pt-20 sm:pb-16">
       <h2 data-reveal class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.05] max-w-4xl text-rose">Você pode continuar tentando adivinhar o que falta. <span class="text-sky italic">Ou perguntar pra quem já passou por isso.</span></h2>
-      <a data-reveal style="--reveal-delay: 80ms;" href={cta.href} target={cta.target} rel={cta.rel} class="inline-flex min-h-12 items-center justify-center rounded-full bg-rose px-8 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5 focus-visible:outline-offwhite">{LISTA_DE_ESPERA ? `${cta.label} →` : `Falar com a Loren · ${PRECO_MENTORIA} →`}</a>
+      <a data-reveal style="--reveal-delay: 80ms;" href={cta.href} target={cta.target} rel={cta.rel} class="inline-flex min-h-12 items-center justify-center rounded-full bg-rose px-8 py-3.5 font-semibold text-wine transition-transform hover:-translate-y-0.5 focus-visible:outline-offwhite">{LISTA_DE_ESPERA ? `${cta.label} →` : `Quero minha vaga · ${PRECO_MENTORIA} →`}</a>
       <p data-reveal style="--reveal-delay: 140ms;" class="font-semibold">Vagas limitadas.</p>
     </div>
     <div class="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-4 border-t border-offwhite/25 px-6 pt-6 pb-24 text-sm md:pb-8">
