@@ -20,8 +20,9 @@
 ```
 src/
   pages/
-    index.astro          ← versão em português (`<Home lang="pt" />`)
-    en/index.astro       ← versão em inglês (`<Home lang="en" />`)
+    index.astro          ← página inicial (lorenmartins.com.br): links pra marcas (portfólio, mídia kit) e creators (mentoria); `MIDIA_KIT` e textos no topo
+    portfolio.astro      ← portfólio em português (`<Home lang="pt" />`), em /portfolio
+    en/index.astro       ← portfólio em inglês (`<Home lang="en" />`), em /en/
     mentoria.astro       ← página de venda da mentoria; preço (`PRECO_MENTORIA`), WhatsApp e textos ficam no topo do arquivo
   layouts/
     Layout.astro         ← shell HTML, meta tags, Google Fonts, IntersectionObserver
@@ -42,7 +43,7 @@ public/
 
 ## Como editar conteúdo
 
-**Tudo que muda no site** (textos, fotos, marcas, nichos, cases, links de contato) fica no topo do frontmatter de `src/components/Home.astro`, nas constantes. Textos com tradução usam `t("português", "english")`; `/` e `/en/` renderizam esse mesmo componente:
+**Tudo que muda no site** (textos, fotos, marcas, nichos, cases, links de contato) fica no topo do frontmatter de `src/components/Home.astro`, nas constantes. Textos com tradução usam `t("português", "english")`; `/portfolio` e `/en/` renderizam esse mesmo componente:
 
 | Constante | O que controla |
 |---|---|

@@ -5,3 +5,9 @@
 # o package.json exige Node >= 22.12; sem isso o Netlify usa a versão padrão dele
 [build.environment]
   NODE_VERSION = "22"
+
+# a página de links virou a inicial; o endereço antigo continua funcionando
+[[redirects]]
+  from = "/links"
+  to = "/"
+  status = 301
