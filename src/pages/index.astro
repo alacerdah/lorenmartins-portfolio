@@ -9,6 +9,9 @@ const WHATSAPP = "5534991670558";
 const MIDIA_KIT = "/midia-kit";
 const midiaKitHref = MIDIA_KIT || `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Oi, Loren! Vi seu portfólio e quero receber seu mídia kit.")}`;
 
+// mentoria: por enquanto o botão abre o WhatsApp; pra mandar pra página, troque por "/mentoria"
+const MENTORIA_LINK = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Oi, Loren! Vi seu site e quero saber mais sobre a mentoria.")}`;
+
 const brands = {
   tag: "Pra marcas",
   title: ["Quero UGC", "pra minha marca"],
@@ -63,7 +66,7 @@ const check = "M5 12.5l4.5 4.5L19 7.5";
     <div class="mx-auto mt-9 grid max-w-[860px] gap-7 px-6 md:grid-cols-2">
       {[
         { ...brands, color: "bg-rose", accent: "text-wine", primary: { href: "/portfolio", label: "Ver meu portfólio" }, secondary: { href: midiaKitHref, label: "Mídia kit", external: !MIDIA_KIT } },
-        { ...creators, color: "bg-sky", accent: "text-wine", primary: { href: "/mentoria", label: "Conhecer a mentoria" }, secondary: null },
+        { ...creators, color: "bg-sky", accent: "text-wine", primary: { href: MENTORIA_LINK, label: "Quero saber da mentoria" }, secondary: null },
       ].map((card, i) => (
         <section data-reveal style={`--reveal-delay: ${i * 90}ms;`} class="hard-shadow flex flex-col gap-4 rounded-[28px] border-[1.5px] border-wine bg-offwhite p-6 sm:p-7">
           <span class={`w-fit rounded-full border-[1.5px] border-wine ${card.color} px-3 py-1 text-xs font-bold tracking-[0.08em] text-wine uppercase`}>{card.tag}</span>
@@ -80,7 +83,7 @@ const check = "M5 12.5l4.5 4.5L19 7.5";
             ))}
           </ul>
           <div class="mt-auto flex flex-col gap-3 pt-2">
-            <a href={card.primary.href} class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-wine px-6 py-3 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">
+            <a href={card.primary.href} target={card.primary.href.startsWith("http") ? "_blank" : undefined} rel={card.primary.href.startsWith("http") ? "noopener noreferrer" : undefined} class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-wine px-6 py-3 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">
               {card.primary.label}
               <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </a>
