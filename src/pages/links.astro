@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sparkle from '../components/Sparkle.astro';
+
+// ===== página de links (bio do Instagram): textos e endereços ficam só aqui =====
+const WHATSAPP = "5534991670558";
+// mídia kit: quando existir o PDF em public/ (ex.: "/midia-kit.pdf"), coloque o caminho aqui.
+// vazio, o botão abre o WhatsApp pedindo o mídia kit.
+const MIDIA_KIT = "";
+const midiaKitHref = MIDIA_KIT || `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Oi, Loren! Vi seu portfólio e quero receber seu mídia kit.")}`;
+
+const brands = {
+  tag: "Pra marcas",
+  title: ["Quero UGC", "pra minha marca"],
+  text: "Vídeos e fotos autênticos de moda, experiências, tech, beleza e mais, gravados e editados por mim.",
+  items: ["+100 vídeos e +1,8M de views", "marcas como Philips, Dove e Disney+", "vídeos, fotos e carrosséis"],
+};
+const creators = {
+  tag: "Pra creators",
+  title: ["Quero monetizar", "meu conteúdo"],
+  text: "Mentoria individual pra sair das permutas e fechar campanhas pagas com UGC.",
+  items: ["4 encontros individuais comigo", "revisão do portfólio e plano de ação", "suporte no WhatsApp por 30 dias"],
+};
+
+const check = "M5 12.5l4.5 4.5L19 7.5";
+---
+
+<Layout
+  title="Loren Martins — links"
+  description="Marcas: portfólio e mídia kit da Loren Martins, criadora UGC. Creators: mentoria individual de UGC."
+>
+  <main class="relative min-h-svh overflow-x-clip bg-offwhite pb-14">
+    <!-- topo listrado com a foto -->
+    <div class="stripes border-b-[1.5px] border-wine" style="--stripe-w: 40px;">
+      <div class="mx-auto flex max-w-[860px] items-center justify-between px-6 pt-5">
+        <a href="/" class="font-display text-xl text-wine italic">bylorenmartins</a>
+        <a href="https://www.instagram.com/bylorenmartins" target="_blank" rel="noopener noreferrer" aria-label="Instagram @bylorenmartins" class="flex h-10 w-10 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite text-wine">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" /></svg>
+        </a>
+      </div>
+      <div class="flex justify-center pt-4 pb-0">
+        <div class="relative">
+          <Sparkle class="sparkle-animate absolute top-6 -left-12 h-9 w-9 text-wine" style="--sparkle-dur: 2.4s;" />
+          <Sparkle class="sparkle-animate absolute top-20 -left-6 h-4 w-4 text-sky" outline style="--sparkle-dur: 1.9s; --sparkle-delay: .4s;" />
+          <Sparkle class="sparkle-animate absolute top-10 -right-10 h-5 w-5 text-rose" outline style="--sparkle-dur: 2.7s; --sparkle-delay: .8s;" />
+          <div class="relative aspect-[4/5] w-[180px] sm:w-[210px]">
+            <div aria-hidden="true" class="absolute inset-0 translate-x-2.5 rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine bg-rose"></div>
+            <div class="absolute inset-0 overflow-hidden rounded-t-[50%_40%] border-x-[1.5px] border-t-[1.5px] border-wine bg-sky">
+              <img src="/images/loren.webp" alt="Loren Martins sorrindo, com a mão apoiada no rosto" class="h-full w-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- nome e pergunta -->
+    <div class="flex flex-col items-center gap-4 px-6 pt-7 text-center">
+      <h1 class="font-display text-[clamp(2.75rem,9vw,4rem)] leading-[0.95] text-wine">Loren <span class="italic">Martins</span></h1>
+      <p class="relative rounded-2xl rounded-bl-[4px] border-[1.5px] border-wine bg-rose px-5 py-2.5 font-semibold text-wine shadow-[3px_3px_0_var(--color-wine)]">Oi! Me conta: você é marca ou creator?</p>
+    </div>
+
+    <!-- os dois caminhos -->
+    <div class="mx-auto mt-9 grid max-w-[860px] gap-7 px-6 md:grid-cols-2">
+      {[
+        { ...brands, color: "bg-rose", accent: "text-wine", primary: { href: "/", label: "Ver meu portfólio" }, secondary: { href: midiaKitHref, label: "Mídia kit", external: true } },
+        { ...creators, color: "bg-sky", accent: "text-wine", primary: { href: "/mentoria", label: "Conhecer a mentoria" }, secondary: null },
+      ].map((card, i) => (
+        <section data-reveal style={`--reveal-delay: ${i * 90}ms;`} class="hard-shadow flex flex-col gap-4 rounded-[28px] border-[1.5px] border-wine bg-offwhite p-6 sm:p-7">
+          <span class={`w-fit rounded-full border-[1.5px] border-wine ${card.color} px-3 py-1 text-xs font-bold tracking-[0.08em] text-wine uppercase`}>{card.tag}</span>
+          <h2 class="font-display text-[30px] leading-[1.08] text-wine">{card.title[0]} <span class="italic">{card.title[1]}</span></h2>
+          <p class="leading-relaxed text-wine-soft">{card.text}</p>
+          <ul class="flex flex-col gap-2">
+            {card.items.map((item) => (
+              <li class="flex items-start gap-2.5 text-[15px] leading-snug">
+                <span aria-hidden="true" class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-wine text-offwhite">
+                  <svg viewBox="0 0 24 24" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d={check} /></svg>
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div class="mt-auto flex flex-col gap-3 pt-2">
+            <a href={card.primary.href} class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-wine px-6 py-3 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">
+              {card.primary.label}
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+            {card.secondary && (
+              <a href={card.secondary.href} target={card.secondary.external ? "_blank" : undefined} rel={card.secondary.external ? "noopener noreferrer" : undefined} class="inline-flex min-h-12 items-center justify-center rounded-full border-[1.5px] border-wine bg-offwhite px-6 py-3 font-semibold text-wine transition-transform hover:-translate-y-0.5">
+                {card.secondary.label}
+              </a>
+            )}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <p class="mt-10 text-center text-sm text-wine-soft">
+      <a href="https://www.instagram.com/bylorenmartins" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4">Instagram</a>
+      <span class="px-2">·</span>
+      <a href="https://www.tiktok.com/@bylorenmartins" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4">TikTok</a>
+      <span class="px-2">·</span>
+      <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" class="underline underline-offset-4">WhatsApp</a>
+    </p>
+  </main>
+</Layout>
