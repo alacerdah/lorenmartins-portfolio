@@ -43,7 +43,7 @@ const contact = {
   instagram: "https://www.instagram.com/bylorenmartins",
   tiktok: "https://www.tiktok.com/@bylorenmartins",
   whatsapp: "5534991670558", // só números, com DDI e DDD (ex.: "5512999999999"); vazio esconde o botão
-  mediaKit: "", // PDF em public/ (ex.: "/midia-kit.pdf") ou link
+  mediaKit: "/midia-kit", // página do mídia kit (src/pages/midia-kit.astro), PDF em public/ ou link
 };
 const web3formsKey = "3b64e019-f7bd-4370-a0eb-69ccf1a98da6"; // chave do Web3Forms: as respostas dos formulários vão para o e-mail cadastrado nela
 
@@ -853,7 +853,7 @@ const linkOr = (url: string) => url || "#contato";
                 { label: "WhatsApp", url: contact.whatsapp && `https://wa.me/${contact.whatsapp}` },
                 { label: "Instagram", url: contact.instagram },
                 { label: "TikTok", url: contact.tiktok },
-                { label: t("Mídia kit (PDF)", "Media kit (PDF)"), url: contact.mediaKit },
+                { label: t("Mídia kit", "Media kit (PT)"), url: contact.mediaKit },
               ].filter((l) => l.url).map((l) => (
                 <a href={linkOr(l.url)} target={l.url ? "_blank" : undefined} rel={l.url ? "noopener noreferrer" : undefined} class="rounded-full border-[1.5px] border-sky px-6 py-3.5 font-semibold text-sky transition-transform hover:-translate-y-0.5">
                   {l.label}

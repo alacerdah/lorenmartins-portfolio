@@ -4,9 +4,9 @@ import Sparkle from '../components/Sparkle.astro';
 
 // ===== página inicial (lorenmartins.com.br): links pra marcas e creators: textos e endereços ficam só aqui =====
 const WHATSAPP = "5534991670558";
-// mídia kit: quando existir o PDF em public/ (ex.: "/midia-kit.pdf"), coloque o caminho aqui.
+// mídia kit: página /midia-kit (src/pages/midia-kit.astro), um PDF em public/ ou um link.
 // vazio, o botão abre o WhatsApp pedindo o mídia kit.
-const MIDIA_KIT = "";
+const MIDIA_KIT = "/midia-kit";
 const midiaKitHref = MIDIA_KIT || `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Oi, Loren! Vi seu portfólio e quero receber seu mídia kit.")}`;
 
 const brands = {
@@ -62,7 +62,7 @@ const check = "M5 12.5l4.5 4.5L19 7.5";
     <!-- os dois caminhos -->
     <div class="mx-auto mt-9 grid max-w-[860px] gap-7 px-6 md:grid-cols-2">
       {[
-        { ...brands, color: "bg-rose", accent: "text-wine", primary: { href: "/portfolio", label: "Ver meu portfólio" }, secondary: { href: midiaKitHref, label: "Mídia kit", external: true } },
+        { ...brands, color: "bg-rose", accent: "text-wine", primary: { href: "/portfolio", label: "Ver meu portfólio" }, secondary: { href: midiaKitHref, label: "Mídia kit", external: !MIDIA_KIT } },
         { ...creators, color: "bg-sky", accent: "text-wine", primary: { href: "/mentoria", label: "Conhecer a mentoria" }, secondary: null },
       ].map((card, i) => (
         <section data-reveal style={`--reveal-delay: ${i * 90}ms;`} class="hard-shadow flex flex-col gap-4 rounded-[28px] border-[1.5px] border-wine bg-offwhite p-6 sm:p-7">
