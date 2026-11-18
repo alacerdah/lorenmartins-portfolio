@@ -31,13 +31,6 @@ const photos = {
   contato: "/images/loren-contato.jpg", // foto da polaroid na última seção
 };
 
-// balões de depoimento em cima da foto da capa; `place` só vale em telas a partir de 1280 px (nas menores ficam empilhados abaixo da foto)
-const heroFeedbacks = [
-  { brand: "Deby Fit", logo: "/images/logos/deby-fit.png", text: t("Estamos usando os conteúdos no tráfego pago e tendo retorno.", "We're using the content in paid traffic and seeing returns."), place: "xl:top-[9%] xl:-right-[130px]" },
-  { brand: "Stapellia Moda", logo: "/images/logos/stapellia.jpg", text: t("A entrega foi perfeita, não precisamos ajustar nada.", "The delivery was perfect, we didn't need to adjust anything."), place: "xl:top-[27%] xl:-right-[130px]" },
-  { brand: "Hey Harper", logo: "/images/logos/hey-harper.png", text: "Everything looks great, and the whole delivery is very well organised.", place: "xl:bottom-[7%] xl:-left-28" },
-];
-
 const contact = {
   email: "contatolorenmartins@gmail.com",
   instagram: "https://www.instagram.com/bylorenmartins",
@@ -396,11 +389,17 @@ const linkOr = (url: string) => url || "#contato";
         <nav class="hidden items-center gap-7 text-[15px] font-medium lg:flex">
           {navLinks.map((l) => <a href={l.href} class="text-wine hover:text-wine-deep">{l.label}</a>)}
         </nav>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
           <div role="group" aria-label={t("Idioma", "Language")} class="flex rounded-full border-[1.5px] border-wine p-0.5 text-xs font-semibold">
             <a href="/portfolio" hreflang="pt-BR" aria-label="Português" aria-current={lang === "pt" ? "true" : undefined} class="flex min-h-10 min-w-10 items-center justify-center rounded-full px-2 text-wine aria-[current]:bg-wine aria-[current]:text-offwhite">PT</a>
             <a href="/en/" hreflang="en" aria-label="English" aria-current={lang === "en" ? "true" : undefined} class="flex min-h-10 min-w-10 items-center justify-center rounded-full px-2 text-wine aria-[current]:bg-wine aria-[current]:text-offwhite">EN</a>
           </div>
+          {contact.mediaKit && (
+            <a href={contact.mediaKit} class="flex min-h-10 shrink-0 items-center gap-1.5 rounded-full bg-rose px-3 text-sm font-semibold whitespace-nowrap text-wine sm:px-4 transition-transform hover:-translate-y-0.5">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5" /></svg>
+              {t("Mídia kit", "Media kit")}
+            </a>
+          )}
           <a href="#contato" class="hidden rounded-full bg-wine px-5 py-2.5 text-sm font-semibold text-offwhite transition-transform hover:-translate-y-0.5 sm:block">
             {t("Vamos conversar", "Let's talk")}
           </a>
@@ -444,14 +443,6 @@ const linkOr = (url: string) => url || "#contato";
             <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 -bottom-px h-[55%] md:hidden" style="background: linear-gradient(to top, rgb(107 31 46) 4%, rgb(107 31 46 / 0.7) 38%, rgb(107 31 46 / 0));"></div>
           </div>
           </div>
-          <ul class="mt-5 mb-8 flex flex-col gap-2.5 max-md:hidden md:mb-6 xl:contents">
-            {heroFeedbacks.map((f, i) => (
-              <li data-reveal style={`--reveal-delay: ${450 + i * 180}ms;`} class={`reveal-sm z-20 flex items-center gap-2.5 rounded-xl border border-wine/10 bg-white/90 px-3 py-2.5 text-wine-soft shadow-[0_4px_16px_rgba(58,15,24,0.08)] backdrop-blur-sm xl:absolute xl:w-[225px] ${f.place}`}>
-                <img src={f.logo} alt={f.brand} width="32" height="32" class="h-8 w-8 shrink-0 rounded-full border border-wine/10 object-cover" loading="lazy" />
-                <p class="font-inter text-[12.5px] leading-snug">{f.text}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </section>

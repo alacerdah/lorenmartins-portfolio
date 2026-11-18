@@ -48,8 +48,7 @@ public/
 | Constante | O que controla |
 |---|---|
 | `photos` | Caminhos das fotos do hero, "sobre" e da polaroid da última seção (`contato`) |
-| `heroFeedbacks` | Balões de depoimento sobre a foto da capa: `brand`, `logo`, `text` e posição (`place`) |
-| `contact` | Email, Instagram, TikTok, WhatsApp, mídia kit |
+| `contact` | Email, Instagram, TikTok, WhatsApp, mídia kit (`mediaKit` também liga o botão "Mídia kit" do topo) |
 | `brandRows` | Logos do carrossel de marcas (2 faixas). Cada logo é `logo("Nome", "arquivo.png")` e o arquivo fica em `public/images/logos/` |
 | `niches` | Lista de nichos em ordem de preferência: viram as abas e os botões do "Sobre". `black-friday` é temporário: faixa, aba e botão só aparecem de 1º/out a 30/nov |
 | `videos` / `realVideos` | Vídeos por nicho (quantos quiser; nicho sem nenhum ganha 3 espaços reservados). Em `realVideos` preencha por nicho: `brand`, `src` = arquivo .mp4 (em `public/videos/`) ou `permalink` do Instagram, `badge` opcional (adesivo tipo "+80 mil views") |
