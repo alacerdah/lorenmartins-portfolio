@@ -20,7 +20,7 @@
 ```
 src/
   pages/
-    index.astro          ← página inicial (lorenmartins.com.br): links pra marcas (portfólio, mídia kit) e creators (mentoria); `MIDIA_KIT` e textos no topo
+    index.astro          ← página inicial (lorenmartins.com.br): links pra marcas (portfólio, mídia kit) e creators (mentoria); `MIDIA_KIT`, `MENTORIA_LINK` e textos no topo
     portfolio.astro      ← portfólio em português (`<Home lang="pt" />`), em /portfolio
     en/index.astro       ← portfólio em inglês (`<Home lang="en" />`), em /en/
     mentoria.astro       ← página de venda da mentoria; preço (`PRECO_MENTORIA`), WhatsApp e textos ficam no topo do arquivo
@@ -28,6 +28,7 @@ src/
     Layout.astro         ← shell HTML, meta tags, Google Fonts, IntersectionObserver
   components/
     Home.astro           ← a página inteira (TODOS os dados ficam no frontmatter)
+    ProfileStats.astro   ← seção "Mídia kit" do portfólio (#midia-kit): números do Instagram, gráficos e redes; os números e a data da coleta ficam no topo do arquivo
     Photo.astro          ← imagem com placeholder (ícone + legenda quando sem src)
     VideoFrame.astro     ← moldura 9:16 com embed do Instagram (ou placeholder)
     OvalPortrait.astro   ← retrato oval da seção "Quem eu sou" (anel rosa, texto curvo, sparkles animados)
@@ -67,10 +68,11 @@ Para adicionar fotos: colocar em `public/images/` e usar o caminho `/images/nome
 2. **Hero** — foto da Loren, tags, headline, CTAs
 3. **Marquee de marcas** — carrossel animado duplo (fundo vinho + faixa azul reversa)
 4. **Quem eu sou** — seção com fundo listrado, card com bio + retrato oval animado
-5. **Trabalhos por nicho** — botões de aba e faixa de vídeos que rola para o lado. Os vídeos com mais views (`views`) sempre vêm primeiro
-6. **Carrosséis & fotos** — visualizador com cards empilhados + galeria masonry
-7. **Cases de venda** — "Vídeos que venderam", logo depois de "Cases virais": vídeo, explicação e números
-8. **Contato/footer** — fundo vinho, faixa colorida, botões de contato
+5. **Mídia kit** — números do Instagram (últimos 30 dias), gráficos e redes (`ProfileStats.astro`)
+6. **Trabalhos por nicho** — botões de aba e faixa de vídeos que rola para o lado. Os vídeos com mais views (`views`) sempre vêm primeiro
+7. **Carrosséis & fotos** — visualizador com cards empilhados + galeria masonry
+8. **Cases de venda** — "Vídeos que venderam", logo depois de "Cases virais": vídeo, explicação e números
+9. **Contato/footer** — fundo vinho, faixa colorida, botões de contato
 
 ## Tokens de design (em `global.css`)
 
@@ -119,4 +121,4 @@ npm run build        # build de produção em dist/
 - [ ] Adicionar vídeos reais com `permalink` do Instagram/TikTok
 - [ ] Fotos reais na galeria UGC (a seção de carrosséis e fotos só aparece com imagens reais)
 - [ ] Slides reais nos carrosséis
-- [ ] Mídia kit (PDF) da Loren
+- [ ] Mídia kit: público (cidades, países, idade, gênero) e crescimento de seguidores, que só aparecem no app

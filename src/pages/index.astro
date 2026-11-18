@@ -4,9 +4,9 @@ import Sparkle from '../components/Sparkle.astro';
 
 // ===== página inicial (lorenmartins.com.br): links pra marcas e creators: textos e endereços ficam só aqui =====
 const WHATSAPP = "5534991670558";
-// mídia kit: página /midia-kit (src/pages/midia-kit.astro), um PDF em public/ ou um link.
+// mídia kit: seção do portfólio (/portfolio#midia-kit), um PDF em public/ ou um link.
 // vazio, o botão abre o WhatsApp pedindo o mídia kit.
-const MIDIA_KIT = "/midia-kit";
+const MIDIA_KIT = "/portfolio#midia-kit";
 const midiaKitHref = MIDIA_KIT || `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Oi, Loren! Vi seu portfólio e quero receber seu mídia kit.")}`;
 
 // mentoria: por enquanto o botão abre o WhatsApp; pra mandar pra página, troque por "/mentoria"

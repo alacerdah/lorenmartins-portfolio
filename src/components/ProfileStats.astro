@@ -1,0 +1,166 @@
+---
+// seção "Mídia kit" do portfólio: números do Instagram + redes. Todos os números ficam aqui, com a data da coleta.
+// fonte: Insights do Instagram @bylorenmartins (versão web). Atualize os números e a DATA juntos.
+import Sparkle from './Sparkle.astro';
+
+interface Props {
+  lang?: "pt" | "en";
+  whatsapp: string;
+  email: string;
+  instagram: string;
+  tiktok: string;
+}
+const { lang = "pt", whatsapp, email, instagram, tiktok } = Astro.props;
+const t = (pt: string, en: string) => (lang === "en" ? en : pt);
+const fmt = (n: number) => n.toLocaleString(lang === "en" ? "en-US" : "pt-BR", { maximumFractionDigits: 1 });
+
+const DATA = { pt: "17/11/2026", en: "Nov 17, 2026" };
+const followers = 2987;
+
+// últimos 30 dias
+const stats = [
+  { value: t("268,6 mil", "268.6K"), label: t("views", "views") },
+  { value: t("79,3 mil", "79.3K"), label: t("contas alcançadas", "accounts reached") },
+  { value: "8,26%".replace(",", lang === "en" ? "." : ","), label: t("engajamento nos Reels", "Reels engagement") },
+  { value: t("5,5 mil", "5.5K"), label: t("visitas ao perfil", "profile visits") },
+];
+
+// cores validadas pra daltonismo (paleta da marca um pouco mais forte); todo valor aparece escrito
+const C = { wine: "#9B2C44", sky: "#3F86CF", rose: "#E58FA3" };
+const viewsAudience = [
+  { label: t("Não seguidores", "Non-followers"), value: 52.5, color: C.wine },
+  { label: t("Seguidores", "Followers"), value: 47.5, color: C.sky },
+];
+const splits = [
+  { title: t("Views por formato", "Views by format"), parts: [{ label: "Stories", value: 63.3, color: C.wine }, { label: "Reels", value: 36.7, color: C.sky }] },
+  { title: t("Interações por formato", "Interactions by format"), parts: [{ label: "Reels", value: 58.3, color: C.wine }, { label: "Stories", value: 39.2, color: C.sky }, { label: "Posts", value: 2.5, color: C.rose }] },
+];
+// seguidores ativos por horário: média dos 7 dias
+const activeByDay: Record<string, number[]> = {
+  "0h": [451, 546, 532, 552, 528, 402, 310], "3h": [1202, 1260, 1271, 1283, 1276, 1133, 1017],
+  "6h": [1462, 1486, 1496, 1522, 1516, 1447, 1392], "9h": [1468, 1466, 1469, 1500, 1489, 1429, 1416],
+  "12h": [1514, 1515, 1530, 1554, 1533, 1440, 1463], "15h": [1465, 1475, 1466, 1491, 1482, 1412, 1456],
+  "18h": [831, 837, 851, 881, 1000, 988, 909], "21h": [214, 208, 215, 226, 290, 311, 240],
+};
+const hours = Object.entries(activeByDay).map(([h, v]) => ({ h, avg: Math.round(v.reduce((a, b) => a + b, 0) / v.length) }));
+const maxHour = Math.max(...hours.map((x) => x.avg));
+
+const R = 54, CIRC = 2 * Math.PI * R;
+let acc = 0;
+const donut = viewsAudience.map((p) => {
+  const len = (p.value / 100) * CIRC;
+  const seg = { ...p, dash: `${Math.max(len - 3, 0)} ${CIRC}`, offset: -acc };
+  acc += len;
+  return seg;
+});
+
+const handle = "@bylorenmartins";
+const networks = [
+  { name: "Instagram", sub: handle, href: instagram, icon: "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM17.5 6.5h.01" },
+  { name: "TikTok", sub: handle, href: tiktok, icon: "M9 12a4 4 0 1 0 4 4V3c.5 2.5 2.5 4.5 5 5" },
+  { name: "WhatsApp", sub: t("resposta rápida", "quick reply"), href: `https://wa.me/${whatsapp}`, icon: "M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z" },
+  { name: "E-mail", sub: email, href: `mailto:${email}`, icon: "M3 6h18v12H3zM3 7l9 6 9-6" },
+];
+const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
+---
+
+<section id="midia-kit" class="scroll-mt-20 border-b-[1.5px] border-wine bg-rose px-6 py-14 sm:py-16">
+  <div class="mx-auto flex max-w-[1320px] flex-col gap-8">
+    <div data-reveal class="flex flex-wrap items-end justify-between gap-4">
+      <h2 class="font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none text-wine">{t("Mídia", "Media")} <span class="italic">kit</span></h2>
+      <p class="max-w-md leading-relaxed">{t("Além do UGC, também crio como influenciadora. Estes são os números do meu perfil.", "Besides UGC, I also create as an influencer. These are my profile numbers.")}</p>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
+      <!-- Instagram -->
+      <div data-reveal class={`hard-shadow ${card} flex flex-col gap-6`}>
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="flex items-center gap-2 font-semibold text-wine"><Sparkle class="h-4 w-4" /> Instagram</p>
+            <a href={instagram} target="_blank" rel="noopener noreferrer" class="font-display text-[clamp(1.75rem,3vw,2.25rem)] leading-tight text-wine italic">{handle}</a>
+          </div>
+          <div class="text-right">
+            <p class="text-xs font-semibold tracking-[0.12em] text-wine-soft uppercase">{t("Seguidores", "Followers")}</p>
+            <p class="font-display text-4xl leading-none text-wine">{fmt(followers)}</p>
+          </div>
+        </div>
+
+        <div>
+          <ul class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {stats.map((s, i) => (
+              <li class={`flex flex-col gap-1 rounded-2xl border-[1.5px] border-wine px-4 py-3 ${i % 2 === 0 ? "bg-rose" : "bg-sky"}`}>
+                <span class="font-display text-[24px] leading-none whitespace-nowrap text-wine sm:text-[28px]">{s.value}</span>
+                <span class="text-sm leading-snug">{s.label}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-2 text-xs text-wine-soft">{t(`Insights do Instagram · últimos 30 dias · dados de ${DATA.pt}`, `Instagram Insights · last 30 days · data from ${DATA.en}`)}</p>
+        </div>
+
+        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 md:grid-cols-[auto_1fr]">
+          <figure class="flex items-center gap-4">
+            <svg viewBox="0 0 140 140" class="h-32 w-32 shrink-0 -rotate-90" role="img" aria-label={t("Views: 52,5% de não seguidores e 47,5% de seguidores", "Views: 52.5% from non-followers and 47.5% from followers")}>
+              {donut.map((d) => (
+                <circle cx="70" cy="70" r={R} fill="none" stroke={d.color} stroke-width="22" stroke-dasharray={d.dash} stroke-dashoffset={d.offset}><title>{d.label}: {fmt(d.value)}%</title></circle>
+              ))}
+            </svg>
+            <figcaption class="flex flex-col gap-2">
+              <span class="text-sm font-semibold text-wine">{t("De onde vêm as views", "Where views come from")}</span>
+              {viewsAudience.map((d) => (
+                <span class="flex items-center gap-2 text-sm"><span aria-hidden="true" class="h-3 w-3 rounded-[3px]" style={`background:${d.color}`}></span><strong class="font-display text-xl font-normal text-wine">{fmt(d.value)}%</strong> {d.label}</span>
+              ))}
+            </figcaption>
+          </figure>
+          <div class="flex flex-col gap-4">
+            {splits.map((sp) => (
+              <figure class="flex flex-col gap-2">
+                <figcaption class="text-sm font-semibold text-wine">{sp.title}</figcaption>
+                <div class="flex h-6 w-full gap-[2px] overflow-hidden rounded-[6px]" role="img" aria-label={`${sp.title}: ${sp.parts.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
+                  {sp.parts.map((p) => <span class="h-full" style={`width:${p.value}%;background:${p.color}`} title={`${p.label}: ${fmt(p.value)}%`}></span>)}
+                </div>
+                <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                  {sp.parts.map((p) => <li class="flex items-center gap-1.5"><span aria-hidden="true" class="h-3 w-3 rounded-[3px]" style={`background:${p.color}`}></span>{p.label} <strong class="text-wine">{fmt(p.value)}%</strong></li>)}
+                </ul>
+              </figure>
+            ))}
+          </div>
+        </div>
+
+        <figure class="border-t-[1.5px] border-wine/15 pt-6">
+          <figcaption class="text-sm font-semibold text-wine">{t("Quando meus seguidores estão online", "When my followers are online")} <span class="font-normal text-wine-soft">· {t("média por horário", "average by hour")}</span></figcaption>
+          <div class="mt-3 flex h-32 items-end gap-2 border-b-[1.5px] border-wine/30 sm:gap-4" role="img" aria-label={hours.map((x) => `${x.h} ${x.avg}`).join(", ")}>
+            {hours.map((x) => (
+              <div class="flex h-full flex-1 flex-col items-center justify-end gap-1" title={`${x.h}: ${fmt(x.avg)}`}>
+                {x.avg === maxHour && <span class="text-xs font-bold text-wine">{t("pico", "peak")}</span>}
+                <span class="w-full max-w-[48px] rounded-t-[4px]" style={`height:${(x.avg / maxHour) * 80}%;background:${x.avg === maxHour ? C.wine : C.rose}`}></span>
+              </div>
+            ))}
+          </div>
+          <div class="mt-1.5 flex gap-2 text-center text-xs text-wine-soft sm:gap-4">{hours.map((x) => <span class="flex-1">{x.h}</span>)}</div>
+        </figure>
+
+        <a href={instagram} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-wine px-6 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">
+          {t("Seguir no Instagram", "Follow on Instagram")}
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+
+      <!-- redes -->
+      <div data-reveal style="--reveal-delay: 100ms;" class={`hard-shadow ${card} flex flex-col gap-4 self-start`}>
+        <p class="flex items-center gap-2 font-semibold text-wine"><Sparkle class="h-4 w-4" /> {t("Onde me encontrar", "Where to find me")}</p>
+        <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+          {networks.map((n) => (
+            <li>
+              <a href={n.href} target={n.href.startsWith("http") ? "_blank" : undefined} rel={n.href.startsWith("http") ? "noopener noreferrer" : undefined} class="flex items-center gap-3 rounded-2xl border-[1.5px] border-wine/20 bg-white/60 px-4 py-3 transition-colors hover:border-wine">
+                <span aria-hidden="true" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky text-wine">
+                  <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d={n.icon} /></svg>
+                </span>
+                <span class="min-w-0"><span class="block font-semibold text-wine">{n.name}</span><span class="block truncate text-sm text-wine-soft">{n.sub}</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

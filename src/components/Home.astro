@@ -4,6 +4,7 @@ import Sparkle from './Sparkle.astro';
 import Photo from './Photo.astro';
 import VideoFrame from './VideoFrame.astro';
 import OvalPortrait from './OvalPortrait.astro';
+import ProfileStats from './ProfileStats.astro';
 
 // a mesma página em dois idiomas: / (pt) e /en/ (en). Textos traduzidos ficam em t("português", "english").
 interface Props {
@@ -21,6 +22,7 @@ const t = (pt: string, en: string) => (lang === "en" ? en : pt);
 const navLinks = [
   { href: "#sobre", label: t("Sobre", "About") },
   { href: lang === "en" ? "#english" : "#virais", label: t("Portfólio", "Portfolio") },
+  { href: "#midia-kit", label: t("Mídia kit", "Media kit") },
   { href: "#feedbacks", label: "Feedbacks" },
   { href: "#contato", label: t("Contato", "Contact") },
 ];
@@ -36,7 +38,7 @@ const contact = {
   instagram: "https://www.instagram.com/bylorenmartins",
   tiktok: "https://www.tiktok.com/@bylorenmartins",
   whatsapp: "5534991670558", // só números, com DDI e DDD (ex.: "5512999999999"); vazio esconde o botão
-  mediaKit: "/midia-kit", // página do mídia kit (src/pages/midia-kit.astro), PDF em public/ ou link
+  mediaKit: "#midia-kit", // seção "Mídia kit" do portfólio (src/components/ProfileStats.astro); vazio esconde o botão do topo
 };
 const web3formsKey = "3b64e019-f7bd-4370-a0eb-69ccf1a98da6"; // chave do Web3Forms: as respostas dos formulários vão para o e-mail cadastrado nela
 
@@ -614,6 +616,9 @@ const linkOr = (url: string) => url || "#contato";
       </div>
     </section>
 
+    <!-- MÍDIA KIT: números do perfil e redes -->
+    <ProfileStats lang={lang} whatsapp={contact.whatsapp} email={contact.email} instagram={contact.instagram} tiktok={contact.tiktok} />
+
     <!-- TRABALHOS POR NICHO -->
     <section id="demais-nichos" class="mx-auto flex max-w-[1320px] scroll-mt-20 flex-col gap-8 px-6 py-14 sm:py-16">
       <div data-reveal class="flex flex-col gap-2">
@@ -841,7 +846,6 @@ const linkOr = (url: string) => url || "#contato";
                 { label: "WhatsApp", url: contact.whatsapp && `https://wa.me/${contact.whatsapp}` },
                 { label: "Instagram", url: contact.instagram },
                 { label: "TikTok", url: contact.tiktok },
-                { label: t("Mídia kit", "Media kit (PT)"), url: contact.mediaKit },
               ].filter((l) => l.url).map((l) => (
                 <a href={linkOr(l.url)} target={l.url ? "_blank" : undefined} rel={l.url ? "noopener noreferrer" : undefined} class="rounded-full border-[1.5px] border-sky px-6 py-3.5 font-semibold text-sky transition-transform hover:-translate-y-0.5">
                   {l.label}

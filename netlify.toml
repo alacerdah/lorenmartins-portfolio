@@ -11,3 +11,9 @@
   from = "/links"
   to = "/"
   status = 301
+
+# o mídia kit virou uma seção do portfólio
+[[redirects]]
+  from = "/midia-kit"
+  to = "/portfolio#midia-kit"
+  status = 301
