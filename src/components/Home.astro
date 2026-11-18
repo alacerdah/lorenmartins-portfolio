@@ -22,8 +22,8 @@ const t = (pt: string, en: string) => (lang === "en" ? en : pt);
 const navLinks = [
   { href: "#sobre", label: t("Sobre", "About") },
   { href: lang === "en" ? "#english" : "#virais", label: t("Portfólio", "Portfolio") },
-  { href: "#midia-kit", label: t("Mídia kit", "Media kit") },
   { href: "#feedbacks", label: "Feedbacks" },
+  { href: "#midia-kit", label: t("Mídia kit", "Media kit") },
   { href: "#contato", label: t("Contato", "Contact") },
 ];
 
@@ -616,9 +616,6 @@ const linkOr = (url: string) => url || "#contato";
       </div>
     </section>
 
-    <!-- MÍDIA KIT: números do perfil e redes -->
-    <ProfileStats lang={lang} whatsapp={contact.whatsapp} email={contact.email} instagram={contact.instagram} tiktok={contact.tiktok} />
-
     <!-- TRABALHOS POR NICHO -->
     <section id="demais-nichos" class="mx-auto flex max-w-[1320px] scroll-mt-20 flex-col gap-8 px-6 py-14 sm:py-16">
       <div data-reveal class="flex flex-col gap-2">
@@ -826,6 +823,9 @@ const linkOr = (url: string) => url || "#contato";
         </div>
       </div>
     </section>
+
+    <!-- MÍDIA KIT: números do perfil e redes -->
+    <ProfileStats lang={lang} whatsapp={contact.whatsapp} email={contact.email} instagram={contact.instagram} tiktok={contact.tiktok} />
 
     <!-- CONTATO -->
     <footer id="contato" class="scroll-mt-20 bg-wine text-offwhite">

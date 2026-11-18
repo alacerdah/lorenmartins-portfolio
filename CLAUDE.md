@@ -68,11 +68,12 @@ Para adicionar fotos: colocar em `public/images/` e usar o caminho `/images/nome
 2. **Hero** — foto da Loren, tags, headline, CTAs
 3. **Marquee de marcas** — carrossel animado duplo (fundo vinho + faixa azul reversa)
 4. **Quem eu sou** — seção com fundo listrado, card com bio + retrato oval animado
-5. **Mídia kit** — números do Instagram (últimos 30 dias), gráficos e redes (`ProfileStats.astro`)
-6. **Trabalhos por nicho** — botões de aba e faixa de vídeos que rola para o lado. Os vídeos com mais views (`views`) sempre vêm primeiro
-7. **Carrosséis & fotos** — visualizador com cards empilhados + galeria masonry
-8. **Cases de venda** — "Vídeos que venderam", logo depois de "Cases virais": vídeo, explicação e números
-9. **Contato/footer** — fundo vinho, faixa colorida, botões de contato
+5. **Trabalhos por nicho** — botões de aba e faixa de vídeos que rola para o lado. Os vídeos com mais views (`views`) sempre vêm primeiro
+6. **Carrosséis & fotos** — visualizador com cards empilhados + galeria masonry
+7. **Cases de venda** — "Vídeos que venderam", logo depois de "Cases virais": vídeo, explicação e números
+8. **Feedbacks** — parede de feedbacks das marcas
+9. **Mídia kit** — números do Instagram (últimos 30 dias), gráficos e redes (`ProfileStats.astro`), logo antes do contato
+10. **Contato/footer** — fundo vinho, faixa colorida, botões de contato
 
 ## Tokens de design (em `global.css`)
 
