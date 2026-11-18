@@ -36,7 +36,13 @@ const ages = [
   { label: "13–17", value: 0.6 }, { label: "18–24", value: 17.1 }, { label: "25–34", value: 56.8 }, { label: "35–44", value: 17.1 },
   { label: "45–54", value: 5.6 }, { label: "55–64", value: 2.4 }, { label: "65+", value: 0.5 },
 ];
-const maxAge = Math.max(...ages.map((a) => a.value));
+// faixa etária em pizza: as 3 maiores faixas + o resto junto (fatia neutra)
+const ageParts = [
+  { label: t("25–34 anos", "25–34"), value: 56.8, color: C.wine },
+  { label: t("18–24 anos", "18–24"), value: 17.1, color: C.sky },
+  { label: t("35–44 anos", "35–44"), value: 17.1, color: C.rose },
+  { label: t("Outras idades", "Other ages"), value: 9.1, color: "#E3D6C8" },
+];
 const cities = [
   { label: "São Paulo", value: 10.0 }, { label: "São José dos Campos", value: 8.5 }, { label: "Uberlândia", value: 6.4 },
   { label: "Rio de Janeiro", value: 4.0 }, { label: "Belo Horizonte", value: 1.8 },
@@ -81,7 +87,7 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
       <p class="max-w-md leading-relaxed">{t("Além do UGC, também crio como influenciadora. Estes são os números do meu perfil.", "Besides UGC, I also create as an influencer. These are my profile numbers.")}</p>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
+    <div class="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
       <!-- Instagram -->
       <div data-reveal class={`hard-shadow ${card} flex flex-col gap-6`}>
         <div class="flex flex-wrap items-start justify-between gap-4">
@@ -108,14 +114,15 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
           <p class="mt-2 text-xs text-wine-soft">{t(`Insights do Instagram · últimos 30 dias · dados de ${DATA.pt}`, `Instagram Insights · last 30 days · data from ${DATA.en}`)}</p>
         </div>
 
-        <!-- gênero e região -->
-        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 sm:grid-cols-2">
+        <!-- gênero, faixa etária e região -->
+        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 md:grid-cols-3">
           {[
             { title: t("Gênero", "Gender"), parts: gender, note: "" },
+            { title: t("Faixa etária", "Age range"), parts: ageParts, note: `${t("Outras idades", "Other ages")}: ${ages.filter((a) => !["18–24", "25–34", "35–44"].includes(a.label)).map((a) => `${a.label} ${fmt(a.value)}%`).join(" · ")}` },
             { title: t("Região", "Location"), parts: regionParts, note: `${t("Também", "Also")}: ${cities.slice(3).map((c) => `${c.label} ${fmt(c.value)}%`).join(" · ")}. ${countries.map((c) => `${c.label} ${fmt(c.value)}%`).join(" · ")}` },
           ].map((d) => (
             <figure class="flex flex-col gap-3">
-              <div class="flex items-center gap-4">
+              <div class="flex items-center gap-4 md:flex-col md:items-start">
                 <svg viewBox="0 0 140 140" class="h-28 w-28 shrink-0 -rotate-90 sm:h-32 sm:w-32" role="img" aria-label={`${d.title}: ${d.parts.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
                   {toDonut(d.parts).map((seg) => (
                     <circle cx="70" cy="70" r={R} fill="none" stroke={seg.color} stroke-width="22" stroke-dasharray={seg.dash} stroke-dashoffset={seg.offset}><title>{seg.label}: {fmt(seg.value)}%</title></circle>
@@ -124,7 +131,7 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
                 <figcaption class="flex flex-col gap-1.5">
                   <span class="text-sm font-semibold text-wine">{d.title}</span>
                   {d.parts.map((p) => (
-                    <span class="flex items-center gap-2 text-sm leading-tight"><span aria-hidden="true" class="h-3 w-3 shrink-0 rounded-[3px]" style={`background:${p.color}`}></span><strong class="font-display text-lg font-normal text-wine">{fmt(p.value)}%</strong> {p.label}</span>
+                    <span class="flex items-baseline gap-2 text-sm leading-tight"><span aria-hidden="true" class="h-3 w-3 shrink-0 self-center rounded-[3px]" style={`background:${p.color}`}></span><strong class="font-display text-lg font-normal text-wine">{fmt(p.value)}%</strong> {p.label}</span>
                   ))}
                 </figcaption>
               </div>
@@ -132,20 +139,6 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
             </figure>
           ))}
         </div>
-
-        <!-- faixa etária -->
-        <figure class="flex flex-col gap-2 border-t-[1.5px] border-wine/15 pt-6">
-          <figcaption class="text-sm font-semibold text-wine">{t("Faixa etária", "Age range")}</figcaption>
-          <ul class="flex max-w-xl flex-col gap-1.5">
-            {ages.map((a) => (
-              <li class="grid grid-cols-[3.25rem_1fr_3rem] items-center gap-2 text-sm" title={`${a.label}: ${fmt(a.value)}%`}>
-                <span class="text-wine-soft">{a.label}</span>
-                <span class="h-3 rounded-r-[4px]" style={`width:${Math.max((a.value / maxAge) * 100, 1.5)}%;background:${a.value === maxAge ? C.wine : C.rose}`}></span>
-                <span class={`text-right ${a.value === maxAge ? "font-bold text-wine" : ""}`}>{fmt(a.value)}%</span>
-              </li>
-            ))}
-          </ul>
-        </figure>
 
         <a href={instagram} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-wine px-6 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">
           {t("Seguir no Instagram", "Follow on Instagram")}
@@ -156,7 +149,7 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
       <!-- redes -->
       <div data-reveal style="--reveal-delay: 100ms;" class={`hard-shadow ${card} flex flex-col gap-4 self-start`}>
         <p class="flex items-center gap-2 font-semibold text-wine"><Sparkle class="h-4 w-4" /> {t("Onde me encontrar", "Where to find me")}</p>
-        <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+        <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
           {networks.map((n) => (
             <li>
               <a href={n.href} target={n.href.startsWith("http") ? "_blank" : undefined} rel={n.href.startsWith("http") ? "noopener noreferrer" : undefined} class="flex items-center gap-3 rounded-2xl border-[1.5px] border-wine/20 bg-white/60 px-4 py-3 transition-colors hover:border-wine">
