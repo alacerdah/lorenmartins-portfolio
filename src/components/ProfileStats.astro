@@ -21,8 +21,8 @@ const followers = 2987;
 const stats = [
   { value: t("268,6 mil", "268.6K"), label: t("views", "views") },
   { value: t("79,3 mil", "79.3K"), label: t("contas alcançadas", "accounts reached") },
-  { value: "8,26%".replace(",", lang === "en" ? "." : ","), label: t("engajamento nos Reels", "Reels engagement") },
-  { value: t("5,5 mil", "5.5K"), label: t("visitas ao perfil", "profile visits") },
+  { value: t("12,6 mil", "12.6K"), label: t("interações", "interactions") },
+  { value: t("8,26%", "8.26%"), label: t("taxa de engajamento nos Reels", "Reels engagement rate") },
 ];
 
 // cores validadas pra daltonismo (paleta da marca um pouco mais forte); todo valor aparece escrito
@@ -31,12 +31,11 @@ const viewsAudience = [
   { label: t("Não seguidores", "Non-followers"), value: 52.5, color: C.wine },
   { label: t("Seguidores", "Followers"), value: 47.5, color: C.sky },
 ];
-const splits = [
-  { title: t("Views por formato", "Views by format"), parts: [{ label: "Stories", value: 63.3, color: C.wine }, { label: "Reels", value: 36.7, color: C.sky }] },
-  { title: t("Interações por formato", "Interactions by format"), parts: [{ label: "Reels", value: 58.3, color: C.wine }, { label: "Stories", value: 39.2, color: C.sky }, { label: "Posts", value: 2.5, color: C.rose }] },
-];
 // público (app do Instagram > Painel > Público)
-const women = 92.6;
+const gender = [
+  { label: t("Mulheres", "Women"), value: 92.6, color: C.wine },
+  { label: t("Homens", "Men"), value: 7.4, color: C.sky },
+];
 const ages = [
   { label: "13–17", value: 0.6 }, { label: "18–24", value: 17.1 }, { label: "25–34", value: 56.8 }, { label: "35–44", value: 17.1 },
   { label: "45–54", value: 5.6 }, { label: "55–64", value: 2.4 }, { label: "65+", value: 0.5 },
@@ -51,13 +50,16 @@ const countries = [
 ];
 
 const R = 54, CIRC = 2 * Math.PI * R;
-let acc = 0;
-const donut = viewsAudience.map((p) => {
-  const len = (p.value / 100) * CIRC;
-  const seg = { ...p, dash: `${Math.max(len - 3, 0)} ${CIRC}`, offset: -acc };
-  acc += len;
-  return seg;
-});
+// donut: 2px de folga entre as fatias
+const toDonut = (parts: { label: string; value: number; color: string }[]) => {
+  let acc = 0;
+  return parts.map((p) => {
+    const len = (p.value / 100) * CIRC;
+    const seg = { ...p, dash: `${Math.max(len - 3, 0)} ${CIRC}`, offset: -acc };
+    acc += len;
+    return seg;
+  });
+};
 
 const handle = "@bylorenmartins";
 const networks = [
@@ -102,45 +104,30 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
           <p class="mt-2 text-xs text-wine-soft">{t(`Insights do Instagram · últimos 30 dias · dados de ${DATA.pt}`, `Instagram Insights · last 30 days · data from ${DATA.en}`)}</p>
         </div>
 
-        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 md:grid-cols-[auto_1fr]">
-          <figure class="flex items-center gap-4">
-            <svg viewBox="0 0 140 140" class="h-32 w-32 shrink-0 -rotate-90" role="img" aria-label={t("Views: 52,5% de não seguidores e 47,5% de seguidores", "Views: 52.5% from non-followers and 47.5% from followers")}>
-              {donut.map((d) => (
-                <circle cx="70" cy="70" r={R} fill="none" stroke={d.color} stroke-width="22" stroke-dasharray={d.dash} stroke-dashoffset={d.offset}><title>{d.label}: {fmt(d.value)}%</title></circle>
-              ))}
-            </svg>
-            <figcaption class="flex flex-col gap-2">
-              <span class="text-sm font-semibold text-wine">{t("De onde vêm as views", "Where views come from")}</span>
-              {viewsAudience.map((d) => (
-                <span class="flex items-center gap-2 text-sm"><span aria-hidden="true" class="h-3 w-3 rounded-[3px]" style={`background:${d.color}`}></span><strong class="font-display text-xl font-normal text-wine">{fmt(d.value)}%</strong> {d.label}</span>
-              ))}
-            </figcaption>
-          </figure>
-          <div class="flex flex-col gap-4">
-            {splits.map((sp) => (
-              <figure class="flex flex-col gap-2">
-                <figcaption class="text-sm font-semibold text-wine">{sp.title}</figcaption>
-                <div class="flex h-6 w-full gap-[2px] overflow-hidden rounded-[6px]" role="img" aria-label={`${sp.title}: ${sp.parts.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
-                  {sp.parts.map((p) => <span class="h-full" style={`width:${p.value}%;background:${p.color}`} title={`${p.label}: ${fmt(p.value)}%`}></span>)}
-                </div>
-                <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                  {sp.parts.map((p) => <li class="flex items-center gap-1.5"><span aria-hidden="true" class="h-3 w-3 rounded-[3px]" style={`background:${p.color}`}></span>{p.label} <strong class="text-wine">{fmt(p.value)}%</strong></li>)}
-                </ul>
-              </figure>
-            ))}
-          </div>
+        <!-- views e gênero -->
+        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 sm:grid-cols-2">
+          {[
+            { title: t("De onde vêm as views", "Where views come from"), parts: viewsAudience },
+            { title: t("Gênero", "Gender"), parts: gender },
+          ].map((d) => (
+            <figure class="flex items-center gap-4">
+              <svg viewBox="0 0 140 140" class="h-28 w-28 shrink-0 -rotate-90 sm:h-32 sm:w-32" role="img" aria-label={`${d.title}: ${d.parts.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
+                {toDonut(d.parts).map((seg) => (
+                  <circle cx="70" cy="70" r={R} fill="none" stroke={seg.color} stroke-width="22" stroke-dasharray={seg.dash} stroke-dashoffset={seg.offset}><title>{seg.label}: {fmt(seg.value)}%</title></circle>
+                ))}
+              </svg>
+              <figcaption class="flex flex-col gap-2">
+                <span class="text-sm font-semibold text-wine">{d.title}</span>
+                {d.parts.map((p) => (
+                  <span class="flex items-center gap-2 text-sm"><span aria-hidden="true" class="h-3 w-3 shrink-0 rounded-[3px]" style={`background:${p.color}`}></span><strong class="font-display text-xl font-normal text-wine">{fmt(p.value)}%</strong> {p.label}</span>
+                ))}
+              </figcaption>
+            </figure>
+          ))}
         </div>
 
-        <!-- público -->
-        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 md:grid-cols-[auto_1fr_1fr]">
-          <div class="flex flex-col gap-1">
-            <span class="text-sm font-semibold text-wine">{t("Público", "Audience")}</span>
-            <span class="font-display text-5xl leading-none text-wine">{fmt(women)}%</span>
-            <span class="text-sm">{t("mulheres", "women")}</span>
-            <ul class="mt-3 flex flex-col gap-0.5 text-sm">
-              {countries.map((c) => <li><strong class="text-wine">{fmt(c.value)}%</strong> {c.label}</li>)}
-            </ul>
-          </div>
+        <!-- faixa etária e região -->
+        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 md:grid-cols-2">
           <figure class="flex flex-col gap-2">
             <figcaption class="text-sm font-semibold text-wine">{t("Faixa etária", "Age range")}</figcaption>
             <ul class="flex flex-col gap-1.5">
@@ -154,12 +141,13 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
             </ul>
           </figure>
           <figure class="flex flex-col gap-2">
-            <figcaption class="text-sm font-semibold text-wine">{t("Principais cidades", "Top cities")}</figcaption>
+            <figcaption class="text-sm font-semibold text-wine">{t("Região", "Location")}</figcaption>
             <ul class="flex flex-col gap-1.5">
               {cities.map((c) => (
                 <li class="flex items-baseline justify-between gap-3 border-b border-dotted border-wine/25 pb-1 text-sm"><span>{c.label}</span><span class="font-semibold text-wine">{fmt(c.value)}%</span></li>
               ))}
             </ul>
+            <p class="text-sm text-wine-soft">{countries.map((c) => `${c.label} ${fmt(c.value)}%`).join(" · ")}</p>
           </figure>
         </div>
 
