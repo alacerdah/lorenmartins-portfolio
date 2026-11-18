@@ -35,15 +35,20 @@ const splits = [
   { title: t("Views por formato", "Views by format"), parts: [{ label: "Stories", value: 63.3, color: C.wine }, { label: "Reels", value: 36.7, color: C.sky }] },
   { title: t("Interações por formato", "Interactions by format"), parts: [{ label: "Reels", value: 58.3, color: C.wine }, { label: "Stories", value: 39.2, color: C.sky }, { label: "Posts", value: 2.5, color: C.rose }] },
 ];
-// seguidores ativos por horário: média dos 7 dias
-const activeByDay: Record<string, number[]> = {
-  "0h": [451, 546, 532, 552, 528, 402, 310], "3h": [1202, 1260, 1271, 1283, 1276, 1133, 1017],
-  "6h": [1462, 1486, 1496, 1522, 1516, 1447, 1392], "9h": [1468, 1466, 1469, 1500, 1489, 1429, 1416],
-  "12h": [1514, 1515, 1530, 1554, 1533, 1440, 1463], "15h": [1465, 1475, 1466, 1491, 1482, 1412, 1456],
-  "18h": [831, 837, 851, 881, 1000, 988, 909], "21h": [214, 208, 215, 226, 290, 311, 240],
-};
-const hours = Object.entries(activeByDay).map(([h, v]) => ({ h, avg: Math.round(v.reduce((a, b) => a + b, 0) / v.length) }));
-const maxHour = Math.max(...hours.map((x) => x.avg));
+// público (app do Instagram > Painel > Público)
+const women = 92.6;
+const ages = [
+  { label: "13–17", value: 0.6 }, { label: "18–24", value: 17.1 }, { label: "25–34", value: 56.8 }, { label: "35–44", value: 17.1 },
+  { label: "45–54", value: 5.6 }, { label: "55–64", value: 2.4 }, { label: "65+", value: 0.5 },
+];
+const maxAge = Math.max(...ages.map((a) => a.value));
+const cities = [
+  { label: "São Paulo", value: 10.0 }, { label: "São José dos Campos", value: 8.5 }, { label: "Uberlândia", value: 6.4 },
+  { label: "Rio de Janeiro", value: 4.0 }, { label: "Belo Horizonte", value: 1.8 },
+];
+const countries = [
+  { label: t("Brasil", "Brazil"), value: 92.2 }, { label: "Portugal", value: 2.0 }, { label: t("Estados Unidos", "United States"), value: 1.7 },
+];
 
 const R = 54, CIRC = 2 * Math.PI * R;
 let acc = 0;
@@ -126,18 +131,37 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
           </div>
         </div>
 
-        <figure class="border-t-[1.5px] border-wine/15 pt-6">
-          <figcaption class="text-sm font-semibold text-wine">{t("Quando meus seguidores estão online", "When my followers are online")} <span class="font-normal text-wine-soft">· {t("média por horário", "average by hour")}</span></figcaption>
-          <div class="mt-3 flex h-32 items-end gap-2 border-b-[1.5px] border-wine/30 sm:gap-4" role="img" aria-label={hours.map((x) => `${x.h} ${x.avg}`).join(", ")}>
-            {hours.map((x) => (
-              <div class="flex h-full flex-1 flex-col items-center justify-end gap-1" title={`${x.h}: ${fmt(x.avg)}`}>
-                {x.avg === maxHour && <span class="text-xs font-bold text-wine">{t("pico", "peak")}</span>}
-                <span class="w-full max-w-[48px] rounded-t-[4px]" style={`height:${(x.avg / maxHour) * 80}%;background:${x.avg === maxHour ? C.wine : C.rose}`}></span>
-              </div>
-            ))}
+        <!-- público -->
+        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 md:grid-cols-[auto_1fr_1fr]">
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-semibold text-wine">{t("Público", "Audience")}</span>
+            <span class="font-display text-5xl leading-none text-wine">{fmt(women)}%</span>
+            <span class="text-sm">{t("mulheres", "women")}</span>
+            <ul class="mt-3 flex flex-col gap-0.5 text-sm">
+              {countries.map((c) => <li><strong class="text-wine">{fmt(c.value)}%</strong> {c.label}</li>)}
+            </ul>
           </div>
-          <div class="mt-1.5 flex gap-2 text-center text-xs text-wine-soft sm:gap-4">{hours.map((x) => <span class="flex-1">{x.h}</span>)}</div>
-        </figure>
+          <figure class="flex flex-col gap-2">
+            <figcaption class="text-sm font-semibold text-wine">{t("Faixa etária", "Age range")}</figcaption>
+            <ul class="flex flex-col gap-1.5">
+              {ages.map((a) => (
+                <li class="grid grid-cols-[3.25rem_1fr_3rem] items-center gap-2 text-sm" title={`${a.label}: ${fmt(a.value)}%`}>
+                  <span class="text-wine-soft">{a.label}</span>
+                  <span class="h-3 rounded-r-[4px]" style={`width:${Math.max((a.value / maxAge) * 100, 1.5)}%;background:${a.value === maxAge ? C.wine : C.rose}`}></span>
+                  <span class={`text-right ${a.value === maxAge ? "font-bold text-wine" : ""}`}>{fmt(a.value)}%</span>
+                </li>
+              ))}
+            </ul>
+          </figure>
+          <figure class="flex flex-col gap-2">
+            <figcaption class="text-sm font-semibold text-wine">{t("Principais cidades", "Top cities")}</figcaption>
+            <ul class="flex flex-col gap-1.5">
+              {cities.map((c) => (
+                <li class="flex items-baseline justify-between gap-3 border-b border-dotted border-wine/25 pb-1 text-sm"><span>{c.label}</span><span class="font-semibold text-wine">{fmt(c.value)}%</span></li>
+              ))}
+            </ul>
+          </figure>
+        </div>
 
         <a href={instagram} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-wine px-6 font-semibold text-offwhite transition-transform hover:-translate-y-0.5">
           {t("Seguir no Instagram", "Follow on Instagram")}

@@ -28,7 +28,7 @@ src/
     Layout.astro         ← shell HTML, meta tags, Google Fonts, IntersectionObserver
   components/
     Home.astro           ← a página inteira (TODOS os dados ficam no frontmatter)
-    ProfileStats.astro   ← seção "Mídia kit" do portfólio (#midia-kit): números do Instagram, gráficos e redes; os números e a data da coleta ficam no topo do arquivo
+    ProfileStats.astro   ← seção "Mídia kit" do portfólio (#midia-kit): números do Instagram, gráficos, público e redes; os números e a data da coleta ficam no topo do arquivo
     Photo.astro          ← imagem com placeholder (ícone + legenda quando sem src)
     VideoFrame.astro     ← moldura 9:16 com embed do Instagram (ou placeholder)
     OvalPortrait.astro   ← retrato oval da seção "Quem eu sou" (anel rosa, texto curvo, sparkles animados)
@@ -121,4 +121,4 @@ npm run build        # build de produção em dist/
 - [ ] Adicionar vídeos reais com `permalink` do Instagram/TikTok
 - [ ] Fotos reais na galeria UGC (a seção de carrosséis e fotos só aparece com imagens reais)
 - [ ] Slides reais nos carrosséis
-- [ ] Mídia kit: público (cidades, países, idade, gênero) e crescimento de seguidores, que só aparecem no app
+- [ ] Mídia kit: crescimento de seguidores, que só aparece no app
