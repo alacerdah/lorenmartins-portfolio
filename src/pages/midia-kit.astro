@@ -50,23 +50,20 @@ const donut = viewsAudience.map((p) => {
   return seg;
 });
 
-// publis e collabs: `src` = vídeo em public/videos (com a capa .jpg do mesmo nome); sem `src`, fica o espaço reservado
-// `tipo`: "Publi" (parceria paga), "Collab" ou "UGC"; `views` só quando o número veio dos insights do próprio Reel
-type Publi = { brand: string; tipo?: string; src?: string; views?: string };
+// publis (todas pagas): `src` = vídeo em public/videos (com a capa .jpg do mesmo nome); sem `src`, fica o espaço reservado
+// `collab`: true quando o Reel saiu em collab com a marca; `views` só quando o número veio dos insights do próprio Reel
+type Publi = { brand: string; collab?: boolean; src?: string; views?: string };
 const publis: Publi[] = [
-  { brand: "Mercure Hotel", tipo: "Collab", src: "/videos/experiencias-mercure.mp4" },
-  { brand: "Mirante", tipo: "Collab", src: "/videos/moda-mirante.mp4", views: "33 mil views" },
-  { brand: "Disney+", tipo: "Publi", views: "16,1 mil views" },
-  { brand: "Boh Gastronomia", tipo: "Collab", src: "/videos/experiencias-boh.mp4", views: "35,9 mil views" },
-  { brand: "Banho Premium", tipo: "Publi" },
-  { brand: "Panda Alianças", tipo: "Collab", src: "/videos/moda-panda-aliancas.mp4" },
+  { brand: "Mercure Hotel", collab: true, src: "/videos/experiencias-mercure.mp4" },
+  { brand: "Mirante", collab: true, src: "/videos/moda-mirante.mp4", views: "33 mil views" },
+  { brand: "Disney+", src: "/videos/tech-disney-plus.mp4", views: "16,1 mil views" },
+  { brand: "Boh Gastronomia", collab: true, src: "/videos/experiencias-boh.mp4", views: "35,9 mil views" },
+  { brand: "Panda Alianças", collab: true, src: "/videos/moda-panda-aliancas.mp4" },
   { brand: "Color Wow", src: "/videos/autocuidado-color-wow.mp4" },
   { brand: "Loungerie", src: "/videos/moda-loungerie.mp4" },
-  { brand: "Deby Alimentação Saudável", tipo: "Collab", src: "/videos/bem-estar-marmitas-deby.mp4" },
-  { brand: "Authentic Nutri", src: "/videos/bem-estar-authentic-nutri.mp4" },
-  { brand: "Thermolife", src: "/videos/lifestyle-thermolife.mp4" },
-  { brand: "Parceria como influenciadora", tipo: "Em breve" },
-  { brand: "Parceria como influenciadora", tipo: "Em breve" },
+  { brand: "Deby Alimentação Saudável", collab: true, src: "/videos/bem-estar-marmitas-deby.mp4" },
+  { brand: "Authentic Nutri", collab: true, src: "/videos/bem-estar-authentic-nutri.mp4" },
+  { brand: "Thermolife", collab: true, src: "/videos/lifestyle-thermolife.mp4" },
 ];
 const poster = (src?: string) => src?.replace(/\.mp4$/, ".jpg");
 
@@ -183,7 +180,7 @@ const deliverables = [
 
     <!-- publis -->
     <section class="kit-publis mx-auto max-w-[960px] px-6 pt-14">
-      <h2 class="flex items-center gap-3 font-display text-[clamp(2rem,4vw,2.75rem)] leading-tight text-wine"><Sparkle class="h-6 w-6" /> Publis <span class="italic">e collabs</span></h2>
+      <h2 class="flex items-center gap-3 font-display text-[clamp(2rem,4vw,2.75rem)] leading-tight text-wine"><Sparkle class="h-6 w-6" /> Publis <span class="italic">recentes</span></h2>
       <p class="kit-print-only mt-2 text-sm text-wine-soft">Assista aos vídeos em lorenmartins.com.br/midia-kit</p>
       <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
         {publis.map((v) => (
@@ -191,7 +188,8 @@ const deliverables = [
             <VideoFrame label={v.src ? v.brand : `Vídeo em breve`} src={v.src} poster={poster(v.src)} badge={v.views} class="rounded-[18px]" />
             <p class="flex flex-wrap items-center gap-x-2 gap-y-1 leading-tight">
               <span class="font-display text-lg text-wine">{v.brand}</span>
-              {v.tipo && <span class="rounded-full bg-sky px-2 py-0.5 text-[11px] font-bold tracking-[0.06em] text-wine uppercase">{v.tipo}</span>}
+              <span class="rounded-full bg-rose px-2 py-0.5 text-[11px] font-bold tracking-[0.06em] text-wine uppercase">Publi</span>
+              {v.collab && <span class="rounded-full bg-sky px-2 py-0.5 text-[11px] font-bold tracking-[0.06em] text-wine uppercase">Collab</span>}
             </p>
           </li>
         ))}
