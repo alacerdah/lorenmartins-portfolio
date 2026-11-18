@@ -29,8 +29,8 @@ const stats: { value: string; label: string; sub?: string[] }[] = [
 const C = { wine: "#9B2C44", sky: "#3F86CF", rose: "#E58FA3" };
 // público (app do Instagram > Painel > Público)
 const gender = [
-  { label: t("Mulheres", "Women"), value: 92.6, color: C.wine },
   { label: t("Homens", "Men"), value: 7.4, color: C.sky },
+  { label: t("Mulheres", "Women"), value: 92.6, color: C.wine },
 ];
 const ages = [
   { label: "13–17", value: 0.6 }, { label: "18–24", value: 17.1 }, { label: "25–34", value: 56.8 }, { label: "35–44", value: 17.1 },
@@ -38,10 +38,10 @@ const ages = [
 ];
 // faixa etária em pizza: as 3 maiores faixas + o resto junto (fatia neutra)
 const ageParts = [
-  { label: t("25–34 anos", "25–34"), value: 56.8, color: C.wine },
-  { label: t("18–24 anos", "18–24"), value: 17.1, color: C.sky },
-  { label: t("35–44 anos", "35–44"), value: 17.1, color: C.rose },
-  { label: t("Outras idades", "Other ages"), value: 9.1, color: "#E3D6C8" },
+  { label: "18–24", value: 17.1, color: C.sky },
+  { label: "35–44", value: 17.1, color: C.rose },
+  { label: t("outras", "other"), value: 9.1, color: "#E3D6C8" },
+  { label: "25–34", value: 56.8, color: C.wine },
 ];
 const cities = [
   { label: "São Paulo", value: 10.0 }, { label: "São José dos Campos", value: 8.5 }, { label: "Uberlândia", value: 6.4 },
@@ -50,23 +50,37 @@ const cities = [
 // região em pizza: as 3 maiores cidades + o resto do público junto (cores validadas; a fatia "outras" é neutra)
 const regionParts = [
   { label: "São Paulo", value: 10.0, color: C.wine },
-  { label: "São José dos Campos", value: 8.5, color: C.sky },
+  { label: "São José", value: 8.5, color: C.sky },
   { label: "Uberlândia", value: 6.4, color: C.rose },
-  { label: t("Outras cidades", "Other cities"), value: 75.1, color: "#E3D6C8" },
+  { label: t("outras", "other"), value: 75.1, color: "#E3D6C8" },
 ];
 const countries = [
   { label: t("Brasil", "Brazil"), value: 92.2 }, { label: "Portugal", value: 2.0 }, { label: t("Estados Unidos", "United States"), value: 1.7 },
 ];
 
-const R = 54, CIRC = 2 * Math.PI * R;
-// donut: 2px de folga entre as fatias
-const toDonut = (parts: { label: string; value: number; color: string }[]) => {
-  let acc = 0;
+// pizza com rótulo fora de cada fatia (como na referência). Ângulos em graus, sentido horário a partir do topo;
+// `start` gira a pizza pra deixar as fatias pequenas onde os rótulos têm espaço
+type Part = { label: string; value: number; color: string };
+const PIE = { w: 480, h: 290, cx: 240, cy: 145, r: 100, inner: 58, labelR: 126 };
+const pt = (deg: number, r: number) => {
+  const a = ((deg - 90) * Math.PI) / 180;
+  return [PIE.cx + r * Math.cos(a), PIE.cy + r * Math.sin(a)];
+};
+const pie = (parts: Part[], start: number) => {
+  let acc = start;
   return parts.map((p) => {
-    const len = (p.value / 100) * CIRC;
-    const seg = { ...p, dash: `${Math.max(len - 3, 0)} ${CIRC}`, offset: -acc };
-    acc += len;
-    return seg;
+    const a0 = acc, a1 = acc + (p.value / 100) * 360;
+    acc = a1;
+    const gap = 0.8; // folga entre fatias
+    const [x0, y0] = pt(a0 + gap, PIE.r), [x1, y1] = pt(a1 - gap, PIE.r);
+    const [x2, y2] = pt(a1 - gap, PIE.inner), [x3, y3] = pt(a0 + gap, PIE.inner);
+    const big = a1 - a0 > 180 ? 1 : 0;
+    const d = `M${x0} ${y0}A${PIE.r} ${PIE.r} 0 ${big} 1 ${x1} ${y1}L${x2} ${y2}A${PIE.inner} ${PIE.inner} 0 ${big} 0 ${x3} ${y3}Z`;
+    const mid = (a0 + a1) / 2;
+    const [lx, ly] = pt(mid, PIE.labelR);
+    const side = Math.sin((mid * Math.PI) / 180);
+    const anchor = side > 0.25 ? "start" : side < -0.25 ? "end" : "middle";
+    return { ...p, d, lx, ly, anchor };
   });
 };
 
@@ -114,28 +128,25 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
           <p class="mt-2 text-xs text-wine-soft">{t(`Insights do Instagram · últimos 30 dias · dados de ${DATA.pt}`, `Instagram Insights · last 30 days · data from ${DATA.en}`)}</p>
         </div>
 
-        <!-- gênero, faixa etária e região -->
-        <div class="grid gap-6 border-t-[1.5px] border-wine/15 pt-6 md:grid-cols-3">
+        <!-- gênero, faixa etária e região: pizzas do mesmo tamanho, rótulo em volta e título embaixo -->
+        <div class="grid gap-8 border-t-[1.5px] border-wine/15 pt-6 sm:grid-cols-3 sm:gap-4">
           {[
-            { title: t("Gênero", "Gender"), parts: gender, note: "" },
-            { title: t("Faixa etária", "Age range"), parts: ageParts, note: `${t("Outras idades", "Other ages")}: ${ages.filter((a) => !["18–24", "25–34", "35–44"].includes(a.label)).map((a) => `${a.label} ${fmt(a.value)}%`).join(" · ")}` },
-            { title: t("Região", "Location"), parts: regionParts, note: `${t("Também", "Also")}: ${cities.slice(3).map((c) => `${c.label} ${fmt(c.value)}%`).join(" · ")}. ${countries.map((c) => `${c.label} ${fmt(c.value)}%`).join(" · ")}` },
+            { title: t("Faixa etária", "Age range"), slices: pie(ageParts, 20), note: `${t("outras", "other")}: ${ages.filter((a) => !["18–24", "25–34", "35–44"].includes(a.label)).map((a) => `${a.label} ${fmt(a.value)}%`).join(" · ")}` },
+            { title: t("Gênero", "Gender"), slices: pie(gender, 333), note: "" },
+            { title: t("Região", "Location"), slices: pie(regionParts, 28), note: `${t("São José = São José dos Campos", "São José = São José dos Campos")} · ${t("Brasil", "Brazil")} ${fmt(countries[0].value)}%` },
           ].map((d) => (
-            <figure class="flex flex-col gap-3">
-              <div class="flex items-center gap-4 md:flex-col md:items-start">
-                <svg viewBox="0 0 140 140" class="h-28 w-28 shrink-0 -rotate-90 sm:h-32 sm:w-32" role="img" aria-label={`${d.title}: ${d.parts.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
-                  {toDonut(d.parts).map((seg) => (
-                    <circle cx="70" cy="70" r={R} fill="none" stroke={seg.color} stroke-width="22" stroke-dasharray={seg.dash} stroke-dashoffset={seg.offset}><title>{seg.label}: {fmt(seg.value)}%</title></circle>
-                  ))}
-                </svg>
-                <figcaption class="flex flex-col gap-1.5">
-                  <span class="text-sm font-semibold text-wine">{d.title}</span>
-                  {d.parts.map((p) => (
-                    <span class="flex items-baseline gap-2 text-sm leading-tight"><span aria-hidden="true" class="h-3 w-3 shrink-0 self-center rounded-[3px]" style={`background:${p.color}`}></span><strong class="font-display text-lg font-normal text-wine">{fmt(p.value)}%</strong> {p.label}</span>
-                  ))}
-                </figcaption>
-              </div>
-              {d.note && <p class="text-xs leading-relaxed text-wine-soft">{d.note}</p>}
+            <figure class="flex flex-col items-center text-center">
+              <svg viewBox={`0 0 ${PIE.w} ${PIE.h}`} class="w-full max-w-[340px] overflow-visible" role="img" aria-label={`${d.title}: ${d.slices.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
+                {d.slices.map((p) => <path d={p.d} fill={p.color}><title>{p.label}: {fmt(p.value)}%</title></path>)}
+                {d.slices.map((p) => (
+                  <text x={p.lx} y={p.ly - 4} text-anchor={p.anchor} class="fill-wine" style="font-size:25px;font-weight:700;font-style:italic">
+                    <tspan x={p.lx}>{p.label}</tspan>
+                    <tspan x={p.lx} dy="27">{fmt(p.value)}%</tspan>
+                  </text>
+                ))}
+              </svg>
+              <figcaption class="mt-1 font-display text-2xl text-wine">{d.title}</figcaption>
+              {d.note && <p class="text-sm text-wine-soft italic">{d.note}</p>}
             </figure>
           ))}
         </div>
