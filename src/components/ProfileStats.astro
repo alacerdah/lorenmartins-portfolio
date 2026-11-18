@@ -29,31 +29,27 @@ const stats: { value: string; label: string; sub?: string[] }[] = [
 const C = { wine: "#9B2C44", sky: "#3F86CF", rose: "#E58FA3" };
 // público (app do Instagram > Painel > Público)
 const gender = [
-  { label: t("Homens", "Men"), value: 7.4, color: C.sky },
+  { label: t("Homens", "Men"), value: 7.4, color: "#F0B8C4" },
   { label: t("Mulheres", "Women"), value: 92.6, color: C.wine },
 ];
-const ages = [
-  { label: "13–17", value: 0.6 }, { label: "18–24", value: 17.1 }, { label: "25–34", value: 56.8 }, { label: "35–44", value: 17.1 },
-  { label: "45–54", value: 5.6 }, { label: "55–64", value: 2.4 }, { label: "65+", value: 0.5 },
-];
-// faixa etária em pizza: as 3 maiores faixas + o resto junto (fatia neutra)
+// faixa etária em pizza com todas as faixas (como na referência). Fatias abaixo de 1% ficam sem rótulo
+const W = C.wine, P = "#F0B8C4"; // vinho e rosa alternados, como na referência; cada fatia tem o nome escrito do lado
 const ageParts = [
-  { label: "18–24", value: 17.1, color: C.sky },
-  { label: "35–44", value: 17.1, color: C.rose },
-  { label: t("outras", "other"), value: 9.1, color: "#E3D6C8" },
-  { label: "25–34", value: 56.8, color: C.wine },
+  { label: "25–34", value: 56.8, color: W },
+  { label: "35–44", value: 17.1, color: P },
+  { label: "45–54", value: 5.6, color: W },
+  { label: "55–64", value: 2.4, color: P },
+  { label: "65+", value: 0.5, color: W },
+  { label: "13–17", value: 0.6, color: P },
+  { label: "18–24", value: 17.1, color: W },
 ];
 const cities = [
   { label: "São Paulo", value: 10.0 }, { label: "São José dos Campos", value: 8.5 }, { label: "Uberlândia", value: 6.4 },
   { label: "Rio de Janeiro", value: 4.0 }, { label: "Belo Horizonte", value: 1.8 },
 ];
-// região em pizza: as 3 maiores cidades + o resto do público junto (cores validadas; a fatia "outras" é neutra)
-const regionParts = [
-  { label: "São Paulo", value: 10.0, color: C.wine },
-  { label: "São José", value: 8.5, color: C.sky },
-  { label: "Uberlândia", value: 6.4, color: C.rose },
-  { label: t("outras", "other"), value: 75.1, color: "#E3D6C8" },
-];
+// região em pizza como na referência: a fatia de cada cidade é a parte dela entre as 5 principais cidades
+const topCitiesTotal = cities.reduce((sum, c) => sum + c.value, 0);
+const regionParts = cities.map((c, i) => ({ label: c.label === "São José dos Campos" ? "São José" : c.label, value: Math.round((c.value / topCitiesTotal) * 1000) / 10, color: i % 2 ? P : W }));
 const countries = [
   { label: t("Brasil", "Brazil"), value: 92.2 }, { label: "Portugal", value: 2.0 }, { label: t("Estados Unidos", "United States"), value: 1.7 },
 ];
@@ -131,18 +127,20 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
         <!-- gênero, faixa etária e região: pizzas do mesmo tamanho, rótulo em volta e título embaixo -->
         <div class="grid gap-8 border-t-[1.5px] border-wine/15 pt-6 sm:grid-cols-3 sm:gap-4">
           {[
-            { title: t("Faixa etária", "Age range"), slices: pie(ageParts, 20), note: `${t("outras", "other")}: ${ages.filter((a) => !["18–24", "25–34", "35–44"].includes(a.label)).map((a) => `${a.label} ${fmt(a.value)}%`).join(" · ")}` },
+            { title: t("Faixa etária", "Age range"), slices: pie(ageParts, 339), note: "" },
             { title: t("Gênero", "Gender"), slices: pie(gender, 333), note: "" },
-            { title: t("Região", "Location"), slices: pie(regionParts, 28), note: `${t("São José = São José dos Campos", "São José = São José dos Campos")} · ${t("Brasil", "Brazil")} ${fmt(countries[0].value)}%` },
+            { title: t("Região", "Location"), slices: pie(regionParts, 294.6), note: `${fmt(countries[0].value)}% ${t("no Brasil", "in Brazil")}` },
           ].map((d) => (
             <figure class="flex flex-col items-center text-center">
               <svg viewBox={`0 0 ${PIE.w} ${PIE.h}`} class="w-full max-w-[340px] overflow-visible" role="img" aria-label={`${d.title}: ${d.slices.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
                 {d.slices.map((p) => <path d={p.d} fill={p.color}><title>{p.label}: {fmt(p.value)}%</title></path>)}
-                {d.slices.map((p) => (
-                  <text x={p.lx} y={p.ly - 4} text-anchor={p.anchor} class="fill-wine" style="font-size:25px;font-weight:700;font-style:italic">
-                    <tspan x={p.lx}>{p.label}</tspan>
-                    <tspan x={p.lx} dy="27">{fmt(p.value)}%</tspan>
-                  </text>
+                {d.slices.filter((p) => p.value >= 1).map((p) => (
+                  p.value < 6 && p.label.length <= 6
+                    ? <text x={p.lx} y={p.ly + 8} text-anchor={p.anchor} class="fill-wine" style="font-size:25px;font-weight:700;font-style:italic">{p.label} {fmt(p.value)}%</text>
+                    : <text x={p.lx} y={p.ly - 4} text-anchor={p.anchor} class="fill-wine" style="font-size:25px;font-weight:700;font-style:italic">
+                        <tspan x={p.lx}>{p.label}</tspan>
+                        <tspan x={p.lx} dy="27">{fmt(p.value)}%</tspan>
+                      </text>
                 ))}
               </svg>
               <figcaption class="mt-1 font-display text-2xl text-wine">{d.title}</figcaption>
