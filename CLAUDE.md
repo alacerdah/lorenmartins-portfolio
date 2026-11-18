@@ -63,7 +63,7 @@ Para adicionar fotos: colocar em `public/images/` e usar o caminho `/images/nome
 
 ## Seções da página
 
-1. **Header** — fixo, com navegação e botão "Vamos conversar"
+1. **Header** — fixo, com navegação, PT/EN e botão "Mídia kit"
 2. **Hero** — foto da Loren, tags, headline, CTAs
 3. **Marquee de marcas** — carrossel animado duplo (fundo vinho + faixa azul reversa)
 4. **Quem eu sou** — seção com fundo listrado, card com bio + retrato oval animado
