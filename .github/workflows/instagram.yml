@@ -1,0 +1,41 @@
+# Atualiza os números do mídia kit (src/data/instagram.json) pela API do Instagram toda segunda de manhã.
+# Também dá pra rodar na hora: aba Actions > "Atualizar mídia kit" > Run workflow.
+# Quando algum número muda, o robô faz um commit no main e o Netlify publica o site sozinho.
+name: Atualizar mídia kit
+
+on:
+  schedule:
+    - cron: "17 11 * * 1" # segunda, 8h17 em Brasília
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Buscar números do Instagram
+        run: node scripts/update-instagram.mjs
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+      - name: Salvar no site
+        run: |
+          if git diff --quiet src/data/instagram.json; then
+            echo "Nada mudou."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/instagram.json
+          git commit -m "chore(midia-kit): números do Instagram de $(date -u +%d/%m/%Y)"
+          git push

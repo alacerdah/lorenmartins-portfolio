@@ -1,0 +1,37 @@
+{
+  "collectedAt": "2026-11-17",
+  "source": "manual",
+  "followers": 2987,
+  "last30Days": {
+    "views": 268627,
+    "viewsNonFollowersPct": 52.5,
+    "reach": 79327,
+    "interactions": 12636,
+    "reelsEngagementPct": 8.26
+  },
+  "audience": {
+    "womenPct": 92.6,
+    "menPct": 7.4,
+    "ages": {
+      "13-17": 0.6,
+      "18-24": 17.1,
+      "25-34": 56.8,
+      "35-44": 17.1,
+      "45-54": 5.6,
+      "55-64": 2.4,
+      "65+": 0.5
+    },
+    "cities": [
+      { "name": "São Paulo", "pct": 10.0 },
+      { "name": "São José dos Campos", "pct": 8.5 },
+      { "name": "Uberlândia", "pct": 6.4 },
+      { "name": "Rio de Janeiro", "pct": 4.0 },
+      { "name": "Belo Horizonte", "pct": 1.8 }
+    ],
+    "countries": [
+      { "code": "BR", "pct": 92.2 },
+      { "code": "PT", "pct": 2.0 },
+      { "code": "US", "pct": 1.7 }
+    ]
+  }
+}

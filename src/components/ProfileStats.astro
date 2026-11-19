@@ -1,7 +1,9 @@
 ---
-// seção "Mídia kit" do portfólio: números do Instagram + redes. Todos os números ficam aqui, com a data da coleta.
-// fonte: Insights do Instagram @bylorenmartins (versão web). Atualize os números e a DATA juntos.
+// seção "Mídia kit" do portfólio: números do Instagram + redes.
+// Os números ficam em src/data/instagram.json. O robô do GitHub (.github/workflows/instagram.yml) atualiza esse arquivo
+// toda semana pela API da Meta; dá pra editar à mão também (mantenha `collectedAt` com a data da coleta).
 import Sparkle from './Sparkle.astro';
+import ig from '../data/instagram.json';
 
 interface Props {
   lang?: "pt" | "en";
@@ -12,47 +14,59 @@ interface Props {
 }
 const { lang = "pt", whatsapp, email, instagram, tiktok } = Astro.props;
 const t = (pt: string, en: string) => (lang === "en" ? en : pt);
-const fmt = (n: number) => n.toLocaleString(lang === "en" ? "en-US" : "pt-BR", { maximumFractionDigits: 1 });
+const locale = lang === "en" ? "en-US" : "pt-BR";
+const fmt = (n: number) => n.toLocaleString(locale, { maximumFractionDigits: 1 });
+// número grande resumido: 268.627 → "268,6 mil" (pt) / "268.6K" (en)
+const short = (n: number) => {
+  if (n >= 1_000_000) return lang === "en" ? `${fmt(Math.floor(n / 100_000) / 10)}M` : `${fmt(Math.floor(n / 100_000) / 10)} mi`;
+  if (n >= 10_000) return lang === "en" ? `${fmt(Math.floor(n / 100) / 10)}K` : `${fmt(Math.floor(n / 100) / 10)} mil`;
+  return fmt(n);
+};
 
-const DATA = { pt: "17/11/2026", en: "Nov 17, 2026" };
-const followers = 2987;
+const [yy, mm, dd] = ig.collectedAt.split("-").map(Number);
+const collected = new Date(Date.UTC(yy, mm - 1, dd));
+const DATA = {
+  pt: collected.toLocaleDateString("pt-BR", { timeZone: "UTC" }),
+  en: collected.toLocaleDateString("en-US", { timeZone: "UTC", month: "short", day: "numeric", year: "numeric" }),
+};
+const followers = ig.followers;
+const m = ig.last30Days;
 
 // últimos 30 dias
 const stats: { value: string; label: string; sub?: string[] }[] = [
-  { value: t("268,6 mil", "268.6K"), label: t("views", "views"), sub: [t("52,5% de não seguidores", "52.5% from non-followers"), t("47,5% de seguidores", "47.5% from followers")] },
-  { value: t("79,3 mil", "79.3K"), label: t("contas alcançadas", "accounts reached") },
-  { value: t("12,6 mil", "12.6K"), label: t("interações", "interactions") },
-  { value: t("8,26%", "8.26%"), label: t("taxa de engajamento nos Reels", "Reels engagement rate") },
+  {
+    value: short(m.views),
+    label: t("views", "views"),
+    sub: m.viewsNonFollowersPct == null ? undefined : [
+      t(`${fmt(m.viewsNonFollowersPct)}% de não seguidores`, `${fmt(m.viewsNonFollowersPct)}% from non-followers`),
+      t(`${fmt(100 - m.viewsNonFollowersPct)}% de seguidores`, `${fmt(100 - m.viewsNonFollowersPct)}% from followers`),
+    ],
+  },
+  { value: short(m.reach), label: t("contas alcançadas", "accounts reached") },
+  { value: short(m.interactions), label: t("interações", "interactions") },
+  { value: `${m.reelsEngagementPct.toLocaleString(locale, { maximumFractionDigits: 2 })}%`, label: t("taxa de engajamento nos Reels", "Reels engagement rate") },
 ];
 
 // cores validadas pra daltonismo (paleta da marca um pouco mais forte); todo valor aparece escrito
 const C = { wine: "#9B2C44", sky: "#3F86CF", rose: "#E58FA3" };
-// público (app do Instagram > Painel > Público)
-const gender = [
-  { label: t("Homens", "Men"), value: 7.4, color: "#F0B8C4" },
-  { label: t("Mulheres", "Women"), value: 92.6, color: C.wine },
-];
-// faixa etária em pizza com todas as faixas (como na referência). Fatias abaixo de 1% ficam sem rótulo
 const W = C.wine, P = "#F0B8C4"; // vinho e rosa alternados, como na referência; cada fatia tem o nome escrito do lado
-const ageParts = [
-  { label: "25–34", value: 56.8, color: W },
-  { label: "35–44", value: 17.1, color: P },
-  { label: "45–54", value: 5.6, color: W },
-  { label: "55–64", value: 2.4, color: P },
-  { label: "65+", value: 0.5, color: W },
-  { label: "13–17", value: 0.6, color: P },
-  { label: "18–24", value: 17.1, color: W },
+const a = ig.audience;
+const gender = [
+  { label: t("Homens", "Men"), value: a.menPct, color: P },
+  { label: t("Mulheres", "Women"), value: a.womenPct, color: W },
 ];
-const cities = [
-  { label: "São Paulo", value: 10.0 }, { label: "São José dos Campos", value: 8.5 }, { label: "Uberlândia", value: 6.4 },
-  { label: "Rio de Janeiro", value: 4.0 }, { label: "Belo Horizonte", value: 1.8 },
-];
+// faixa etária em pizza com todas as faixas (como na referência). Fatias abaixo de 1% ficam sem rótulo.
+// A ordem das fatias deixa as faixas pequenas juntas do lado esquerdo, onde os rótulos têm espaço
+const ageOrder = ["25-34", "35-44", "45-54", "55-64", "65+", "13-17", "18-24"];
+const ages = a.ages as Record<string, number>;
+const ageParts = ageOrder.filter((k) => ages[k] != null).map((k, i) => ({ label: k.replace("-", "–"), value: ages[k], color: i % 2 ? P : W }));
+const cities = a.cities.map((c) => ({ label: c.name, value: c.pct }));
 // região em pizza como na referência: a fatia de cada cidade é a parte dela entre as 5 principais cidades
 const topCitiesTotal = cities.reduce((sum, c) => sum + c.value, 0);
 const regionParts = cities.map((c, i) => ({ label: c.label === "São José dos Campos" ? "São José" : c.label, value: Math.round((c.value / topCitiesTotal) * 1000) / 10, color: i % 2 ? P : W }));
-const countries = [
-  { label: t("Brasil", "Brazil"), value: 92.2 }, { label: "Portugal", value: 2.0 }, { label: t("Estados Unidos", "United States"), value: 1.7 },
-];
+const countryName = new Intl.DisplayNames([locale], { type: "region" });
+const countries = a.countries.map((c) => ({ label: countryName.of(c.code) ?? c.code, value: c.pct }));
+const brazil = a.countries.find((c) => c.code === "BR");
 
 // pizza com rótulo fora de cada fatia (como na referência). Ângulos em graus, sentido horário a partir do topo;
 // `start` gira a pizza pra deixar as fatias pequenas onde os rótulos têm espaço
@@ -129,7 +143,7 @@ const card = "rounded-[28px] border-[1.5px] border-wine bg-offwhite p-5 sm:p-7";
           {[
             { title: t("Faixa etária", "Age range"), slices: pie(ageParts, 339), note: "" },
             { title: t("Gênero", "Gender"), slices: pie(gender, 333), note: "" },
-            { title: t("Região", "Location"), slices: pie(regionParts, 294.6), note: `${fmt(countries[0].value)}% ${t("no Brasil", "in Brazil")}` },
+            { title: t("Região", "Location"), slices: pie(regionParts, 294.6), note: brazil ? `${fmt(brazil.pct)}% ${t("no Brasil", "in Brazil")}` : "" },
           ].map((d) => (
             <figure class="flex flex-col items-center text-center">
               <svg viewBox={`0 0 ${PIE.w} ${PIE.h}`} class="w-full max-w-[340px] overflow-visible" role="img" aria-label={`${d.title}: ${d.slices.map((p) => `${p.label} ${fmt(p.value)}%`).join(", ")}`}>
