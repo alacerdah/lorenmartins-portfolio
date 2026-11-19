@@ -81,8 +81,8 @@ const niches = [
 // sem nenhum dos dois, espaço reservado. Preencha `realVideos` por nicho, quantos vídeos quiser
 // nicho sem nenhum ganha 3 espaços reservados.
 // `brand` = marca do vídeo (só `brand`, sem vídeo = espaço reservado com o nome da marca); `badge` = adesivo sobre o vídeo;
-// `views` = visualizações: nas abas, os vídeos com mais views vêm primeiro; `format` = nota sobre o vídeo (não aparece no site);
-type Video = { niche: string; brand: string; format: string; src?: string; permalink?: string; badge?: string | string[]; views?: number };
+// `views` = visualizações: nas abas, os vídeos com mais views vêm primeiro (`first: true` passa na frente de todos); `embed` = link de vídeo do Canva (/view?embed); `format` = nota sobre o vídeo (não aparece no site);
+type Video = { niche: string; brand: string; format: string; src?: string; permalink?: string; embed?: string; first?: boolean; badge?: string | string[]; views?: number };
 const realVideos: Record<string, Partial<Video>[]> = {
   beleza: [
     { brand: "Color Wow", src: "/videos/autocuidado-color-wow.mp4" },
@@ -125,6 +125,8 @@ const realVideos: Record<string, Partial<Video>[]> = {
     { brand: "Basic", src: "/videos/moda-basic-2.mp4", badge: "Aesthetic" },
   ],
   experiencias: [
+    { brand: "Mercure Hotel", embed: "https://www.canva.com/design/DAHbYgVPHks/DfbvdOKcRSnRcXIqp1jnqg/view?embed", first: true },
+    { brand: "Lig Lig", embed: "https://www.canva.com/design/DAHbYrCJdpk/xMf03lkL9rMXIo0ecHjk6w/view?embed", first: true },
     { brand: "Boh Gastronomia", src: "/videos/experiencias-boh.mp4", badge: t("+79 mil views", "79K+ views"), views: 79000 },
     { brand: "Restaurante Amicci", format: t("Dia dos Namorados", "Valentine's Day"), src: "/videos/experiencias-amicci.mp4", badge: t("+35 mil views", "35K+ views"), views: 35000 },
     { brand: "Mercure Hotel", src: "/videos/experiencias-mercure.mp4", badge: "Aesthetic" },
@@ -134,8 +136,9 @@ const realVideos: Record<string, Partial<Video>[]> = {
     { brand: "KitKat", src: "/videos/experiencias-kitkat.mp4", badge: "Rock in Rio" },
     { brand: "Gioco Pizzeria", src: "/videos/experiencias-gioco.mp4", badge: t("+23 mil views", "23K+ views"), views: 23000 },
   ],
-  bebidas: [{ brand: "Don Cream", src: "/videos/bebidas-don-cream.mp4", badge: "Kit" }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-2.mp4", badge: t("Ação promocional", "Promo campaign") }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-3.mp4", badge: "Aesthetic" }],
+  bebidas: [{ brand: "Don Cream", embed: "https://www.canva.com/design/DAHbYnumqDk/m_dOgfcqppus_hlhYzZKMQ/view?embed", badge: "Black Friday", first: true }, { brand: "Don Cream", src: "/videos/bebidas-don-cream.mp4", badge: "Kit" }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-2.mp4", badge: t("Ação promocional", "Promo campaign") }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-3.mp4", badge: "Aesthetic" }],
   tech: [
+    { brand: "PuggyWare", embed: "https://www.canva.com/design/DAHaXpG007w/ZT0eIGs1KdlLzDMHWLjJMA/view?embed", first: true },
     { brand: "InfinitePay", src: "/videos/tech-infinitepay.mp4", badge: "Black Friday" },
     { brand: "Disney+", src: "/videos/tech-disney-plus.mp4", badge: t("+16 mil views", "16K+ views") },
     { brand: "Zapia AI", src: "/videos/tech-zapia.mp4" },
@@ -346,7 +349,7 @@ const feedbacks = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 const videosOf = (id: string) => videos.filter((v) => v.niche === id);
-const tabVideosOf = (id: string) => videosOf(id).filter((v) => v.src || v.permalink).sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
+const tabVideosOf = (id: string) => videosOf(id).filter((v) => v.src || v.permalink || v.embed).sort((a, b) => Number(!!b.first) - Number(!!a.first) || (b.views ?? 0) - (a.views ?? 0));
 const otherNiches = niches.filter((n) => tabVideosOf(n.id).length > 0);
 const isSeasonal = (id: string) => id === "black-friday";
 const isPlaceholder = (brand: string) => brand.startsWith("[");
@@ -650,7 +653,7 @@ const linkOr = (url: string) => url || "#contato";
         <div data-panel={`niche:${n.id}`} data-rail hidden={i !== 0} aria-label={n.label} class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-color:var(--color-wine)_transparent] [scrollbar-width:thin]">
           {tabVideosOf(n.id).map((v, j) => (
             <figure data-card class="relative w-[200px] shrink-0 snap-start sm:w-[230px]">
-              <VideoFrame label={isPlaceholder(v.brand) ? t(`Vídeo ${j + 1}`, `Video ${j + 1}`) : v.brand} src={v.src} poster={v.poster} permalink={v.permalink} badge={v.badge} class="rounded-2xl bg-rose" />
+              <VideoFrame label={isPlaceholder(v.brand) ? t(`Vídeo ${j + 1}`, `Video ${j + 1}`) : v.brand} src={v.src} poster={v.poster} permalink={v.permalink} embed={v.embed} badge={v.badge} class="rounded-2xl bg-rose" />
               <div data-card-cover class="pointer-events-none absolute inset-0 z-[5]">
                 <span class="absolute bottom-3 left-3 max-w-[calc(100%-1.5rem)] rounded-full border-[1.5px] border-wine bg-offwhite px-3 py-1 text-[13px] leading-snug font-semibold text-wine">{v.brand}</span>
               </div>
