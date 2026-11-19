@@ -35,6 +35,12 @@ const badges = [badge ?? []].flat();
     <button type="button" data-video-play aria-label={`Play: ${label}`} class="absolute top-1/2 left-1/2 z-[6] flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-offwhite/90 text-wine transition-transform hover:scale-105">
       <svg aria-hidden="true" viewBox="0 0 24 24" class="ml-0.5 h-6 w-6" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
     </button>
+  ) : embed && poster ? (
+    /* vídeo do Canva com capa: mostra a capa e o mesmo play dos outros vídeos; o player do Canva só carrega no clique */
+    <img src={poster} alt="" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+    <button type="button" data-embed-play={embed} data-embed-title={label} aria-label={`Play: ${label}`} class="absolute top-1/2 left-1/2 z-[6] flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-offwhite/90 text-wine transition-transform hover:scale-105">
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="ml-0.5 h-6 w-6" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+    </button>
   ) : embed ? (
     <iframe src={embed} title={label} loading="lazy" allow="autoplay; fullscreen" allowfullscreen class="absolute inset-0 h-full w-full border-0"></iframe>
   ) : permalink ? (
@@ -73,6 +79,23 @@ const badges = [badge ?? []].flat();
       document.querySelectorAll("video").forEach((other) => {
         if (other !== video) other.pause();
       });
+    });
+  });
+
+  // vídeo do Canva com capa: no clique, troca a capa pelo player do Canva (e pausa os outros vídeos)
+  document.querySelectorAll<HTMLButtonElement>("[data-embed-play]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const frame = btn.parentElement;
+      if (!frame) return;
+      document.querySelectorAll("video").forEach((v) => v.pause());
+      const iframe = document.createElement("iframe");
+      iframe.src = btn.dataset.embedPlay ?? "";
+      iframe.title = btn.dataset.embedTitle ?? "";
+      iframe.allow = "autoplay; fullscreen";
+      iframe.allowFullscreen = true;
+      iframe.className = "absolute inset-0 z-[7] h-full w-full border-0";
+      frame.querySelector("img")?.remove();
+      btn.replaceWith(iframe);
     });
   });
 
