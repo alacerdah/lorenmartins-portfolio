@@ -82,7 +82,7 @@ const niches = [
 // nicho sem nenhum ganha 3 espaços reservados.
 // `brand` = marca do vídeo (só `brand`, sem vídeo = espaço reservado com o nome da marca); `badge` = adesivo sobre o vídeo;
 // `views` = visualizações: nas abas, os vídeos com mais views vêm primeiro; `format` = nota sobre o vídeo (não aparece no site);
-type Video = { niche: string; brand: string; format: string; src?: string; permalink?: string; badge?: string | string[]; views?: number };
+type Video = { niche: string; brand: string; format: string; src?: string; permalink?: string; embed?: string; badge?: string | string[]; views?: number };
 const realVideos: Record<string, Partial<Video>[]> = {
   beleza: [
     { brand: "Color Wow", src: "/videos/autocuidado-color-wow.mp4" },
@@ -136,6 +136,7 @@ const realVideos: Record<string, Partial<Video>[]> = {
   ],
   bebidas: [{ brand: "Don Cream", src: "/videos/bebidas-don-cream.mp4", badge: "Kit" }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-2.mp4", badge: t("Ação promocional", "Promo campaign") }, { brand: "Don Cream", src: "/videos/bebidas-don-cream-3.mp4", badge: "Aesthetic" }],
   tech: [
+    { brand: "PuggyWare", embed: "https://www.canva.com/design/DAHaXpG007w/ZT0eIGs1KdlLzDMHWLjJMA/view?embed" },
     { brand: "InfinitePay", src: "/videos/tech-infinitepay.mp4", badge: "Black Friday" },
     { brand: "Disney+", src: "/videos/tech-disney-plus.mp4", badge: t("+16 mil views", "16K+ views") },
     { brand: "Zapia AI", src: "/videos/tech-zapia.mp4" },
@@ -346,7 +347,7 @@ const feedbacks = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 const videosOf = (id: string) => videos.filter((v) => v.niche === id);
-const tabVideosOf = (id: string) => videosOf(id).filter((v) => v.src || v.permalink).sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
+const tabVideosOf = (id: string) => videosOf(id).filter((v) => v.src || v.permalink || v.embed).sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
 const otherNiches = niches.filter((n) => tabVideosOf(n.id).length > 0);
 const isSeasonal = (id: string) => id === "black-friday";
 const isPlaceholder = (brand: string) => brand.startsWith("[");
@@ -650,7 +651,7 @@ const linkOr = (url: string) => url || "#contato";
         <div data-panel={`niche:${n.id}`} data-rail hidden={i !== 0} aria-label={n.label} class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-color:var(--color-wine)_transparent] [scrollbar-width:thin]">
           {tabVideosOf(n.id).map((v, j) => (
             <figure data-card class="relative w-[200px] shrink-0 snap-start sm:w-[230px]">
-              <VideoFrame label={isPlaceholder(v.brand) ? t(`Vídeo ${j + 1}`, `Video ${j + 1}`) : v.brand} src={v.src} poster={v.poster} permalink={v.permalink} badge={v.badge} class="rounded-2xl bg-rose" />
+              <VideoFrame label={isPlaceholder(v.brand) ? t(`Vídeo ${j + 1}`, `Video ${j + 1}`) : v.brand} src={v.src} poster={v.poster} permalink={v.permalink} embed={v.embed} badge={v.badge} class="rounded-2xl bg-rose" />
               <div data-card-cover class="pointer-events-none absolute inset-0 z-[5]">
                 <span class="absolute bottom-3 left-3 max-w-[calc(100%-1.5rem)] rounded-full border-[1.5px] border-wine bg-offwhite px-3 py-1 text-[13px] leading-snug font-semibold text-wine">{v.brand}</span>
               </div>
