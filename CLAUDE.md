@@ -28,13 +28,19 @@ src/
     Layout.astro         ← shell HTML, meta tags, Google Fonts, IntersectionObserver
   components/
     Home.astro           ← a página inteira (TODOS os dados ficam no frontmatter)
-    ProfileStats.astro   ← seção "Mídia kit" do portfólio (#midia-kit): números do Instagram, gráficos, público e redes; os números e a data da coleta ficam no topo do arquivo
+    ProfileStats.astro   ← seção "Mídia kit" do portfólio (#midia-kit): números do Instagram, gráficos, público e redes; lê os números de src/data/instagram.json
     Photo.astro          ← imagem com placeholder (ícone + legenda quando sem src)
     VideoFrame.astro     ← moldura 9:16 com embed do Instagram (ou placeholder)
     OvalPortrait.astro   ← retrato oval da seção "Quem eu sou" (anel rosa, texto curvo, sparkles animados)
     Sparkle.astro        ← estrela decorativa de 4 pontas (fill ou outline)
+  data/
+    instagram.json       ← números do mídia kit (seguidores, últimos 30 dias, público) e a data da coleta; atualizado pelo robô
   styles/
     global.css           ← tokens de cor/fonte, utilitários (.stripes, .hard-shadow, .marquee-track, animações)
+scripts/
+  update-instagram.mjs   ← busca os números na API do Instagram (Meta) e grava src/data/instagram.json
+.github/workflows/
+  instagram.yml          ← robô semanal (segunda 8h17) que roda o script e faz commit no main quando algum número muda
 public/
   images/                ← fotos do portfólio (referenciadas como "/images/nome.ext")
     loren.webp           ← foto principal (hero)
@@ -100,6 +106,10 @@ O sistema de abas é genérico via `data-tab` e `data-panel`:
 - Painel: `data-panel="grupo:id"` + `hidden`
 - Grupos usados: `niche:*` (demais nichos), `car:*` (carrosséis)
 
+## Mídia kit automático
+
+O robô `.github/workflows/instagram.yml` roda toda segunda (ou na hora, em Actions > "Atualizar mídia kit" > Run workflow) e usa os segredos `IG_USER_ID` e `IG_ACCESS_TOKEN` do GitHub (Settings > Secrets and variables > Actions). Ele nunca inventa número: métrica que a API não devolver mantém o valor antigo, e com token inválido o job falha (o GitHub avisa por e-mail) e o site continua com os números da última coleta. Os números também podem ser editados à mão em `src/data/instagram.json`.
+
 ## Formulários
 
 Contato e pop-up da tabela usam o Web3Forms: cada resposta chega no e-mail cadastrado na chave `web3formsKey`, no topo de `Home.astro`. A chave pode aparecer na página.
@@ -122,4 +132,5 @@ npm run build        # build de produção em dist/
 - [ ] Adicionar vídeos reais com `permalink` do Instagram/TikTok
 - [ ] Fotos reais na galeria UGC (a seção de carrosséis e fotos só aparece com imagens reais)
 - [ ] Slides reais nos carrosséis
+- [ ] Mídia kit: configurar o app da Meta e os segredos `IG_USER_ID` e `IG_ACCESS_TOKEN` no GitHub
 - [ ] Mídia kit: crescimento de seguidores, que só aparece no app
