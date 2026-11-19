@@ -41,10 +41,6 @@ scripts/
   update-instagram.mjs   ← busca os números na API do Instagram (Meta) e grava src/data/instagram.json
 .github/workflows/
   instagram.yml          ← robô semanal (segunda 8h17) que roda o script e faz commit no main quando algum número muda
-scripts/
-  update-instagram.mjs   ← busca os números na API do Instagram (Meta) e grava src/data/instagram.json
-.github/workflows/
-  instagram.yml          ← robô semanal (segunda 8h17) que roda o script e faz commit no main quando algum número muda
 public/
   images/                ← fotos do portfólio (referenciadas como "/images/nome.ext")
     loren.webp           ← foto principal (hero)
