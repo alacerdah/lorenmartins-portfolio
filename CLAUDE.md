@@ -1,7 +1,7 @@
 # Portfólio UGC — Loren Martins
 
 > Site-portfólio para a criadora de conteúdo **Loren Martins**, de São José dos Campos (SP), 26 anos.
-> Nichos, em ordem de preferência: moda, experiências, tech, acessórios, beleza, bem-estar & fit, bebidas & drinks e pet.
+> Nichos, na ordem das abas: beleza & autocuidado, tech & educação, experiências, moda & acessórios, bem-estar & fit, bebidas & drinks e pet (e Black Friday, em primeiro, só em outubro e novembro).
 
 ---
 
@@ -51,8 +51,8 @@ public/
 | `photos` | Caminhos das fotos do hero, "sobre" e da polaroid da última seção (`contato`) |
 | `contact` | Email, Instagram, TikTok, WhatsApp, mídia kit (`mediaKit` também liga o botão "Mídia kit" do topo) |
 | `brandRows` | Logos do carrossel de marcas (2 faixas). Cada logo é `logo("Nome", "arquivo.png")` e o arquivo fica em `public/images/logos/` |
-| `niches` | Lista de nichos em ordem de preferência: viram as abas e os botões do "Sobre". `black-friday` é temporário: faixa, aba e botão só aparecem de 1º/out a 30/nov |
-| `videos` / `realVideos` | Vídeos por nicho (quantos quiser; nicho sem nenhum ganha 3 espaços reservados). Em `realVideos` preencha por nicho: `brand`, `src` = arquivo .mp4 (em `public/videos/`) ou `permalink` do Instagram, `badge` opcional (adesivo tipo "+80 mil views") |
+| `niches` | Lista de nichos na ordem das abas e dos botões do "Sobre". `black-friday` é temporário: faixa, aba e botão só aparecem de 1º/out a 30/nov, e a aba abre primeiro e junta sozinha todos os vídeos com a etiqueta "Black Friday" |
+| `videos` / `realVideos` | Vídeos por nicho (quantos quiser; nicho sem nenhum ganha 3 espaços reservados). Em `realVideos` preencha por nicho: `brand`, `src` = arquivo .mp4 (em `public/videos/`) ou `permalink` do Instagram, `badge` opcional (adesivo tipo "+80 mil views"), `embed` = link de vídeo do Canva (`/view?embed`), `first: true` = primeiro da aba |
 | `englishVideos` | Vídeos em inglês, só na página `/en/`, logo depois do topo |
 | `viralVideos` | Seção "Cases virais": vídeos soltos com balão de views (o do meio, o mais visto, fica um pouco maior), com `logo`, `views`, `text` e `insights` (print em `public/images/insights/`; quando existe, o balão abre o print) |
 | `carousels` | Carrosséis do feed; `slides` = array de caminhos de imagem ou vídeo .mp4, `badge` = adesivo na foto |

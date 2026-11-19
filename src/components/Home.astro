@@ -59,19 +59,19 @@ const brandRows = [
     logo("Peça Rara", "peca-rara.png"), logo("White Align", "white-align.png"), logo("Panda Alianças", "panda-aliancas.png"), logo("Kaisan", "kaisan.png"),
     logo("Stapellia Moda", "stapellia.jpg"), logo("Clinique", "clinique.png"), logo("HSMT Store", "hsmt-store.png"), logo("CMC Lab", "cmc-lab.png"),
     logo("Deby Fit", "deby-fit.png"), logo("Tell No One", "tell-no-one.png"), logo("Arara Sport", "arara-sport.png"), logo("Pure", "pure.png"), logo("Mirante", "mirante.jpg"), logo("Zapia AI", "zapia.png"),
-    logo("Authentic Nutri", "marca-a.png"), logo("LingoPanda", "marca-panda.png"),
+    logo("Authentic Nutri", "marca-a.png"), logo("LingoPanda", "marca-panda.png"), logo("Feelin", "feelin.png"),
   ],
 ];
 
 // nichos em ordem de preferência: viram as abas e os botões do "Sobre"
 const niches = [
-  { id: "moda", label: t("Moda", "Fashion") },
-  { id: "experiencias", label: t("Experiências", "Experiences") },
-  { id: "tech", label: "Tech" },
-  // temporário: aba e botão só aparecem de 1º de outubro a 30 de novembro, junto com a faixa do topo (ver script no fim)
+  // temporário: aba e botão só aparecem de 1º de outubro a 30 de novembro (e abrem primeiro), junto com a faixa do topo (ver script no fim).
+  // A aba junta sozinha todos os vídeos com a etiqueta "Black Friday", de qualquer nicho
   { id: "black-friday", label: "Black Friday" },
-  { id: "acessorios", label: t("Acessórios", "Accessories") },
-  { id: "beleza", label: t("Beleza", "Beauty") },
+  { id: "beleza", label: t("Beleza & autocuidado", "Beauty & self-care") },
+  { id: "tech", label: t("Tech & educação", "Tech & education") },
+  { id: "experiencias", label: t("Experiências", "Experiences") },
+  { id: "moda", label: t("Moda & acessórios", "Fashion & accessories") },
   { id: "bem-estar", label: t("Bem-estar & fit", "Wellness & fitness") },
   { id: "bebidas", label: t("Bebidas & drinks", "Drinks") },
   { id: "pet", label: "Pet" },
@@ -98,19 +98,12 @@ const realVideos: Record<string, Partial<Video>[]> = {
     { brand: "CMC Lab", src: "/videos/beleza-cmc-lab.mp4" },
   ],
   "bem-estar": [
+    { brand: "Feelin", embed: "https://www.canva.com/design/DAHbUgEzkJk/ha6FBzYIfCPC2k_1WPEMQg/view?embed", badge: "Black Friday", first: true },
     { brand: "Marmitas da Deby", src: "/videos/bem-estar-marmitas-deby.mp4" },
     { brand: "Thermolife", src: "/videos/lifestyle-thermolife.mp4" },
     { brand: "Marmitas da Deby", src: "/videos/bem-estar-marmitas-deby-2.mp4" },
     { brand: "Authentic Nutri", format: t("Colágeno", "Collagen"), src: "/videos/bem-estar-authentic-nutri-colageno.mp4", badge: "Aesthetic" },
     { brand: "Authentic Nutri", src: "/videos/bem-estar-authentic-nutri.mp4" },
-  ],
-  acessorios: [
-    { brand: "Panda Alianças", src: "/videos/moda-panda-aliancas.mp4", badge: t("+8 mil views", "8K+ views"), views: 8000 },
-    { brand: "Hey Harper", src: "/videos/moda-hey-harper.mp4" },
-    { brand: "HSMT Store", src: "/videos/moda-hsmt-store.mp4", badge: "Aesthetic" },
-    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-2.mp4" },
-    { brand: "Hoy Óculos", src: "/videos/acessorios-hoy.mp4", badge: "Aesthetic" },
-    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-3.mp4" },
   ],
   moda: [
     { brand: "Pernambucanas", format: t("TikTok da marca", "Brand's TikTok"), src: "/videos/moda-pernambucanas.mp4", badge: t("+80 mil views", "80K+ views"), views: 80000 },
@@ -123,6 +116,12 @@ const realVideos: Record<string, Partial<Video>[]> = {
     { brand: "Loungerie", src: "/videos/moda-loungerie-2.mp4" },
     { brand: "Mirante", format: t("Post em collab", "Collab post"), src: "/videos/moda-mirante.mp4", badge: t("+30 mil views", "30K+ views") },
     { brand: "Basic", src: "/videos/moda-basic-2.mp4", badge: "Aesthetic" },
+    { brand: "Panda Alianças", src: "/videos/moda-panda-aliancas.mp4", badge: t("+8 mil views", "8K+ views"), views: 8000 },
+    { brand: "Hey Harper", src: "/videos/moda-hey-harper.mp4" },
+    { brand: "HSMT Store", src: "/videos/moda-hsmt-store.mp4", badge: "Aesthetic" },
+    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-2.mp4" },
+    { brand: "Hoy Óculos", src: "/videos/acessorios-hoy.mp4", badge: "Aesthetic" },
+    { brand: "Hey Harper", src: "/videos/acessorios-hey-harper-3.mp4" },
   ],
   experiencias: [
     { brand: "Mercure Hotel", embed: "https://www.canva.com/design/DAHbYgVPHks/DfbvdOKcRSnRcXIqp1jnqg/view?embed", first: true },
@@ -206,7 +205,7 @@ const carousels: { id: string; brand: string; niche: string; text: string; slide
   {
     id: "k3",
     brand: "Óculos Hoy",
-    niche: t("Acessórios", "Accessories"),
+    niche: t("Moda & acessórios", "Fashion & accessories"),
     text: "",
     badge: t("+30 mil views", "30K+ views"),
     slides: ["/images/carrossel/hoy/hoy1.jpg", "/images/carrossel/hoy/hoy2.jpg", "/images/carrossel/hoy/hoy3.jpg", "/images/carrossel/hoy/hoy4.jpg", "/images/carrossel/hoy/hoy5.jpg", "/images/carrossel/hoy/hoy6.jpg"],
@@ -215,7 +214,7 @@ const carousels: { id: string; brand: string; niche: string; text: string; slide
   {
     id: "k1",
     brand: "Kiss New York",
-    niche: t("Beleza", "Beauty"),
+    niche: t("Beleza & autocuidado", "Beauty & self-care"),
     text: "",
     badge: t("+12 mil views", "+12K views"),
     slides: ["/images/carrossel/kiss/kiss1.jpg", "/images/carrossel/kiss/kiss2.jpg", "/images/carrossel/kiss/kiss3.jpg", "/images/carrossel/kiss/kiss4.jpg", "/images/carrossel/kiss/kiss5.jpg", "/images/carrossel/kiss/kiss6.jpg"],
@@ -224,7 +223,7 @@ const carousels: { id: string; brand: string; niche: string; text: string; slide
   {
     id: "k2",
     brand: "Hey Harper",
-    niche: t("Acessórios", "Accessories"),
+    niche: t("Moda & acessórios", "Fashion & accessories"),
     text: "",
     slides: ["/images/carrossel/hh/hhcapa.jpg", "/images/carrossel/hh/snapinsta-1793675207456.mp4", "/images/carrossel/hh/hh3.jpg", "/images/carrossel/hh/hh4.jpg", "/images/carrossel/hh/hh1.jpg", "/images/carrossel/hh/hh6.jpg"],
     slideCount: 6,
@@ -348,10 +347,13 @@ const feedbacks = [
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const videosOf = (id: string) => videos.filter((v) => v.niche === id);
+const isBlackFriday = (v: { badge?: string | string[] }) => [v.badge ?? []].flat().includes("Black Friday");
+const videosOf = (id: string) => (id === "black-friday" ? videos.filter(isBlackFriday) : videos.filter((v) => v.niche === id));
 const tabVideosOf = (id: string) => videosOf(id).filter((v) => v.src || v.permalink || v.embed).sort((a, b) => Number(!!b.first) - Number(!!a.first) || (b.views ?? 0) - (a.views ?? 0));
 const otherNiches = niches.filter((n) => tabVideosOf(n.id).length > 0);
 const isSeasonal = (id: string) => id === "black-friday";
+// fora da época a aba de Black Friday fica escondida, então a primeira aba aberta é a primeira fixa
+const firstTab = otherNiches.findIndex((n) => !isSeasonal(n.id));
 const isPlaceholder = (brand: string) => brand.startsWith("[");
 
 const kpiBgs = ["bg-rose", "bg-offwhite", "bg-sky", "bg-offwhite"];
@@ -633,7 +635,7 @@ const linkOr = (url: string) => url || "#contato";
               data-tab={`niche:${n.id}`}
               data-bf-only={isSeasonal(n.id) ? "true" : undefined}
               hidden={isSeasonal(n.id)}
-              aria-pressed={i === 0 ? "true" : "false"}
+              aria-pressed={i === firstTab ? "true" : "false"}
               class="min-h-12 rounded-full border-[1.5px] border-wine bg-offwhite px-6 text-[15px] font-semibold text-wine transition-colors hover:bg-rose aria-pressed:bg-wine aria-pressed:text-offwhite"
             >
               {n.label}
@@ -650,7 +652,7 @@ const linkOr = (url: string) => url || "#contato";
         </div>
       </div>
       {otherNiches.map((n, i) => (
-        <div data-panel={`niche:${n.id}`} data-rail hidden={i !== 0} aria-label={n.label} class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-color:var(--color-wine)_transparent] [scrollbar-width:thin]">
+        <div data-panel={`niche:${n.id}`} data-rail hidden={i !== firstTab} aria-label={n.label} class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-color:var(--color-wine)_transparent] [scrollbar-width:thin]">
           {tabVideosOf(n.id).map((v, j) => (
             <figure data-card class="relative w-[200px] shrink-0 snap-start sm:w-[230px]">
               <VideoFrame label={isPlaceholder(v.brand) ? t(`Vídeo ${j + 1}`, `Video ${j + 1}`) : v.brand} src={v.src} poster={v.poster} permalink={v.permalink} embed={v.embed} badge={v.badge} class="rounded-2xl bg-rose" />
@@ -982,6 +984,8 @@ const linkOr = (url: string) => url || "#contato";
       const today = new Date(year, now.getMonth(), now.getDate());
       if (now.getMonth() === 9 || now.getMonth() === 10) {
         document.querySelectorAll<HTMLElement>("[data-bf-only]").forEach((el) => (el.hidden = false));
+        // na época, a aba de Black Friday abre primeiro
+        document.querySelector<HTMLButtonElement>('[data-tab="niche:black-friday"]')?.click();
         const bar = document.querySelector<HTMLElement>("[data-bf-only]");
         if (bar) document.documentElement.style.setProperty("--bf-h", `${bar.offsetHeight}px`);
         const label = document.querySelector<HTMLElement>("[data-bf-countdown]");
